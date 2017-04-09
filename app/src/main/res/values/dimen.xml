@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--font size-->
+    <dimen name="font_huge">28sp</dimen>
+    <dimen name="font_large">18sp</dimen>
+    <dimen name="font_normal">15sp</dimen>
+    <dimen name="font_small">12sp</dimen>
+    <dimen name="font_tiny">8sp</dimen>
+
+    <!--typical spacing between two views-->
+    <dimen name="spacing_huge">40dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_normal">14dp</dimen>
+    <dimen name="spacing_small">10dp</dimen>
+    <dimen name="spacing_tiny">4dp</dimen>
+
+    <dimen name="image_size_tiny">20dp</dimen>
+    <dimen name="image_size_small">40dp</dimen>
+    <dimen name="image_size_normal">60dp</dimen>
+    <dimen name="image_size_large">80dp</dimen>
+
+</resources>
