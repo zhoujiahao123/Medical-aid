@@ -1,1 +1,1 @@
-需要进行注入的，全面在component中进行接口的提供就可以 module scope基本不需要改动
+需要进行注入的，全部在component中进行接口的提供就可以 module scope基本不需要改动

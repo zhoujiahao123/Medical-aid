@@ -11,6 +11,7 @@ import com.zxr.medicalaid.dagger.module.ActivityModule;
 import com.zxr.medicalaid.mvp.presenter.base.BasePresenterImpl;
 
 import butterknife.ButterKnife;
+import rx.Subscription;
 
 /**
  * Created by 猿人 on 2017/4/9.
@@ -20,6 +21,7 @@ public abstract class BaseActivity<T extends BasePresenterImpl> extends AppCompa
 
     protected ActivityComponent mActivityComponent;
     protected T mPresenter;
+    protected Subscription mSubscription;
 
     /**
      * 初始化注入信息
@@ -62,5 +64,13 @@ public abstract class BaseActivity<T extends BasePresenterImpl> extends AppCompa
                 .applicationComponent(((App) getApplication()).getmApplicationComponent())
                 .activityModule(new ActivityModule(this))
                 .build();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mSubscription != null && mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
     }
 }

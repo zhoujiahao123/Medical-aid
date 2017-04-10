@@ -14,6 +14,7 @@ import com.zxr.medicalaid.dagger.module.FragmentModule;
 import com.zxr.medicalaid.mvp.presenter.base.BasePresenter;
 
 import butterknife.ButterKnife;
+import rx.Subscription;
 
 /**
  * Created by 猿人 on 2017/4/9.
@@ -23,6 +24,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
 
     protected T mPresenter;
     protected FragmentComponent mFragmentComponent;
+    protected Subscription mSubsription;
 
     public FragmentComponent getFragmentComponent() {
         return mFragmentComponent;
@@ -66,5 +68,13 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mSubsription != null && mSubsription.isUnsubscribed()) {
+            mSubsription.unsubscribe();
+        }
     }
 }
