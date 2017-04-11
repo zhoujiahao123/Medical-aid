@@ -9,6 +9,7 @@ import com.zxr.medicalaid.dagger.component.ActivityComponent;
 import com.zxr.medicalaid.dagger.component.DaggerActivityComponent;
 import com.zxr.medicalaid.dagger.module.ActivityModule;
 import com.zxr.medicalaid.mvp.presenter.base.BasePresenterImpl;
+import com.zxr.medicalaid.utils.ActivityStack;
 
 import butterknife.ButterKnife;
 import rx.Subscription;
@@ -43,6 +44,7 @@ public abstract class BaseActivity<T extends BasePresenterImpl> extends AppCompa
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityStack.getScreenManager().pushActivity(this);
         //初始化组件 注入器
         initActivityComponent();
 
@@ -72,5 +74,6 @@ public abstract class BaseActivity<T extends BasePresenterImpl> extends AppCompa
         if (mSubscription != null && mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
+        ActivityStack.getScreenManager().popActivity(this);
     }
 }
