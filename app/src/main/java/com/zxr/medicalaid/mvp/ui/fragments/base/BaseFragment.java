@@ -54,7 +54,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        View rootView = inflater.inflate(getLayoutId(),container,false);
         ButterKnife.inject(this, rootView);
         initViews();
         if (mPresenter != null) {

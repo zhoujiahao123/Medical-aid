@@ -4,11 +4,10 @@ import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.ui.fragments.base.BaseFragment;
 
 /**
- * Created by 猿人 on 2017/4/11.
+ * Created by 猿人 on 2017/4/20.
  */
 
-public class SelectFragment extends BaseFragment {
-
+public class SearchFragment extends BaseFragment {
     @Override
     public void initInjector() {
 
@@ -21,6 +20,6 @@ public class SelectFragment extends BaseFragment {
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_select;
+        return R.layout.fragment_search;
     }
 }
