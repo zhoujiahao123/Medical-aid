@@ -1,15 +1,21 @@
 package com.zxr.medicalaid.mvp.ui.fragments;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.youth.banner.Banner;
 import com.zxr.medicalaid.R;
+import com.zxr.medicalaid.dagger.scope.ContextLife;
+import com.zxr.medicalaid.mvp.ui.activities.PrescribeActivity;
 import com.zxr.medicalaid.mvp.ui.fragments.base.BaseFragment;
 import com.zxr.medicalaid.utils.image.GildeImageLoader;
+import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -27,7 +33,9 @@ public class SelectFragment extends BaseFragment {
     @InjectView(R.id.banner)
     Banner mBanner;
 
-
+    @Inject
+    @ContextLife("Activity")
+    Context mContext;
     @Override
     public void initInjector() {
         mFragmentComponent.inject(this);
@@ -58,8 +66,12 @@ public class SelectFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.prescribe_bt:
+                ToActivityUtil.toNextActivity(mContext,PrescribeActivity.class,
+                        new String[]{PrescribeActivity.GET_FROM},new int[]{PrescribeActivity.DOCTOR});
                 break;
             case R.id.treat_bt:
+                ToActivityUtil.toNextActivity(mContext,PrescribeActivity.class,
+                        new String[]{PrescribeActivity.GET_FROM},new int[]{PrescribeActivity.PATIENT});
                 break;
         }
     }

@@ -46,8 +46,11 @@ dependencies {
     compile 'com.jakewharton:butterknife:5.1.2'
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:support-vector-drawable:25.1.0'
+    compile 'com.youth.banner:banner:1.4.9'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.4'
     provided 'org.glassfish:javax.annotation:10.0-b28'
-    compile 'com.youth.banner:banner:1.4.9'
+    //动画
+    compile 'com.daimajia.easing:library:2.0@aar'
+    compile 'com.daimajia.androidanimations:library:2.2@aar'
 }
