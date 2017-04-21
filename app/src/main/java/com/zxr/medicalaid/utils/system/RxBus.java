@@ -1,4 +1,4 @@
-package com.zxr.medicalaid.utils;
+package com.zxr.medicalaid.utils.system;
 
 import rx.Observable;
 import rx.subjects.PublishSubject;

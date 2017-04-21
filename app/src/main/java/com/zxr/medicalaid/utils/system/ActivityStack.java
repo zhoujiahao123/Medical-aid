@@ -1,4 +1,4 @@
-package com.zxr.medicalaid.utils;
+package com.zxr.medicalaid.utils.system;
 
 /**
  * Created by 猿人 on 2017/3/31.

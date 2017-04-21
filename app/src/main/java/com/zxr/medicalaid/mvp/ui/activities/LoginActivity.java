@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
-import com.zxr.medicalaid.utils.ToActivityUtil;
+import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
 import butterknife.InjectView;
 import butterknife.OnClick;

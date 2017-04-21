@@ -14,13 +14,11 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/ad_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3">
-        </android.support.v4.view.ViewPager>
-
+       <com.youth.banner.Banner
+           android:id="@+id/banner"
+           android:layout_weight="3"
+           android:layout_width="match_parent"
+           android:layout_height="0dp"></com.youth.banner.Banner>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"

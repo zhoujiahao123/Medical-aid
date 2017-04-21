@@ -9,7 +9,7 @@ import com.zxr.medicalaid.dagger.component.ActivityComponent;
 import com.zxr.medicalaid.dagger.component.DaggerActivityComponent;
 import com.zxr.medicalaid.dagger.module.ActivityModule;
 import com.zxr.medicalaid.mvp.presenter.base.BasePresenterImpl;
-import com.zxr.medicalaid.utils.ActivityStack;
+import com.zxr.medicalaid.utils.system.ActivityStack;
 
 import butterknife.ButterKnife;
 import rx.Subscription;

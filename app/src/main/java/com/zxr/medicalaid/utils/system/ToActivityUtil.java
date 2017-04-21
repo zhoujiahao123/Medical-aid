@@ -1,4 +1,4 @@
-package com.zxr.medicalaid.utils;
+package com.zxr.medicalaid.utils.system;
  
 import android.app.Activity;
 import android.content.Context;
