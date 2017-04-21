@@ -19,29 +19,40 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9" />
 
-    <TextView
-        android:id="@+id/main_title_tv"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/main_toolbar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:gravity="center_horizontal"
-        android:padding="16dp"
-        android:text="选择"
-        android:textColor="@color/white"
-        android:textSize="@dimen/font_huge"
         app:layout_constraintBottom_toTopOf="@id/top_guide"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/main_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/select_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_huge"
+        app:layout_constraintBottom_toTopOf="@+id/main_view_pager"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/main_toolbar"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!--底部导航栏-->
     <ImageView
         android:id="@+id/select_bt"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
+        android:layout_height="0dp"
         android:background="@color/colorPrimary"
-        android:padding="4dp"
+        android:padding="8dp"
         android:src="@drawable/select_bt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -52,10 +63,9 @@
     <ImageView
         android:id="@+id/search_bt"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
+        android:layout_height="0dp"
         android:background="@color/colorPrimary"
-        android:padding="4dp"
+        android:padding="8dp"
         android:src="@drawable/search_bt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/select_bt"
@@ -65,10 +75,9 @@
     <ImageView
         android:id="@+id/personage"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
+        android:layout_height="0dp"
         android:background="@color/colorPrimary"
-        android:padding="4dp"
+        android:padding="8dp"
         android:src="@drawable/personage_bt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/search_bt"
@@ -83,7 +92,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_title_tv"></android.support.v4.view.ViewPager>
+        app:layout_constraintTop_toBottomOf="@+id/main_toolbar"></android.support.v4.view.ViewPager>
 
 
 </android.support.constraint.ConstraintLayout>

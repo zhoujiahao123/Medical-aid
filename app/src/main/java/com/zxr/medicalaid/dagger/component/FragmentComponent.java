@@ -22,6 +22,7 @@ import android.content.Context;
 import com.zxr.medicalaid.dagger.module.FragmentModule;
 import com.zxr.medicalaid.dagger.scope.ContextLife;
 import com.zxr.medicalaid.dagger.scope.PerFragment;
+import com.zxr.medicalaid.mvp.ui.fragments.SelectFragment;
 
 import dagger.Component;
 
@@ -36,5 +37,7 @@ public interface FragmentComponent {
     Context getApplicationContext();
 
     Activity getActivity();
+
+    void inject(SelectFragment selectFragment);
 
 }

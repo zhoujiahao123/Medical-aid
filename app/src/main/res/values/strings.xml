@@ -6,9 +6,6 @@
     <string name="telphone_num">电话</string>
     <string name="password">密码</string>
     <string name="confirm">确认</string>
-    <string name="title_activity_main_view">MainViewActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="prescribe">开药</string>
+    <string name="select_text">选择</string>
 </resources>

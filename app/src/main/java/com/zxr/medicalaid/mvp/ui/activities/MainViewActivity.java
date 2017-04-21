@@ -58,7 +58,7 @@ public class MainViewActivity extends BaseActivity {
         fragments.add(personFragment);
 
         MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
-        adapter.setItemFragments(fragments);
+        adapter.setFragments(fragments);
 
         mViewPager.setAdapter(adapter);
     }

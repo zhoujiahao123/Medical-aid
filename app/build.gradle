@@ -49,4 +49,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.4'
     provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile 'com.youth.banner:banner:1.4.9'
 }
