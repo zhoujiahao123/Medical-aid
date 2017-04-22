@@ -23,4 +23,51 @@
         <item name="colorControlNormal">@color/white</item>
     </style>
 
+
+    <style name="MyButtonText">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MyCaption">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="MyBody1">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="MyBody2">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MySubhead">
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="MyTitle">
+        <item name="android:textSize">21sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MyHeadLine">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="MyDisplay1">
+        <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="MyDisplay2">
+        <item name="android:textSize">45sp</item>
+    </style>
+
+    <style name="MyDisplay3">
+        <item name="android:textSize">56sp</item>
+    </style>
+
+    <style name="MyDisplay4">
+        <item name="android:textSize">112sp</item>
+    </style>
 </resources>

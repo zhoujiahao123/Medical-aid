@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import com.youth.banner.Banner;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.dagger.scope.ContextLife;
-import com.zxr.medicalaid.mvp.ui.activities.PrescribeActivity;
+import com.zxr.medicalaid.mvp.ui.activities.CurrentPatientsActivity;
 import com.zxr.medicalaid.mvp.ui.activities.QRActivity;
 import com.zxr.medicalaid.mvp.ui.fragments.base.BaseFragment;
 import com.zxr.medicalaid.utils.image.GildeImageLoader;
@@ -68,8 +68,8 @@ public class SelectFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.prescribe_bt:
-                ToActivityUtil.toNextActivity(mContext, PrescribeActivity.class,
-                        new String[]{PrescribeActivity.GET_FROM}, new int[]{PrescribeActivity.DOCTOR});
+                ToActivityUtil.toNextActivity(mContext, CurrentPatientsActivity.class,
+                        new String[]{CurrentPatientsActivity.GET_FROM}, new int[]{CurrentPatientsActivity.DOCTOR});
                 break;
             case R.id.treat_bt:
                 ToActivityUtil.toNextActivity(mContext, QRActivity.class);

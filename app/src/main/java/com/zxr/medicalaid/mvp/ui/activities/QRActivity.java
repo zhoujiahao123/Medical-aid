@@ -15,8 +15,8 @@ public class QRActivity extends BaseActivity {
     public void initViews() {
         findViewById(R.id.text_bt).setOnClickListener(
                 v->{
-                    ToActivityUtil.toNextActivity(this,PrescribeActivity.class,
-                            new String[]{PrescribeActivity.GET_FROM},new int[]{PrescribeActivity.PATIENT});
+                    ToActivityUtil.toNextActivity(this,CurrentPatientsActivity.class,
+                            new String[]{CurrentPatientsActivity.GET_FROM},new int[]{CurrentPatientsActivity.PATIENT});
                     finish();});
     }
 

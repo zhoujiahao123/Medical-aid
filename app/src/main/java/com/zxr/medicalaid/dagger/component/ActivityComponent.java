@@ -22,7 +22,7 @@ import android.content.Context;
 import com.zxr.medicalaid.dagger.module.ActivityModule;
 import com.zxr.medicalaid.dagger.scope.ContextLife;
 import com.zxr.medicalaid.dagger.scope.PerActivity;
-import com.zxr.medicalaid.mvp.ui.activities.PrescribeActivity;
+import com.zxr.medicalaid.mvp.ui.activities.CurrentPatientsActivity;
 
 import dagger.Component;
 
@@ -38,6 +38,6 @@ public interface ActivityComponent {
 
     Activity getActivity();
 
-    void inject(PrescribeActivity prescribeActivity);
+    void inject(CurrentPatientsActivity currentPatientsActivity);
 
 }

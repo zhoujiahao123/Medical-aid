@@ -33,6 +33,8 @@ public class MainViewActivity extends BaseActivity {
     @InjectView(R.id.main_view_pager)
     ViewPager mViewPager;
 
+    private String titles[] = new String[]{"选择","药材百科","个人中心"};
+
     /**
      * 几个常亮
      */
@@ -61,6 +63,14 @@ public class MainViewActivity extends BaseActivity {
         adapter.setFragments(fragments);
 
         mViewPager.setAdapter(adapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            @Override
+            public void onPageSelected(int position) {mTitleTv.setText(titles[position]);}
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
     }
 
     @Override
