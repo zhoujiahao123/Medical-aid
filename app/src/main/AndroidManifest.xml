@@ -24,7 +24,8 @@
         </activity>
         <activity android:name=".mvp.ui.activities.RegisterActivity" />
         <activity android:name=".mvp.ui.activities.MainViewActivity" />
-        <activity android:name=".mvp.ui.activities.PrescribeActivity"></activity>
+        <activity android:name=".mvp.ui.activities.PrescribeActivity" />
+        <activity android:name=".mvp.ui.activities.QRActivity"></activity>
     </application>
 
 </manifest>

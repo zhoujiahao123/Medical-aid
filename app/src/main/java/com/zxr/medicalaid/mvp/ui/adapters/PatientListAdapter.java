@@ -2,7 +2,6 @@ package com.zxr.medicalaid.mvp.ui.adapters;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -22,6 +21,7 @@ public class PatientListAdapter extends RecyclerArrayAdapter<Person> {
     private final String TAG = "PatientListAdapter";
     Context mContext;
 
+
     public PatientListAdapter(Context context) {
         super(context);
         mContext = context;
@@ -39,7 +39,6 @@ public class PatientListAdapter extends RecyclerArrayAdapter<Person> {
 
         public PatientListViewHolder(ViewGroup parent, @LayoutRes int res) {
             super(parent, res);
-            Log.i(TAG, "onConstruct");
             patientImage = $(R.id.patient_image);
             patientName = $(R.id.patient_name);
             time = $(R.id.time);

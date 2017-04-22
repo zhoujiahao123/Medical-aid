@@ -25,6 +25,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
     protected T mPresenter;
     protected FragmentComponent mFragmentComponent;
     protected Subscription mSubsription;
+    protected String TAG;
 
     public FragmentComponent getFragmentComponent() {
         return mFragmentComponent;
@@ -40,6 +41,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TAG = this.getClass().getName();
         initFragmentComponent();
         initInjector();
     }

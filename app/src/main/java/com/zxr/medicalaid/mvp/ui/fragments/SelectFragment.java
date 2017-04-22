@@ -8,6 +8,7 @@ import com.youth.banner.Banner;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.dagger.scope.ContextLife;
 import com.zxr.medicalaid.mvp.ui.activities.PrescribeActivity;
+import com.zxr.medicalaid.mvp.ui.activities.QRActivity;
 import com.zxr.medicalaid.mvp.ui.fragments.base.BaseFragment;
 import com.zxr.medicalaid.utils.image.GildeImageLoader;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
@@ -36,6 +37,7 @@ public class SelectFragment extends BaseFragment {
     @Inject
     @ContextLife("Activity")
     Context mContext;
+
     @Override
     public void initInjector() {
         mFragmentComponent.inject(this);
@@ -66,16 +68,14 @@ public class SelectFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.prescribe_bt:
-                ToActivityUtil.toNextActivity(mContext,PrescribeActivity.class,
-                        new String[]{PrescribeActivity.GET_FROM},new int[]{PrescribeActivity.DOCTOR});
+                ToActivityUtil.toNextActivity(mContext, PrescribeActivity.class,
+                        new String[]{PrescribeActivity.GET_FROM}, new int[]{PrescribeActivity.DOCTOR});
                 break;
             case R.id.treat_bt:
-                ToActivityUtil.toNextActivity(mContext,PrescribeActivity.class,
-                        new String[]{PrescribeActivity.GET_FROM},new int[]{PrescribeActivity.PATIENT});
+                ToActivityUtil.toNextActivity(mContext, QRActivity.class);
                 break;
         }
     }
-
 
 
 }

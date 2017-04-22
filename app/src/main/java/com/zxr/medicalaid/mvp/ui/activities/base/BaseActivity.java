@@ -23,6 +23,7 @@ public abstract class BaseActivity<T extends BasePresenterImpl> extends AppCompa
     protected ActivityComponent mActivityComponent;
     protected T mPresenter;
     protected Subscription mSubscription;
+    protected  String TAG ;
 
     /**
      * 初始化注入信息
@@ -44,6 +45,7 @@ public abstract class BaseActivity<T extends BasePresenterImpl> extends AppCompa
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TAG = this.getClass().getName() ;
         ActivityStack.getScreenManager().pushActivity(this);
         //初始化组件 注入器
         initActivityComponent();
