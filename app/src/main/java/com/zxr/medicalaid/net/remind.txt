@@ -1,0 +1,34 @@
+Api 用来进行网络请求的Service接口
+ResponseCons 是网络请求中用到的常量
+
+剩下的都是用来进行过滤状态码用到的
+这里要注意FileterSubsrciber这个类，用来代替Subsriber进行RxJava和Retrofit网咯请求的时候的最后一层书写。
+eg:
+  newsModel.getNewsBean(type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new FilterSubscriber<NewsBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onNext(NewsBean newsBean) {
+                        mView.showMsg(newsBean.getData().get(0).getDate());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        mView.showMsg(error);
+                    }
+                });
+其中的onError一般都这要这样写，注意不能删除super.onError
+同时，这次的mvp设计模式中，model层不再像之前那样使用listener来进行数据的回调，model只是简单的返回的Observable提供presenter层使用，具体的实现由presenter层来写
+如上面那个代码就是presenter的代码，下面给出model层的代码:
+    @Override
+    public Observable<NewsBean> getNewsBean(String type) {
+        return filterStatus(api.getNews(type,key));
+    }
+其中filterStatus这个方法用来过滤后返回一个Observable。

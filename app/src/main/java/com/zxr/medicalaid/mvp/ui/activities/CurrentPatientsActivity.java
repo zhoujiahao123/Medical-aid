@@ -23,6 +23,7 @@ import com.zxr.medicalaid.dagger.scope.ContextLife;
 import com.zxr.medicalaid.mvp.entity.Person;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.PatientListAdapter;
+import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +94,7 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
                         Toast.makeText(this, "病人，可选择退出", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, "医生，点击进行开药", Toast.LENGTH_SHORT).show();
+                        ToActivityUtil.toNextActivity(mContext,PrescribeActivity.class);
                     }
                 }
         );

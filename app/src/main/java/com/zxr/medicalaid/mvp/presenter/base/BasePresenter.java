@@ -9,7 +9,6 @@ import com.zxr.medicalaid.mvp.view.base.BaseView;
  */
 
 public interface BasePresenter {
-    void onCreate();
 
     void injectView(@NonNull BaseView view);
 

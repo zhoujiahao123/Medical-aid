@@ -31,5 +31,4 @@ import javax.inject.Qualifier;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ContextLife {
     String value() default "Application";
-
 }

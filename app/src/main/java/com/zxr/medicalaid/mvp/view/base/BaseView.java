@@ -9,7 +9,5 @@ public interface BaseView {
 
     void hideProgress();
 
-    void showSuccess();
-
-    void showError();
+    void showMsg(String msg);
 }

@@ -8,21 +8,17 @@ import com.zxr.medicalaid.App;
 import com.zxr.medicalaid.dagger.component.ActivityComponent;
 import com.zxr.medicalaid.dagger.component.DaggerActivityComponent;
 import com.zxr.medicalaid.dagger.module.ActivityModule;
-import com.zxr.medicalaid.mvp.presenter.base.BasePresenterImpl;
 import com.zxr.medicalaid.utils.system.ActivityStack;
 
 import butterknife.ButterKnife;
-import rx.Subscription;
 
 /**
  * Created by 猿人 on 2017/4/9.
  */
 
-public abstract class BaseActivity<T extends BasePresenterImpl> extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     protected ActivityComponent mActivityComponent;
-    protected T mPresenter;
-    protected Subscription mSubscription;
     protected  String TAG ;
 
     /**
@@ -41,11 +37,12 @@ public abstract class BaseActivity<T extends BasePresenterImpl> extends AppCompa
     public abstract int getLayout();
 
 
+
     //===============================================
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TAG = this.getClass().getName() ;
+        TAG = this.getClass().getSimpleName() ;
         ActivityStack.getScreenManager().pushActivity(this);
         //初始化组件 注入器
         initActivityComponent();
@@ -54,12 +51,8 @@ public abstract class BaseActivity<T extends BasePresenterImpl> extends AppCompa
         ButterKnife.inject(this);
 
         initInjector();
-
         initViews();
-        //完成presenter中的初始化
-        if (mPresenter != null) {
-            mPresenter.onCreate();
-        }
+
 
     }
 
@@ -73,9 +66,6 @@ public abstract class BaseActivity<T extends BasePresenterImpl> extends AppCompa
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mSubscription != null && mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
         ActivityStack.getScreenManager().popActivity(this);
     }
 }

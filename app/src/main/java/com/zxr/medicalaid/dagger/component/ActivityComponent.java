@@ -40,4 +40,5 @@ public interface ActivityComponent {
 
     void inject(CurrentPatientsActivity currentPatientsActivity);
 
+
 }

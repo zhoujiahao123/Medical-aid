@@ -79,6 +79,7 @@ public class MainViewActivity extends BaseActivity {
     }
 
 
+
     @OnClick({R.id.select_bt, R.id.search_bt, R.id.personage})
     public void onViewClicked(View view) {
         switch (view.getId()) {

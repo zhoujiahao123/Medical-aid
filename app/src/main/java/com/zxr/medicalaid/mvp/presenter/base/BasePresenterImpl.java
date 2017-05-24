@@ -2,7 +2,6 @@ package com.zxr.medicalaid.mvp.presenter.base;
 
 import android.support.annotation.NonNull;
 
-import com.zxr.medicalaid.listener.RequestCallBack;
 import com.zxr.medicalaid.mvp.view.base.BaseView;
 
 /**
@@ -12,20 +11,12 @@ import com.zxr.medicalaid.mvp.view.base.BaseView;
 /**
  *
  * @param <T> view
- * @param <E> 数据
  */
-public class BasePresenterImpl<T extends BaseView,E> implements BasePresenter,RequestCallBack<E> {
+public class BasePresenterImpl<T extends BaseView> implements BasePresenter {
 
     //声明为protected 供子类使用
     protected T mView;
 
-    /**
-     * 进行一些初始化工作，如model的注入
-     */
-    @Override
-    public void onCreate() {
-
-    }
     /**
      * 注入view
      * @param view
@@ -35,14 +26,6 @@ public class BasePresenterImpl<T extends BaseView,E> implements BasePresenter,Re
         mView = (T) view;
     }
 
-    @Override
-    public void onSuccess(E data) {
-        mView.hideProgress();
-    }
 
-    @Override
-    public void onError(String errorMsg) {
-        mView.hideProgress();
-        mView.showError();
-    }
+
 }

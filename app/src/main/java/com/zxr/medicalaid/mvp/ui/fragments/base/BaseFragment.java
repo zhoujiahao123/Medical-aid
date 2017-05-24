@@ -11,7 +11,6 @@ import com.zxr.medicalaid.App;
 import com.zxr.medicalaid.dagger.component.DaggerFragmentComponent;
 import com.zxr.medicalaid.dagger.component.FragmentComponent;
 import com.zxr.medicalaid.dagger.module.FragmentModule;
-import com.zxr.medicalaid.mvp.presenter.base.BasePresenter;
 
 import butterknife.ButterKnife;
 import rx.Subscription;
@@ -20,9 +19,8 @@ import rx.Subscription;
  * Created by 猿人 on 2017/4/9.
  */
 
-public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
-    protected T mPresenter;
     protected FragmentComponent mFragmentComponent;
     protected Subscription mSubsription;
     protected String TAG;
@@ -41,7 +39,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TAG = this.getClass().getName();
+        TAG = this.getClass().getSimpleName();
         initFragmentComponent();
         initInjector();
     }
@@ -59,9 +57,6 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
         View rootView = inflater.inflate(getLayoutId(),container,false);
         ButterKnife.inject(this, rootView);
         initViews();
-        if (mPresenter != null) {
-            mPresenter.onCreate();
-        }
 
         return rootView;
     }
