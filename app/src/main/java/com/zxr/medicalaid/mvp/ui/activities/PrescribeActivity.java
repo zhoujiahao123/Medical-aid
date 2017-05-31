@@ -1,6 +1,8 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
+import android.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -41,12 +43,37 @@ public class PrescribeActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onCreatePanelMenu(int featureId, Menu menu) {
+        getMenuInflater().inflate(R.menu.precribe_confirm,menu);
+        return super.onCreatePanelMenu(featureId, menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // TODO Auto-generated method stub
         //add top-left icon click event deal
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.confirm_bt:
+                //弹窗
+                AlertDialog.Builder builder = new AlertDialog.Builder(PrescribeActivity.this);
+                AlertDialog dialog1 = null;
+                builder.setTitle("提醒");
+                builder.setMessage("您确定要进行提交吗?");
+                builder.setPositiveButton("确定",
+                        (dialog,which) ->
+                      //进行相关逻辑
+                      dialog.dismiss()
+                );
+                builder.setNegativeButton("取消",
+                        (dialog,which) ->
+                           dialog.dismiss()
+                        );
+                dialog1 = builder.create();
+                dialog1.show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

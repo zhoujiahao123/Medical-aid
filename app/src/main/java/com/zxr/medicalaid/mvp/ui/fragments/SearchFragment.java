@@ -21,8 +21,8 @@ public class SearchFragment extends BaseFragment {
 
     @InjectView(R.id.input_medicine)
     EditText mSearch;
-    @InjectView(R.id.reset)
-    ImageView mReset;
+    @InjectView(R.id.search_confirm_bt)
+    ImageView mConfirmBt;
     @InjectView(R.id.easy_recyclerview)
     EasyRecyclerView mRecycler;
 
@@ -35,9 +35,9 @@ public class SearchFragment extends BaseFragment {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if(s.toString().length() == 0){
-                mReset.setVisibility(View.INVISIBLE);
+                mConfirmBt.setVisibility(View.INVISIBLE);
             }else{
-                mReset.setVisibility(View.VISIBLE);
+                mConfirmBt.setVisibility(View.VISIBLE);
             }
         }
 
@@ -53,7 +53,7 @@ public class SearchFragment extends BaseFragment {
 
     @Override
     public void initViews() {
-
+        mSearch.addTextChangedListener(watcher);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SearchFragment extends BaseFragment {
     }
 
 
-    @OnClick(R.id.reset)
+    @OnClick(R.id.search_confirm_bt)
     public void onViewClicked() {
     }
 }

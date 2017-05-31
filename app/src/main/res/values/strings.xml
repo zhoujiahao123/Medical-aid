@@ -18,4 +18,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="search_text">搜索</string>
     <string name="personage_text">个人</string>
+    <string name="confirm_text">确认</string>
 </resources>

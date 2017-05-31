@@ -23,10 +23,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".mvp.ui.activities.RegisterActivity" />
-        <activity android:name=".mvp.ui.activities.MainViewActivity" />
+        <activity
+            android:name=".mvp.ui.activities.MainViewActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".mvp.ui.activities.CurrentPatientsActivity" />
         <activity android:name=".mvp.ui.activities.QRActivity" />
         <activity android:name=".mvp.ui.activities.PrescribeActivity" />
+        <activity android:name=".mvp.ui.activities.AboutUsActivity"></activity>
     </application>
 
 </manifest>

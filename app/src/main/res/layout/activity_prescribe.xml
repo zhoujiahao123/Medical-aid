@@ -19,6 +19,8 @@
             app:theme="@style/WhiteToolbarStyle"></android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
+    
+
     <include layout="@layout/personage_title"></include>
 
     <LinearLayout

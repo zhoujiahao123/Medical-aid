@@ -1,43 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_margin="@dimen/spacing_tiny"
+    android:layout_marginTop="@dimen/spacing_small"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/spacing_tiny"
+    android:paddingLeft="@dimen/spacing_normal"
+    android:paddingRight="@dimen/spacing_normal"
+    android:paddingTop="@dimen/spacing_tiny">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_margin="@dimen/spacing_tiny"
-        android:layout_marginTop="@dimen/spacing_small"
-        android:background="@color/white"
-        android:paddingBottom="@dimen/spacing_tiny"
-        android:paddingLeft="@dimen/spacing_normal"
-        android:paddingRight="@dimen/spacing_normal"
-        android:paddingTop="@dimen/spacing_tiny">
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:src="@drawable/search_icon" />
 
-        <ImageView
-            android:layout_gravity="center"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/search_icon" />
+    <EditText
+        android:id="@+id/input_medicine"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/spacing_normal"
+        android:layout_weight="1"
+        android:maxLines="1"
+        android:background="@drawable/edit_bg"
+        android:hint="输入药材名称" />
 
-        <EditText
-            android:id="@+id/input_medicine"
-            android:layout_marginLeft="@dimen/spacing_normal"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:background="@drawable/edit_bg"
-            android:hint="输入药材名称" />
-        <ImageView
-            android:id="@+id/reset"
-            android:src="@drawable/reset"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
-    </LinearLayout>
-
-
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/search_confirm_bt"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/search_confirm" />
 </LinearLayout>
+
+
