@@ -1,9 +1,10 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.widget.ImageView;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.zxr.medicalaid.R;
@@ -17,26 +18,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 public class MainViewActivity extends BaseActivity {
 
 
     @InjectView(R.id.main_title_tv)
     TextView mTitleTv;
-    @InjectView(R.id.select_bt)
-    ImageView mSelectBt;
-    @InjectView(R.id.search_bt)
-    ImageView mSearchBt;
-    @InjectView(R.id.personage)
-    ImageView mPersonageBt;
     @InjectView(R.id.main_view_pager)
     ViewPager mViewPager;
+    @InjectView(R.id.navigation)
+    BottomNavigationView mBottomNav;
 
-    private String titles[] = new String[]{"选择","药材百科","个人中心"};
+    private String titles[] = new String[]{"主页", "药材百科", "个人中心"};
 
     /**
-     * 几个常亮
+     * 几个常量
      */
     private final int SELECT_FRAGMENT = 0;
     private final int SEARCH_FRAGMENT = 1;
@@ -50,6 +46,8 @@ public class MainViewActivity extends BaseActivity {
 
     @Override
     public void initViews() {
+        //加入底部导航监听
+        mBottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //viewpager初始化
         Fragment selectFragment = new SelectFragment();
         Fragment searchFragment = new SearchFragment();
@@ -65,11 +63,17 @@ public class MainViewActivity extends BaseActivity {
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
             @Override
-            public void onPageSelected(int position) {mTitleTv.setText(titles[position]);}
+            public void onPageSelected(int position) {
+                mTitleTv.setText(titles[position]);
+            }
+
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
     }
 
@@ -78,22 +82,25 @@ public class MainViewActivity extends BaseActivity {
         return R.layout.activity_main_view;
     }
 
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-
-    @OnClick({R.id.select_bt, R.id.search_bt, R.id.personage})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.select_bt:
-                mViewPager.setCurrentItem(SELECT_FRAGMENT);
-                break;
-            case R.id.search_bt:
-                mViewPager.setCurrentItem(SEARCH_FRAGMENT);
-                break;
-            case R.id.personage:
-                mViewPager.setCurrentItem(PERSONAGE_FRAGMENT);
-                break;
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.select_ui:
+                    mViewPager.setCurrentItem(SELECT_FRAGMENT);
+                    return true;
+                case R.id.search_ui:
+                    mViewPager.setCurrentItem(SEARCH_FRAGMENT);
+                    return true;
+                case R.id.personage_ui:
+                   mViewPager.setCurrentItem(PERSONAGE_FRAGMENT);
+                    return true;
+            }
+            return false;
         }
-    }
 
+    };
 
 }

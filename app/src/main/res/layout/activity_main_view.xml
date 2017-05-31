@@ -11,7 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.095" />
+        app:layout_constraintGuide_percent="0.095"
+        tools:layout_editor_absoluteY="54dp"
+        tools:layout_editor_absoluteX="0dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/bottom_guide"
@@ -20,44 +22,20 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="536dp" />
+        tools:layout_editor_absoluteY="511dp" />
 
     <!--底部导航栏-->
-    <ImageView
-        android:id="@+id/select_bt"
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/colorPrimary"
-        android:padding="8dp"
-        android:src="@drawable/select_bt"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/search_bt"
-        app:layout_constraintTop_toTopOf="@+id/bottom_guide" />
-
-    <ImageView
-        android:id="@+id/search_bt"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/colorPrimary"
-        android:padding="8dp"
-        android:src="@drawable/search_bt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/select_bt"
-        app:layout_constraintRight_toLeftOf="@+id/personage"
-        app:layout_constraintTop_toTopOf="@+id/bottom_guide" />
-
-    <ImageView
-        android:id="@+id/personage"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/colorPrimary"
-        android:padding="8dp"
-        android:src="@drawable/personage_bt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/search_bt"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bottom_guide" />
+        app:layout_constraintTop_toTopOf="@+id/bottom_guide"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/navigation" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/main_view_pager"
