@@ -65,10 +65,18 @@ public class MainViewActivity extends BaseActivity {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
-
+            private MenuItem prevMenuItem;
             @Override
             public void onPageSelected(int position) {
                 mTitleTv.setText(titles[position]);
+                if (prevMenuItem != null) {
+                    prevMenuItem.setChecked(false);
+                } else {
+                    mBottomNav.getMenu().getItem(0).setChecked(false);
+                }
+                mBottomNav.getMenu().getItem(position).setChecked(true);
+                prevMenuItem = mBottomNav.getMenu().getItem(position);
+
             }
 
             @Override
