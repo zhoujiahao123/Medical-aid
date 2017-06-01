@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.ui.activities.AboutUsActivity;
+import com.zxr.medicalaid.mvp.ui.activities.InquiryActivity;
 import com.zxr.medicalaid.mvp.ui.fragments.base.BaseFragment;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
@@ -36,6 +37,7 @@ public class PersonFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.presribe_bt:
+                ToActivityUtil.toNextActivity(getContext(), InquiryActivity.class);
                 break;
             case R.id.about_us_bt:
                 ToActivityUtil.toNextActivity(getContext(), AboutUsActivity.class);

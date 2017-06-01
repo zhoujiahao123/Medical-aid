@@ -29,7 +29,8 @@
         <activity android:name=".mvp.ui.activities.CurrentPatientsActivity" />
         <activity android:name=".mvp.ui.activities.QRActivity" />
         <activity android:name=".mvp.ui.activities.PrescribeActivity" />
-        <activity android:name=".mvp.ui.activities.AboutUsActivity"></activity>
+        <activity android:name=".mvp.ui.activities.AboutUsActivity" />
+        <activity android:name=".mvp.ui.activities.InquiryActivity"></activity>
     </application>
 
 </manifest>

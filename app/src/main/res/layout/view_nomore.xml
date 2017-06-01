@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:text="已经全部加载完成了呢"
+    android:gravity="center"
+    android:padding="8dp"
+    android:textColor="@color/secondary_text"
+    android:textSize="@dimen/font_normal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+</TextView>
