@@ -12,7 +12,13 @@
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></android.support.design.widget.AppBarLayout>
+        app:layout_constraintTop_toTopOf="parent">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:theme="@style/WhiteToolbarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
 
     <com.jude.easyrecyclerview.EasyRecyclerView
         android:id="@+id/inquiry_easy_recycler_view"

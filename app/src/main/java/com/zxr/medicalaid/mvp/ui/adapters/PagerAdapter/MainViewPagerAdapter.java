@@ -13,4 +13,6 @@ public class MainViewPagerAdapter extends BaseViewPagerAdapter {
     public MainViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }
+
+
 }

@@ -2,7 +2,6 @@ package com.zxr.medicalaid.mvp.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,30 +14,35 @@ import com.zxr.medicalaid.widget.StickyHeaderDecoration;
  * Created by 猿人 on 2017/6/1.
  */
 
-public class InquiryHeaderAdapter implements  StickyHeaderDecoration.IStickyHeaderAdapter<InquiryHeaderAdapter.HeaderHolder>{
+public class InquiryHeaderAdapter implements StickyHeaderDecoration.IStickyHeaderAdapter<InquiryHeaderAdapter.HeaderHolder> {
 
     private LayoutInflater mInflater;
+    private InquiryContentAdapter adapter;
 
-    public InquiryHeaderAdapter(Context context) {
+    public InquiryHeaderAdapter(Context context, InquiryContentAdapter adapter) {
         mInflater = LayoutInflater.from(context);
+        this.adapter = adapter;
     }
+
 
     @Override
     public long getHeaderId(int position) {
-        Log.i("测试","position"+position);
-        return position/3;
+
+        if(position == 0 || !(adapter.getAllData().get(position).getTime().equals(adapter.getAllData().get(position-1).getTime()))){
+            return position;
+        }
+        return position-1;
     }
 
     @Override
     public HeaderHolder onCreateHeaderViewHolder(ViewGroup parent) {
-        final View view = mInflater.inflate(R.layout.header_item,parent,false);
+        final View view = mInflater.inflate(R.layout.header_item, parent, false);
         return new HeaderHolder(view);
     }
 
     @Override
     public void onBindHeaderViewHolder(HeaderHolder viewholder, int position) {
-        Log.i("测试","onBind");
-        viewholder.header.setText("第"+getHeaderId(position)+"组");
+        viewholder.header.setText(adapter.getAllData().get((int) getHeaderId(position)).getTime());
     }
 
     class HeaderHolder extends RecyclerView.ViewHolder {
