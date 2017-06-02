@@ -21,4 +21,7 @@
     <string name="confirm_text">确认</string>
     <string name="inquiryRecord">问诊记录</string>
     <string name="prescription">药方:</string>
+
+    <string name="weight">重量</string>
+    <string name="medince_name">药名</string>
 </resources>

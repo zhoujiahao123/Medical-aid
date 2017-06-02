@@ -5,8 +5,7 @@
     <corners
         android:radius="@dimen/spacing_small"
         ></corners>
-    <solid
-        android:color="@color/gray_200"
+    <solid android:color="@color/grey_200"
         ></solid>
 
 </shape>

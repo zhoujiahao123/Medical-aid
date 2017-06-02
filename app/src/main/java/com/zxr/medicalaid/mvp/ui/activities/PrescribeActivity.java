@@ -1,20 +1,31 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.github.lazylibrary.util.ToastUtils;
+import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.zxr.medicalaid.R;
+import com.zxr.medicalaid.mvp.entity.PrescriptionItem;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
+import com.zxr.medicalaid.mvp.ui.adapters.PrescribeTableAdapter;
+import com.zxr.medicalaid.utils.others.DialogUtils;
 import com.zxr.medicalaid.widget.CircleImageView;
 
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class PrescribeActivity extends BaseActivity {
 
-
+    /**
+     * view
+     */
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
     @InjectView(R.id.patient_image)
@@ -27,6 +38,19 @@ public class PrescribeActivity extends BaseActivity {
     TextView mAge;
     @InjectView(R.id.time)
     TextView mRegisterTime;
+    @InjectView(R.id.prescribe_table)
+    EasyRecyclerView mTable;
+    @InjectView(R.id.medicine_name_input)
+    EditText mNameInput;
+    @InjectView(R.id.medicine_weight_input)
+    EditText mWeightInput;
+
+
+    /**
+     * 数据
+     */
+    private PrescribeTableAdapter adapter;
+
 
     @Override
     public void initInjector() {
@@ -40,11 +64,36 @@ public class PrescribeActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.prescibe_text);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
+        //设置recyclerView
+        mTable.setEmptyView(R.layout.view_empty);
+        mTable.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new PrescribeTableAdapter(this);
+        adapter.setOnItemLongClickListener(
+                position -> {
+                    DialogUtils.showAlert(this, "提示", "确定删除当前条目?", "确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            adapter.remove(position);
+                            dialog.dismiss();
+                        }
+                    }, "取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    return false;
+                }
+
+        );
+        mTable.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
-        getMenuInflater().inflate(R.menu.precribe_confirm,menu);
+        getMenuInflater().inflate(R.menu.precribe_confirm, menu);
         return super.onCreatePanelMenu(featureId, menu);
     }
 
@@ -63,14 +112,14 @@ public class PrescribeActivity extends BaseActivity {
                 builder.setTitle("提醒");
                 builder.setMessage("您确定要进行提交吗?");
                 builder.setPositiveButton("确定",
-                        (dialog,which) ->
-                      //进行相关逻辑
-                      dialog.dismiss()
+                        (dialog, which) ->
+                                //进行相关逻辑
+                                dialog.dismiss()
                 );
                 builder.setNegativeButton("取消",
-                        (dialog,which) ->
-                           dialog.dismiss()
-                        );
+                        (dialog, which) ->
+                                dialog.dismiss()
+                );
                 dialog1 = builder.create();
                 dialog1.show();
                 break;
@@ -84,5 +133,20 @@ public class PrescribeActivity extends BaseActivity {
     }
 
 
-
+    @OnClick(R.id.add)
+    public void onViewClicked() {
+        /**
+         * 注意考虑药名输入加入模糊联想
+         */
+        String name = mNameInput.getText().toString();
+        String weight = mWeightInput.getText().toString();
+        if (name.length() == 0 || weight.length() == 0) {
+            ToastUtils.showToast(this, "您的输入不完整，请重新输入");
+            return;
+        }
+        adapter.add(new PrescriptionItem(name, weight));
+        adapter.notifyDataSetChanged();
+        mNameInput.setText("");
+        mWeightInput.setText("");
+    }
 }

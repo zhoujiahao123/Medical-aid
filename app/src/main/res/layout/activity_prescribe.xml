@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_300"
+    android:background="@color/grey_300"
     android:orientation="vertical"
     tools:context="com.zxr.medicalaid.mvp.ui.activities.PrescribeActivity">
 
@@ -27,30 +27,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_normal"
-        android:background="@color/gray_100"
+        android:background="@color/white"
         android:orientation="horizontal">
 
         <ImageView
+
             android:layout_width="@dimen/image_size_small"
             android:layout_height="@dimen/image_size_small"
             android:padding="@dimen/spacing_small"
             android:src="@drawable/search_icon" />
 
         <EditText
+            android:id="@+id/medicine_name_input"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@null" />
+            android:background="@null"
+            android:hint="药名" />
+
+        <EditText
+            android:maxLines="1"
+            android:inputType="number"
+            android:id="@+id/medicine_weight_input"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="重量(g)" />
 
         <ImageView
+            android:id="@+id/add"
             android:layout_width="@dimen/image_size_small"
             android:layout_height="@dimen/image_size_small"
             android:padding="@dimen/spacing_small"
             android:src="@drawable/add_icon" />
     </LinearLayout>
 
-    <include layout="@layout/divider_line"></include>
 
+    <!--第一行-->
+    <include layout="@layout/prescribe_first_line"></include>
 
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:id="@+id/prescribe_table"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.jude.easyrecyclerview.EasyRecyclerView>
 
 </LinearLayout>
