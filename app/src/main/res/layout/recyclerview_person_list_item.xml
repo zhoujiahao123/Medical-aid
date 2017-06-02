@@ -2,20 +2,20 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/list_item"
+    android:background="@android:color/white"
     android:foreground="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/list_item_height">
 
     <com.zxr.medicalaid.widget.CircleImageView
         android:id="@+id/patient_image"
         android:layout_width="@dimen/image_size_normal"
         android:layout_height="@dimen/image_size_normal"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginLeft="16dp"
         android:src="@drawable/welcome_logo"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
         android:id="@+id/patient_name"

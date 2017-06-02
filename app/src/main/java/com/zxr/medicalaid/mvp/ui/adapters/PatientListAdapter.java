@@ -46,7 +46,7 @@ public class PatientListAdapter extends RecyclerArrayAdapter<Person> {
 
         @Override
         public void setData(Person data) {
-            Glide.with(mContext).load(data.getImage_url()).crossFade().into(patientImage);
+            Glide.with(mContext).load(data.getImage_url()).placeholder(R.drawable.default_image).crossFade().into(patientImage);
             patientName.setText(data.getName());
             time.setText(data.getTime());
         }

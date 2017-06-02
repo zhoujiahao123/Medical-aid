@@ -126,8 +126,6 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.qr_code:
-                adapter.add(new Person("吴黎明", "11:10", null));
         }
         return super.onOptionsItemSelected(item);
     }

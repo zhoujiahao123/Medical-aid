@@ -48,6 +48,7 @@ public class InquiryContentAdapter extends RecyclerArrayAdapter<Person> {
             patinentName.setText(data.getName());
             Glide.with(getContext())
                     .load(data.getImage_url())
+                    .crossFade()
                     .placeholder(R.drawable.default_image)
                     .into(patinentImg);
         }
