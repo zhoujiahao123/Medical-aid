@@ -31,7 +31,10 @@
         <activity android:name=".mvp.ui.activities.PrescribeActivity" />
         <activity android:name=".mvp.ui.activities.AboutUsActivity" />
         <activity android:name=".mvp.ui.activities.InquiryActivity" />
-        <activity android:name=".mvp.ui.activities.TreatmentActivity"></activity>
+        <activity android:name=".mvp.ui.activities.TreatmentActivity" />
+        <activity
+            android:name=".mvp.ui.activities.PrescribeDetailActivity"
+            android:theme="@style/ActivitySemiTransparent"></activity>
     </application>
 
 </manifest>

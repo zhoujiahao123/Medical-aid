@@ -6,8 +6,8 @@ package com.zxr.medicalaid.mvp.entity;
 
 public class PrescriptionItem {
 
-    private String weight;
     private String name;
+    private String weight;
 
     public PrescriptionItem(String name, String weight) {
         this.weight = weight;

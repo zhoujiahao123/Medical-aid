@@ -70,4 +70,11 @@
     <style name="MyDisplay4">
         <item name="android:textSize">112sp</item>
     </style>
+
+    <style name="ActivitySemiTransparent" parent="Theme.AppCompat">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
 </resources>

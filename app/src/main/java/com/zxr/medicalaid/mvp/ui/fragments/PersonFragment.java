@@ -5,6 +5,7 @@ import android.view.View;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.ui.activities.AboutUsActivity;
 import com.zxr.medicalaid.mvp.ui.activities.InquiryActivity;
+import com.zxr.medicalaid.mvp.ui.activities.TreatmentActivity;
 import com.zxr.medicalaid.mvp.ui.fragments.base.BaseFragment;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
@@ -45,6 +46,7 @@ public class PersonFragment extends BaseFragment {
             case R.id.caution_bt:
                 break;
             case R.id.treat_record_bt:
+                ToActivityUtil.toNextActivity(getContext(), TreatmentActivity.class);
                 break;
         }
     }
