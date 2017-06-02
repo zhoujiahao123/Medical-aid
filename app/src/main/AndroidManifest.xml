@@ -30,7 +30,8 @@
         <activity android:name=".mvp.ui.activities.QRActivity" />
         <activity android:name=".mvp.ui.activities.PrescribeActivity" />
         <activity android:name=".mvp.ui.activities.AboutUsActivity" />
-        <activity android:name=".mvp.ui.activities.InquiryActivity"></activity>
+        <activity android:name=".mvp.ui.activities.InquiryActivity" />
+        <activity android:name=".mvp.ui.activities.TreatmentActivity"></activity>
     </application>
 
 </manifest>

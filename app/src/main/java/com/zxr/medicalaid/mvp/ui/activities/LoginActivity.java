@@ -5,18 +5,15 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.zxr.medicalaid.R;
-import com.zxr.medicalaid.mvp.ui.activities.base.RxBusSubscriberBaseActivity;
-import com.zxr.medicalaid.utils.system.RxBus;
+import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
-import rx.functions.Action1;
 
-public class LoginActivity extends RxBusSubscriberBaseActivity {
+public class LoginActivity extends BaseActivity {
 
     @InjectView(R.id.account_input)
     EditText mAccountEt;
@@ -44,16 +41,6 @@ public class LoginActivity extends RxBusSubscriberBaseActivity {
     }
 
 
-    @Override
-    public void initRxBus() {
-        mSubscription = RxBus.getDefault().toObservable(String.class)
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        Toast.makeText(LoginActivity.this, s, Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

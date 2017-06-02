@@ -6,7 +6,6 @@ import android.widget.ImageView;
 
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
-import com.zxr.medicalaid.utils.system.RxBus;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -42,7 +41,6 @@ public class RegisterActivity extends BaseActivity {
 
     @OnClick(R.id.confirm_bt)
     public void onViewClicked() {
-        RxBus.getDefault().post(new String("测试"));
-        finish();
+        //做注册的逻辑操作
     }
 }
