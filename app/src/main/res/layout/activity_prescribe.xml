@@ -47,7 +47,7 @@
 
         <EditText
             android:maxLines="1"
-            android:inputType="number"
+            android:digits="01234567890."
             android:id="@+id/medicine_weight_input"
             android:layout_width="0dp"
             android:layout_height="match_parent"

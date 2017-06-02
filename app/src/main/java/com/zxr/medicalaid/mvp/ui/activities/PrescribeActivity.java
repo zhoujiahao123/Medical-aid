@@ -138,15 +138,29 @@ public class PrescribeActivity extends BaseActivity {
         /**
          * 注意考虑药名输入加入模糊联想
          */
-        String name = mNameInput.getText().toString();
-        String weight = mWeightInput.getText().toString();
+        String name = mNameInput.getText().toString().trim();
+        String weight = mWeightInput.getText().toString().trim();
         if (name.length() == 0 || weight.length() == 0) {
             ToastUtils.showToast(this, "您的输入不完整，请重新输入");
+            return;
+        }
+        if (getDotNumber(weight) >= 2) {
+            ToastUtils.showToast(this, "小数点过多");
             return;
         }
         adapter.add(new PrescriptionItem(name, weight));
         adapter.notifyDataSetChanged();
         mNameInput.setText("");
         mWeightInput.setText("");
+    }
+
+    private int getDotNumber(String str) {
+        int x = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '.') {
+                x++;
+            }
+        }
+        return x;
     }
 }
