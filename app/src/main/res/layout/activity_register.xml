@@ -69,18 +69,21 @@
         app:layout_constraintTop_toBottomOf="@+id/password_input">
 
         <EditText
+            android:hint="@string/identifying_code"
             android:id="@+id/identifying_number_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="4dp"
-            android:layout_weight="1"
-            android:hint="@string/identifying_code" />
+            android:layout_weight="1" />
 
-        <ImageView
-            android:id="@+id/identifying_number_image"
+        <TextView
+            android:id="@+id/identifying_number_send"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:text="@string/send"
+            android:gravity="center"
+            android:background="@drawable/identify_text_bg"
+            android:layout_height="match_parent"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="8dp"
             android:layout_weight="1"

@@ -24,4 +24,5 @@
 
     <string name="weight">重量</string>
     <string name="medince_name">药名</string>
+    <string name="send">发送</string>
 </resources>
