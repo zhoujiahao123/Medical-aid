@@ -34,7 +34,8 @@
         <activity android:name=".mvp.ui.activities.TreatmentActivity" />
         <activity
             android:name=".mvp.ui.activities.PrescribeDetailActivity"
-            android:theme="@style/ActivitySemiTransparent"></activity>
+            android:theme="@style/ActivitySemiTransparent" />
+        <activity android:name=".mvp.ui.activities.AlarmActivity"></activity>
     </application>
 
 </manifest>
