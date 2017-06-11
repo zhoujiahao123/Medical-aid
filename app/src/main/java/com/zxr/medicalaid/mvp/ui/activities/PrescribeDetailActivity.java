@@ -1,6 +1,7 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.MenuItem;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.zxr.medicalaid.R;
@@ -52,5 +53,14 @@ public class PrescribeDetailActivity extends BaseActivity {
         return R.layout.activity_prescribe_detail;
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

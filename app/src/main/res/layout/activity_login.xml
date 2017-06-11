@@ -24,30 +24,35 @@
     <EditText
         android:id="@+id/account_input"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="48dp"
         android:hint="电话"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintLeft_toLeftOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintRight_toLeftOf="@+id/guideline3" />
 
     <EditText
         android:id="@+id/password_input"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:inputType="textPassword"
+        android:layout_height="40dp"
         android:layout_marginEnd="7dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="7dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:hint="密码"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_input" />
+        app:layout_constraintLeft_toLeftOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/account_input"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintRight_toLeftOf="@+id/guideline3" />
 
 
     <LinearLayout
@@ -90,7 +95,6 @@
             android:textSize="@dimen/font_large"
             android:layout_weight="0.6"
             android:text="@string/register"
-            android:textColor="@color/white"
             android:background="@drawable/register_bg" />
     </LinearLayout>
 
@@ -100,5 +104,19 @@
         android:id="@+id/guideline"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.1" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline2"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05"
+        app:layout_constraintGuide_end="236dp" />
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline3"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
 
 </android.support.constraint.ConstraintLayout>

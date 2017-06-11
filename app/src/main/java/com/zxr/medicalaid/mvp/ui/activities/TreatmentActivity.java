@@ -7,6 +7,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.zxr.medicalaid.R;
@@ -60,6 +61,16 @@ public class TreatmentActivity extends BaseActivity implements SwipeRefreshLayou
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setRefreshListener(this);
         mRecyclerView.setRefreshing(true, true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

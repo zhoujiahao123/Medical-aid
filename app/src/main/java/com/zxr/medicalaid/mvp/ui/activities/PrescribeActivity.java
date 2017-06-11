@@ -107,21 +107,20 @@ public class PrescribeActivity extends BaseActivity {
                 break;
             case R.id.confirm_bt:
                 //弹窗
-                AlertDialog.Builder builder = new AlertDialog.Builder(PrescribeActivity.this);
-                AlertDialog dialog1 = null;
-                builder.setTitle("提醒");
-                builder.setMessage("您确定要进行提交吗?");
-                builder.setPositiveButton("确定",
-                        (dialog, which) ->
-                                //进行相关逻辑
-                                dialog.dismiss()
-                );
-                builder.setNegativeButton("取消",
-                        (dialog, which) ->
-                                dialog.dismiss()
-                );
-                dialog1 = builder.create();
-                dialog1.show();
+                new AlertDialog.Builder(PrescribeActivity.this)
+                        .setTitle("提醒")
+                        .setMessage("您确定要进行提交吗?")
+                        .setPositiveButton("确定",
+                                (dialog, which) ->
+                                        //进行相关逻辑
+                                        dialog.dismiss()
+                        )
+                        .setNegativeButton("取消",
+                                (dialog, which) ->
+                                        dialog.dismiss()
+                        )
+                        .show();
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -140,6 +139,7 @@ public class PrescribeActivity extends BaseActivity {
          */
         String name = mNameInput.getText().toString().trim();
         String weight = mWeightInput.getText().toString().trim();
+
         if (name.length() == 0 || weight.length() == 0) {
             ToastUtils.showToast(this, "您的输入不完整，请重新输入");
             return;
@@ -147,6 +147,12 @@ public class PrescribeActivity extends BaseActivity {
         if (getDotNumber(weight) >= 2) {
             ToastUtils.showToast(this, "小数点过多");
             return;
+        }
+        if (weight.charAt(0) == '.') {
+            weight = '0' + weight;
+        }
+        if (weight.charAt(weight.length() - 1) == '.') {
+            weight = weight + '0';
         }
         adapter.add(new PrescriptionItem(name, weight));
         adapter.notifyDataSetChanged();

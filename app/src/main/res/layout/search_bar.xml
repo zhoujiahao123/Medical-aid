@@ -20,13 +20,13 @@
         android:src="@drawable/search_icon" />
 
     <EditText
+        android:singleLine="true"
         android:id="@+id/input_medicine"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/spacing_normal"
         android:layout_weight="1"
-        android:maxLines="1"
         android:background="@drawable/edit_bg"
         android:hint="输入药材名称" />
 

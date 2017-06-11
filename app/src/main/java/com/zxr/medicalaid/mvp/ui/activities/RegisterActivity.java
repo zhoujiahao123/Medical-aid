@@ -71,6 +71,7 @@ public class RegisterActivity extends BaseActivity {
     /**
      * 计时类
      */
+    
     class TimeCount extends CountDownTimer {
         /**
          * @param millisInFuture    The number of millis in the future from the call
