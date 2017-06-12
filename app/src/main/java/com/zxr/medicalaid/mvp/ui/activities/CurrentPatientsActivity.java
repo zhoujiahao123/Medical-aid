@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +15,6 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.LinearInterpolator;
-import android.widget.Toast;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
@@ -91,13 +91,36 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
         adapter.setOnItemClickListener(
                 pos -> {
                     if (type == PATIENT) {
-                        Toast.makeText(this, "病人，可选择退出", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(this, "病人，可选择退出", Toast.LENGTH_SHORT).show();
+                        return;
                     } else {
-                        Toast.makeText(this, "医生，点击进行开药", Toast.LENGTH_SHORT).show();
-                        ToActivityUtil.toNextActivity(mContext,PrescribeActivity.class);
+//                        Toast.makeText(this, "医生，点击进行开药", Toast.LENGTH_SHORT).show();
+                        ToActivityUtil.toNextActivity(mContext, PrescribeActivity.class);
                     }
                 }
         );
+        if (type == PATIENT) {
+            adapter.setOnItemLongClickListener(
+                    position -> {
+                        new AlertDialog.Builder(this)
+                                .setTitle("提示")
+                                .setCancelable(true)
+                                .setMessage("您确定要退出当前队列?")
+                                .setPositiveButton("确定",
+                                        (dialog, what) -> {
+                                            adapter.remove(position);
+                                            dialog.dismiss();
+                                        }
+                                )
+                                .setNegativeButton("取消",
+                                        (dialog, what) ->
+                                                dialog.dismiss()
+                                )
+                                .show();
+                        return false;
+                    }
+            );
+        }
 
         mRecycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecycler.setLayoutManager(new LinearLayoutManager(this));

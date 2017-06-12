@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -89,6 +90,8 @@ public class PrescribeActivity extends BaseActivity {
 
         );
         mTable.setAdapter(adapter);
+        //设置重量输入框的弹起类型
+        mWeightInput.setRawInputType(InputType.TYPE_CLASS_NUMBER);
     }
 
     @Override
@@ -111,9 +114,11 @@ public class PrescribeActivity extends BaseActivity {
                         .setTitle("提醒")
                         .setMessage("您确定要进行提交吗?")
                         .setPositiveButton("确定",
-                                (dialog, which) ->
-                                        //进行相关逻辑
-                                        dialog.dismiss()
+                                (dialog, which) ->{
+                                    //进行相关逻辑
+                                    dialog.dismiss();
+                                    finish();
+                                    }
                         )
                         .setNegativeButton("取消",
                                 (dialog, which) ->

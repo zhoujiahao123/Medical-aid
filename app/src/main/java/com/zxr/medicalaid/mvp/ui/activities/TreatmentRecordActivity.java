@@ -19,7 +19,7 @@ import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
 import butterknife.InjectView;
 
-public class TreatmentActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class TreatmentRecordActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     /**
      * view
@@ -51,7 +51,7 @@ public class TreatmentActivity extends BaseActivity implements SwipeRefreshLayou
         adapter.setOnItemClickListener(
                 position -> {
                     //传递该条药方数据到
-                    ToActivityUtil.toNextActivity(this, PrescribeDetailActivity.class);
+                    ToActivityUtil.toNextActivity(this, PrescribeRecordActivity.class);
                 }
         );
         //easyrecyclerview初始化

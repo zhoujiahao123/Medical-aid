@@ -31,9 +31,9 @@
         <activity android:name=".mvp.ui.activities.PrescribeActivity" />
         <activity android:name=".mvp.ui.activities.AboutUsActivity" />
         <activity android:name=".mvp.ui.activities.InquiryActivity" />
-        <activity android:name=".mvp.ui.activities.TreatmentActivity" />
+        <activity android:name=".mvp.ui.activities.TreatmentRecordActivity" />
         <activity
-            android:name=".mvp.ui.activities.PrescribeDetailActivity"
+            android:name=".mvp.ui.activities.PrescribeRecordActivity"
             android:theme="@style/ActivitySemiTransparent" />
         <activity android:name=".mvp.ui.activities.AlarmActivity"></activity>
     </application>

@@ -14,7 +14,7 @@ import java.util.List;
 
 import butterknife.InjectView;
 
-public class PrescribeDetailActivity extends BaseActivity {
+public class PrescribeRecordActivity extends BaseActivity {
 
 
     @InjectView(R.id.easy_recycler_view)
