@@ -5,6 +5,7 @@ import android.app.Application;
 import com.zxr.medicalaid.dagger.component.ApplicationComponent;
 import com.zxr.medicalaid.dagger.component.DaggerApplicationComponent;
 import com.zxr.medicalaid.dagger.module.ApplicationModule;
+
 import com.zxr.medicalaid.utils.image.GlideImageLoader;
 
 import cn.finalteam.galleryfinal.CoreConfig;
@@ -12,6 +13,7 @@ import cn.finalteam.galleryfinal.FunctionConfig;
 import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.ImageLoader;
 import cn.finalteam.galleryfinal.ThemeConfig;
+
 
 /**
  * Created by 猿人 on 2017/4/9.

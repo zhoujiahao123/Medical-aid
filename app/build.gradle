@@ -26,12 +26,20 @@ android {
 
 }
 
+
+repositories{
+    flatDir{
+        dirs 'libs' //就是你放aar的目录地址
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     //动画
+
     //工具类
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
@@ -53,6 +61,11 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.4'
     provided 'org.glassfish:javax.annotation:10.0-b28'
-    //图片选择器
+    compile files('libs/MobCommons-2017.0321.1624.jar')
+    compile files('libs/MobCommons-2017.0607.1736.jar')
+    compile name: 'SMSSDK-2.1.4', ext: 'aar'
+    compile name: 'SMSSDKGUI-2.1.4', ext: 'aar'
+    compile files('libs/MobTools-2017.0321.1624.jar')
+    compile 'com.google.zxing:core:3.3.0'
     compile 'cn.finalteam:galleryfinal:1.4.3'
 }

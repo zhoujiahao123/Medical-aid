@@ -2,13 +2,18 @@ package com.zxr.medicalaid.mvp.ui.fragments;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.zxr.medicalaid.R;
+import com.zxr.medicalaid.mvp.presenter.presenterImpl.DrugInfoPresenterImpl;
 import com.zxr.medicalaid.mvp.ui.fragments.base.BaseFragment;
+import com.zxr.medicalaid.mvp.view.SearchView;
+
+import javax.inject.Inject;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -17,7 +22,10 @@ import butterknife.OnClick;
  * Created by 猿人 on 2017/4/20.
  */
 
-public class SearchFragment extends BaseFragment {
+public class SearchFragment extends BaseFragment implements SearchView {
+
+    @Inject
+    DrugInfoPresenterImpl presenter;
 
     @InjectView(R.id.input_medicine)
     EditText mSearch;
@@ -48,12 +56,25 @@ public class SearchFragment extends BaseFragment {
     };
     @Override
     public void initInjector() {
+        mFragmentComponent.inject(this);
+        presenter.injectView(this);
 
     }
 
     @Override
     public void initViews() {
         mSearch.addTextChangedListener(watcher);
+
+        mConfirmBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(presenter==null){
+                    Log.e("TAG","presenter是空的");
+                }else {
+                    presenter.getDrugInfo("中文");
+                }
+            }
+        });
     }
 
     @Override
@@ -64,5 +85,22 @@ public class SearchFragment extends BaseFragment {
 
     @OnClick(R.id.search_confirm_bt)
     public void onViewClicked() {
+
     }
-}
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void showMsg(String msg) {
+        Log.e("TAG","药材信息是"+msg);
+
+
+}}

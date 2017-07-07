@@ -1,5 +1,6 @@
 package com.zxr.medicalaid.mvp.ui.fragments;
 
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.provider.AlarmClock;
@@ -23,6 +24,7 @@ import butterknife.OnClick;
 /**
  * Created by 猿人 on 2017/4/20.
  */
+
 
 public class PersonFragment extends BaseFragment {
 
@@ -52,6 +54,7 @@ public class PersonFragment extends BaseFragment {
     TextView pageNum;
 
 
+
     @Override
     public void initInjector() {
 
@@ -59,6 +62,7 @@ public class PersonFragment extends BaseFragment {
 
     @Override
     public void initViews() {
+
         //长按可编辑用户信息
         userInfoLayout.setOnLongClickListener(
                 (v -> {
@@ -79,6 +83,7 @@ public class PersonFragment extends BaseFragment {
                     return false;
                 })
         );
+
     }
 
     @Override
@@ -97,13 +102,16 @@ public class PersonFragment extends BaseFragment {
                 ToActivityUtil.toNextActivity(getContext(), AboutUsActivity.class);
                 break;
             case R.id.caution_bt:
+
                 //跳转到系统的闹钟
                 Intent alarm = new Intent(AlarmClock.ACTION_SHOW_ALARMS);
                 startActivity(alarm);
+
                 break;
             case R.id.treat_record_bt:
                 ToActivityUtil.toNextActivity(getContext(), TreatmentRecordActivity.class);
                 break;
+
 
         }
     }

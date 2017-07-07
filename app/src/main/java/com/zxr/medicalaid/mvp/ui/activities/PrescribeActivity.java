@@ -16,8 +16,12 @@ import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.entity.PrescriptionItem;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.PrescribeTableAdapter;
+import com.zxr.medicalaid.net.ResponseCons;
 import com.zxr.medicalaid.utils.others.DialogUtils;
 import com.zxr.medicalaid.widget.CircleImageView;
+
+import java.io.OutputStream;
+import java.net.Socket;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -45,6 +49,10 @@ public class PrescribeActivity extends BaseActivity {
     EditText mNameInput;
     @InjectView(R.id.medicine_weight_input)
     EditText mWeightInput;
+
+
+    //写入数据流
+    OutputStream os;
 
 
     /**
@@ -116,6 +124,21 @@ public class PrescribeActivity extends BaseActivity {
                         .setPositiveButton("确定",
                                 (dialog, which) ->{
                                     //进行相关逻辑
+
+                                    new Thread(){
+                                        @Override
+                                        public void run() {
+                                            Socket socket;
+                                            try{
+                                                socket = new Socket(ResponseCons.IP_ADD,ResponseCons.PORT);
+                                                os = socket.getOutputStream();
+                                                os.write(("药材信息\r\n").getBytes("utf-8"));
+                                            }catch (Exception e){
+
+                                            }
+                                        }
+                                    };
+
                                     dialog.dismiss();
                                     finish();
                                     }
