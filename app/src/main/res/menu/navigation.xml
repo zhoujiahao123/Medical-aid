@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/select_ui"
+        android:icon="@drawable/select_bt"
+        android:title="@string/prescribe"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/search_ui"
+        android:icon="@drawable/search_bt"
+        android:title="@string/search_text" />
+
+    <item
+        android:id="@+id/personage_ui"
+        android:icon="@drawable/personage_bt"
+        android:title="@string/personage_text" />
+
+</menu>

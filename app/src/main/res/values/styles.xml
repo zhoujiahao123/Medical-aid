@@ -1,0 +1,80 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <!--引导页-->
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@drawable/welcome_bg</item>
+    </style>
+    <!--toolbar返回箭头-->
+    <style name="BlackToolbarStyle" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/black</item>
+    </style>
+
+    <style name="WhiteToolbarStyle" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+
+
+    <style name="MyButtonText">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MyCaption">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="MyBody1">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="MyBody2">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MySubhead">
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="MyTitle">
+        <item name="android:textSize">21sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MyHeadLine">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="MyDisplay1">
+        <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="MyDisplay2">
+        <item name="android:textSize">45sp</item>
+    </style>
+
+    <style name="MyDisplay3">
+        <item name="android:textSize">56sp</item>
+    </style>
+
+    <style name="MyDisplay4">
+        <item name="android:textSize">112sp</item>
+    </style>
+
+    <style name="ActivitySemiTransparent" parent="Theme.AppCompat">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
+</resources>

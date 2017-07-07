@@ -1,0 +1,2 @@
+普通的的adapter
+viewpager的adapter放在上面那个包中

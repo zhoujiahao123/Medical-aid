@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.zxr.medicalaid.mvp.ui.activities.AlarmActivity">
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:background="#3C4095"></android.support.v7.widget.Toolbar>
+
+
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:id="@+id/easy_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.jude.easyrecyclerview.EasyRecyclerView>
+
+</LinearLayout>

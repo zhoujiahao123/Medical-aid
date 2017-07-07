@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_300"
+    android:orientation="vertical"
+    tools:context="com.zxr.medicalaid.mvp.ui.activities.PrescribeActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:theme="@style/WhiteToolbarStyle"></android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    
+
+    <include layout="@layout/personage_title"></include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+
+            android:layout_width="@dimen/image_size_small"
+            android:layout_height="@dimen/image_size_small"
+            android:padding="@dimen/spacing_small"
+            android:src="@drawable/search_icon" />
+
+        <EditText
+            android:id="@+id/medicine_name_input"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="药名" />
+
+        <EditText
+            android:maxLines="1"
+            android:digits="01234567890."
+            android:id="@+id/medicine_weight_input"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="重量(g)" />
+
+        <ImageView
+            android:id="@+id/add"
+            android:layout_width="@dimen/image_size_small"
+            android:layout_height="@dimen/image_size_small"
+            android:padding="@dimen/spacing_small"
+            android:src="@drawable/add_icon" />
+    </LinearLayout>
+
+
+    <!--第一行-->
+    <include layout="@layout/prescribe_first_line"></include>
+
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:id="@+id/prescribe_table"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.jude.easyrecyclerview.EasyRecyclerView>
+
+</LinearLayout>
