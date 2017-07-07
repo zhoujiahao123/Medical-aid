@@ -24,6 +24,7 @@ public class LoginActivity extends BaseActivity {
     @InjectView(R.id.register_bt)
     Button mRegisterBt;
 
+
     @Override
     public void initInjector() {
 
@@ -38,6 +39,9 @@ public class LoginActivity extends BaseActivity {
     public int getLayout() {
         return R.layout.activity_login;
     }
+
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);

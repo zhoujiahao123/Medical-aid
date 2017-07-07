@@ -10,6 +10,7 @@ import com.zxr.medicalaid.zxing.CaptureActivity;
 public class QRActivity extends BaseActivity {
     public final static int SCANNING_REQUEST_CODE = 1;
 
+
     @Override
     public void initInjector() {
 

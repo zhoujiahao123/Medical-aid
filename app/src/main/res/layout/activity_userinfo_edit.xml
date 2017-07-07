@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <!--头像-->
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:theme="@style/WhiteToolbarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/head_relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_line"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:text="@string/head_image"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/font_large" />
+
+        <ImageView
+            android:id="@+id/go_on"
+            android:layout_width="@dimen/image_size_tiny"
+            android:layout_height="@dimen/image_size_tiny"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/more" />
+
+        <com.zxr.medicalaid.widget.CircleImageView
+            android:id="@+id/circleImageView"
+            android:layout_width="@dimen/image_size_small"
+            android:layout_height="@dimen/image_size_small"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/go_on"
+            android:src="@drawable/default_image" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/name_relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/border_line"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:text="@string/name"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/font_large" />
+
+        <ImageView
+            android:id="@+id/go_on_1"
+            android:layout_width="@dimen/image_size_tiny"
+            android:layout_height="@dimen/image_size_tiny"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/more" />
+
+        <EditText
+            android:id="@+id/nick_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/go_on_1"
+            android:hint="Jacob"
+            android:background="@null"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/font_normal" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/password_relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/border_line"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:text="@string/password"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/font_large" />
+
+        <ImageView
+            android:id="@+id/go_on_3"
+            android:layout_width="@dimen/image_size_tiny"
+            android:layout_height="@dimen/image_size_tiny"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/more" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/go_on_3"
+            android:text="修改"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/font_normal" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_margin="8dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/finish_bt"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_marginRight="4dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bt_bg"
+            android:text="完成"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_large" />
+        <Button
+            android:id="@+id/log_off"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_marginLeft="4dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bt_bg"
+            android:text="退出登录"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_large" />
+    </LinearLayout>
+
+
+
+</LinearLayout>
+
+

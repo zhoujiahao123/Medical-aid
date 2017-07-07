@@ -15,6 +15,7 @@ public class Data<T> {
     public void setMessage(String message) {
         this.message = message;
     }
+
     public int getCode() {
         return code;
     }
@@ -29,5 +30,8 @@ public class Data<T> {
 
     public void setData(T data) {
         this.body = data;
+
     }
+
+
 }

@@ -26,6 +26,7 @@ public class SearchFragment extends BaseFragment implements SearchView {
 
     @Inject
     DrugInfoPresenterImpl presenter;
+
     @InjectView(R.id.input_medicine)
     EditText mSearch;
     @InjectView(R.id.search_confirm_bt)
@@ -57,11 +58,13 @@ public class SearchFragment extends BaseFragment implements SearchView {
     public void initInjector() {
         mFragmentComponent.inject(this);
         presenter.injectView(this);
+
     }
 
     @Override
     public void initViews() {
         mSearch.addTextChangedListener(watcher);
+
         mConfirmBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,6 +81,7 @@ public class SearchFragment extends BaseFragment implements SearchView {
     public int getLayoutId() {
         return R.layout.fragment_search;
     }
+
 
     @OnClick(R.id.search_confirm_bt)
     public void onViewClicked() {
@@ -97,5 +101,6 @@ public class SearchFragment extends BaseFragment implements SearchView {
     @Override
     public void showMsg(String msg) {
         Log.e("TAG","药材信息是"+msg);
-    }
-}
+
+
+}}

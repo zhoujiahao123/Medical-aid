@@ -201,4 +201,15 @@
     <string name="error_no_browser">No browser installed on the device.</string>
     <!--custom tabs end-->
 
+
+    <string name="head_image">头像</string>
+    <string name="name">姓名</string>
+    <string name="user_info_setting">设置</string>
+    <string name="remind">提示</string>
+    <string name="need_to_go_to_user_setting">需要进入个人设置界面吗?</string>
+    <string name="setting">设置</string>
+    <string name="old_password">原密码</string>
+    <string name="new_password">新密码</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="reset_password">重置密码</string>
 </resources>

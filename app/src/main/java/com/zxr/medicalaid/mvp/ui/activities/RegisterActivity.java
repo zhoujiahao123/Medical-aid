@@ -22,6 +22,7 @@ import cn.smssdk.SMSSDK;
 import static com.zxr.medicalaid.net.ResponseCons.APP_KEY;
 import static com.zxr.medicalaid.net.ResponseCons.APP_SECRECT;
 
+
 public class RegisterActivity extends BaseActivity {
 
 
@@ -35,9 +36,11 @@ public class RegisterActivity extends BaseActivity {
     Button mConfirmBt;
     @InjectView(R.id.identifying_number_send)
     TextView mSendCodeTv;
+
     private String countryCode ;
     private static final String code ="42";
     private String phoneNum;
+
     @Override
     public void initInjector() {
 
@@ -59,6 +62,7 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.inject(this);
+
         EventHandler eh = InitSDK();
         SMSSDK.registerEventHandler(eh); //注册短信回调
         countryCode = SMSSDK.getCountry(code)[1];
@@ -85,6 +89,7 @@ public class RegisterActivity extends BaseActivity {
             }
         };
     }
+
     int seconds = 60;
     TimeCount time = new TimeCount(60 * 1000, 1000);
 
@@ -92,6 +97,7 @@ public class RegisterActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.identifying_number_send:
+
                 phoneNum = mAccountEt.getText().toString();
                 SMSSDK.getVerificationCode(countryCode,phoneNum,new OnSendMessageHandler() {
                     @Override
@@ -99,14 +105,17 @@ public class RegisterActivity extends BaseActivity {
                         return false;
                     }
                 });
+
                 mSendCodeTv.setClickable(false);
                 mSendCodeTv.setText(seconds + "s后可重新发送");
                 //开启及时
                 time.start();
                 break;
             case R.id.confirm_bt:
+
                 Log.e("TAG","点了");
                 SMSSDK.submitVerificationCode(SMSSDK.getCountry("42")[1],mAccountEt.getText().toString(),mIdentifyintEt.getText().toString());
+
                 break;
         }
     }

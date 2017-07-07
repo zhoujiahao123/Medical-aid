@@ -40,5 +40,9 @@ public interface FragmentComponent {
     Activity getActivity();
 
     void inject(SelectFragment selectFragment);
+
     void inject(SearchFragment searchFragment);
+
+
+
 }

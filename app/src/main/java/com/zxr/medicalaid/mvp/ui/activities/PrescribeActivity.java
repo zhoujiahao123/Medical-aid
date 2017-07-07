@@ -27,6 +27,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class PrescribeActivity extends BaseActivity {
+
     /**
      * view
      */
@@ -49,8 +50,10 @@ public class PrescribeActivity extends BaseActivity {
     @InjectView(R.id.medicine_weight_input)
     EditText mWeightInput;
 
+
     //写入数据流
     OutputStream os;
+
 
     /**
      * 数据
@@ -121,6 +124,7 @@ public class PrescribeActivity extends BaseActivity {
                         .setPositiveButton("确定",
                                 (dialog, which) ->{
                                     //进行相关逻辑
+
                                     new Thread(){
                                         @Override
                                         public void run() {
@@ -134,6 +138,7 @@ public class PrescribeActivity extends BaseActivity {
                                             }
                                         }
                                     };
+
                                     dialog.dismiss();
                                     finish();
                                     }
