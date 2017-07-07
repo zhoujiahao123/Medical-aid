@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected ActivityComponent mActivityComponent;
-    protected  String TAG ;
+    protected String TAG;
 
     /**
      * 初始化注入信息
@@ -37,12 +37,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     public abstract int getLayout();
 
 
-
     //===============================================
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TAG = this.getClass().getSimpleName() ;
+        TAG = this.getClass().getSimpleName();
         ActivityStack.getScreenManager().pushActivity(this);
         //初始化组件 注入器
         initActivityComponent();

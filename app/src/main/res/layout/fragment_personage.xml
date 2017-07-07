@@ -102,6 +102,7 @@
             android:id="@+id/time_wenzhen7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="药方张数"
             android:textAppearance="@style/MySubhead"
@@ -109,8 +110,7 @@
             android:textStyle="normal"
             app:layout_constraintBaseline_toBaselineOf="@+id/time_wenzhen4"
             app:layout_constraintLeft_toLeftOf="@+id/page_num"
-            app:layout_constraintRight_toRightOf="@+id/page_num"
-            android:layout_marginEnd="8dp" />
+            app:layout_constraintRight_toRightOf="@+id/page_num" />
 
         <ImageView
             android:layout_width="60dp"
@@ -123,58 +123,61 @@
             app:layout_constraintTop_toTopOf="@+id/page_num" />
     </android.support.constraint.ConstraintLayout>
 
-    
-    <android.support.constraint.ConstraintLayout
-        android:layout_marginTop="@dimen/spacing_normal"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
 
-            app:layout_constraintDimensionRatio="3:2"
-            android:src="@drawable/prescribe_record_bt"
-            android:layout_width="150dp"
-            android:layout_height="0dp"
-            app:layout_constraintLeft_toLeftOf="parent"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal"
+        android:background="@color/white">
+
+        <com.zxr.medicalaid.widget.MaskableImageView
             android:id="@+id/presribe_bt"
-            app:layout_constraintRight_toLeftOf="@+id/treat_record_bt"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp" />
-        <ImageView
-            app:layout_constraintDimensionRatio="3:2"
-            android:src="@drawable/caution_bt"
             android:layout_width="150dp"
             android:layout_height="0dp"
-            app:layout_constraintRight_toLeftOf="@+id/about_us_bt"
-            android:id="@+id/caution_bt"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/prescribe_record_bt"
+            app:layout_constraintDimensionRatio="3:2"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/treat_record_bt"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.zxr.medicalaid.widget.MaskableImageView
+            android:id="@+id/caution_bt"
+            android:layout_width="150dp"
+            android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/presribe_bt" />
-        <ImageView
-            app:layout_constraintDimensionRatio="3:2"
-            android:src="@drawable/about_us_bt"
-            android:layout_width="150dp"
-            android:layout_height="0dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/caution_bt"
-            android:id="@+id/about_us_bt"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/treat_record_bt"
+            android:src="@drawable/caution_bt"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp" />
-        <ImageView
             app:layout_constraintDimensionRatio="3:2"
-            android:src="@drawable/treat_record_bt"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/about_us_bt"
+            app:layout_constraintTop_toBottomOf="@+id/presribe_bt" />
+
+        <com.zxr.medicalaid.widget.MaskableImageView
+            android:id="@+id/about_us_bt"
             android:layout_width="150dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/about_us_bt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="3:2"
+            app:layout_constraintLeft_toRightOf="@+id/caution_bt"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/treat_record_bt" />
+
+        <com.zxr.medicalaid.widget.MaskableImageView
+            android:id="@+id/treat_record_bt"
+            android:layout_width="150dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/treat_record_bt"
+            app:layout_constraintDimensionRatio="3:2"
             app:layout_constraintLeft_toRightOf="@+id/presribe_bt"
             app:layout_constraintRight_toRightOf="parent"
-            android:id="@+id/treat_record_bt"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
-    
+
 </LinearLayout>
