@@ -22,6 +22,15 @@ public class StatusUtils {
             case ResponseCons.STATUS_FILED:
                 desc = ResponseCons.FILED_MSG;
                 break;
+            case ResponseCons.STATUS_FALED_AES:
+                desc = ResponseCons.FILED_AES_MSG;
+                break;
+            case ResponseCons.STATUS_FALED_NAME:
+                desc = ResponseCons.FILED_NAME_MSG;
+                break;
+            case ResponseCons.STATUS_PASS_NAME:
+                desc = ResponseCons.FILED_PASS_MSG;
+                break;
         }
         mStatusResult.status = status;
         mStatusResult.desc = desc;

@@ -1,5 +1,7 @@
 package com.zxr.medicalaid.mvp.ui.activities.base;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +24,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected String TAG;
 
-
+    ConnectivityManager manager;
+    NetworkInfo networkInfo;
     /**
      * 初始化注入信息
      */
@@ -71,5 +74,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ActivityStack.getScreenManager().popActivity(this);
+    }
+    public boolean isNetWork(){
+        manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        networkInfo = manager.getActiveNetworkInfo();
+        if(networkInfo!=null&&networkInfo.isAvailable()){
+            return true;
+        }else {
+            return false;
+        }
     }
 }

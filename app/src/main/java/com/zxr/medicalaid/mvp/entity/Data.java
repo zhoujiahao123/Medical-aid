@@ -6,8 +6,8 @@ package com.zxr.medicalaid.mvp.entity;
 
 public class Data<T> {
     private int code;
-    private T body;
     private String message;
+    private T body;
     public String getMessage() {
         return message;
     }
@@ -30,7 +30,6 @@ public class Data<T> {
 
     public void setData(T data) {
         this.body = data;
-
     }
 
 

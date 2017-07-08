@@ -1,6 +1,7 @@
 package com.zxr.medicalaid;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.zxr.medicalaid.dagger.component.ApplicationComponent;
 import com.zxr.medicalaid.dagger.component.DaggerApplicationComponent;
@@ -20,7 +21,7 @@ import cn.finalteam.galleryfinal.ThemeConfig;
  */
 
 public class App extends Application {
-
+    private static Context context;
     private ApplicationComponent mApplicationComponent;
 
     public ApplicationComponent getmApplicationComponent() {
@@ -32,6 +33,7 @@ public class App extends Application {
         super.onCreate();
         initApplicationComponent();
         initGallerFinal();
+        this.context = this;
     }
 
     private void initGallerFinal() {
@@ -54,7 +56,9 @@ public class App extends Application {
                 .build();
         GalleryFinal.init(coreConfig);
     }
-
+    public static  Context getBaseApplicationContext(){
+        return context;
+    }
     private void initApplicationComponent() {
         mApplicationComponent = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build();
     }

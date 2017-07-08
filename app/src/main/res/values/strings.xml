@@ -33,7 +33,7 @@
     <string name="activity_add_package">Add Package</string>
     <string name="activity_company_details">Company Details</string>
     <string name="activity_search">Search</string>
-    <string name="activity_scan_code">Scan code</string>
+    <string name="activity_scan_code">Medical</string>
     <!--activities end-->
 
     <!--navigation drawer-->
