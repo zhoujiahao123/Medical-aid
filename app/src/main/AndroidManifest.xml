@@ -54,6 +54,10 @@
             android:theme="@style/ActivitySemiTransparent" />
 
         <activity android:name=".mvp.ui.activities.AlarmActivity"></activity>
+
+        <activity android:name=".mvp.ui.activities.UserInfoEditActivity" />
+        <activity android:name=".mvp.ui.activities.PasswordEditActivity"></activity>
+    </application>
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -75,7 +79,4 @@
         android:normalScreens="true"
         android:smallScreens="true"
         android:xlargeScreens="true" />
-        <activity android:name=".mvp.ui.activities.UserInfoEditActivity" />
-        <activity android:name=".mvp.ui.activities.PasswordEditActivity"></activity>
-    </application>
 </manifest>
