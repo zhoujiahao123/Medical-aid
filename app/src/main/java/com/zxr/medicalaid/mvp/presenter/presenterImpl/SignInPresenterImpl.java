@@ -2,16 +2,12 @@ package com.zxr.medicalaid.mvp.presenter.presenterImpl;
 
 import android.util.Log;
 
-import com.zxr.medicalaid.DaoSession;
-import com.zxr.medicalaid.User;
-import com.zxr.medicalaid.UserDao;
 import com.zxr.medicalaid.mvp.model.ModelImpl.SignInModelImpl;
 import com.zxr.medicalaid.mvp.model.SignInModel;
 import com.zxr.medicalaid.mvp.presenter.SignInPresenter;
 import com.zxr.medicalaid.mvp.presenter.base.BasePresenterImpl;
 import com.zxr.medicalaid.mvp.view.SignInView;
 import com.zxr.medicalaid.net.FilterSubscriber;
-import com.zxr.medicalaid.utils.db.DbUtil;
 
 import javax.inject.Inject;
 
@@ -49,7 +45,7 @@ public class SignInPresenterImpl extends BasePresenterImpl<SignInView> implement
                     public void onError(Throwable e) {
                         super.onError(e);
                         Log.e("TAG",error);
-                        mView.showMsg("FAILED");
+                        mView.showMsg(error);
                     }
                 });
 

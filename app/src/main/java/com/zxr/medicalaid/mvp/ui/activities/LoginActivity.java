@@ -13,6 +13,7 @@ import com.zxr.medicalaid.mvp.presenter.presenterImpl.LogInPresenterImpl;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.view.LogInView;
 import com.zxr.medicalaid.net.ResponseCons;
+import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.encode.EncodeUtil;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
@@ -48,7 +49,9 @@ public class LoginActivity extends BaseActivity implements LogInView{
 
     @Override
     public void initViews() {
-
+        if(DbUtil.getDaosession().getUserDao().loadAll().size() != 0){
+            ToActivityUtil.toNextActivityAndFinish(this,MainViewActivity.class);
+        }
     }
 
     @Override

@@ -1,13 +1,10 @@
 package com.zxr.medicalaid.mvp.ui.fragments;
-
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.provider.AlarmClock;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.TextView;
-
 import com.zxr.medicalaid.DaoSession;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.User;

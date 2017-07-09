@@ -9,5 +9,5 @@ import rx.Observable;
  */
 
 public interface LogInModel  {
-    Observable<UserInfo> logIn(String nickName,String password);
+    Observable<UserInfo> logIn(String nickName, String password);
 }

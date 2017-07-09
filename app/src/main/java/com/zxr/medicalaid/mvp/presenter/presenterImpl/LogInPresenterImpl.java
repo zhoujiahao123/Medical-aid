@@ -11,11 +11,11 @@ import com.zxr.medicalaid.mvp.model.ModelImpl.LogInModelImpl;
 import com.zxr.medicalaid.mvp.presenter.LogInPresenter;
 import com.zxr.medicalaid.mvp.presenter.base.BasePresenterImpl;
 import com.zxr.medicalaid.mvp.view.LogInView;
+import com.zxr.medicalaid.net.FilterSubscriber;
 import com.zxr.medicalaid.utils.db.DbUtil;
 
 import javax.inject.Inject;
 
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -35,7 +35,7 @@ public class LogInPresenterImpl extends BasePresenterImpl<LogInView> implements 
         model.logIn(nickName,password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UserInfo>() {
+                .subscribe(new FilterSubscriber<UserInfo>() {
                     @Override
                     public void onCompleted() {
 
@@ -43,8 +43,8 @@ public class LogInPresenterImpl extends BasePresenterImpl<LogInView> implements 
 
                     @Override
                     public void onError(Throwable e) {
-                        e.getStackTrace();
-                        Log.e("TAG",e.toString());
+                        super.onError(e);
+                        mView.showMsg(error);
                     }
 
                     @Override
@@ -52,10 +52,10 @@ public class LogInPresenterImpl extends BasePresenterImpl<LogInView> implements 
                         DaoSession daoSession = DbUtil.getDaosession();
                         UserDao userDao = daoSession.getUserDao();
                         User user = new User();
-                        user.setType(userInfo.getBody().getType());
-                        user.setUName(userInfo.getBody().getNickName());
-                        user.setPhoneNumber(userInfo.getBody().getPhoneNumber());
-                        user.setIdString(userInfo.getBody().getIdString());
+                        user.setType(userInfo.getType());
+                        user.setUName(userInfo.getNickName());
+                        user.setPhoneNumber(userInfo.getPhoneNumber());
+                        user.setIdString(userInfo.getIdString());
                         user.setIsAlready(1);
                         userDao.insert(user);
                         mView.showMsg("");

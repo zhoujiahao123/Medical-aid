@@ -143,7 +143,6 @@ public class PrescribeActivity extends BaseActivity {
                                         }
                                     }.start();
                                     dialog.dismiss();
-                                    finish();
                                     }
                         )
                         .setNegativeButton("取消",
