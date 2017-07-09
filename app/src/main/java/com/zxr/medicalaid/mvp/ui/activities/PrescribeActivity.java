@@ -16,12 +16,13 @@ import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.entity.PrescriptionItem;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.PrescribeTableAdapter;
-import com.zxr.medicalaid.net.ResponseCons;
 import com.zxr.medicalaid.utils.others.DialogUtils;
 import com.zxr.medicalaid.widget.CircleImageView;
 
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -53,14 +54,15 @@ public class PrescribeActivity extends BaseActivity {
 
     //写入数据流
     OutputStream os;
-
-
+    //ip地址和端口(公网,私有地址不行)
+    public static final String IP_ADD="113.250.152.104";
+    public static final int PORT=20000;
+    private List<String> listName = new ArrayList<>();
+    private List<String> listWeight = new ArrayList<>();
     /**
      * 数据
      */
     private PrescribeTableAdapter adapter;
-
-
     @Override
     public void initInjector() {
 
@@ -73,11 +75,9 @@ public class PrescribeActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.prescibe_text);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
-
         //设置recyclerView
         mTable.setEmptyView(R.layout.view_empty);
         mTable.setLayoutManager(new LinearLayoutManager(this));
-
         adapter = new PrescribeTableAdapter(this);
         adapter.setOnItemLongClickListener(
                 position -> {
@@ -124,21 +124,24 @@ public class PrescribeActivity extends BaseActivity {
                         .setPositiveButton("确定",
                                 (dialog, which) ->{
                                     //进行相关逻辑
-
                                     new Thread(){
                                         @Override
                                         public void run() {
                                             Socket socket;
                                             try{
-                                                socket = new Socket(ResponseCons.IP_ADD,ResponseCons.PORT);
+                                                socket = new Socket(IP_ADD,PORT);
                                                 os = socket.getOutputStream();
-                                                os.write(("药材信息\r\n").getBytes("utf-8"));
+                                                StringBuffer buffer = new StringBuffer();
+                                                for(int i=0;i<listName.size();i++){
+                                                    //将药材信息装入
+                                                    buffer.append(listName.get(i)+":"+listWeight.get(i)+",");
+                                                }
+                                                os.write((buffer+"\r\n").getBytes("utf-8"));
                                             }catch (Exception e){
-
+                                                e.printStackTrace();
                                             }
                                         }
-                                    };
-
+                                    }.start();
                                     dialog.dismiss();
                                     finish();
                                     }
@@ -182,6 +185,9 @@ public class PrescribeActivity extends BaseActivity {
         if (weight.charAt(weight.length() - 1) == '.') {
             weight = weight + '0';
         }
+        //获取到药名和重量
+        listName.add(name);
+        listWeight.add(weight);
         adapter.add(new PrescriptionItem(name, weight));
         adapter.notifyDataSetChanged();
         mNameInput.setText("");

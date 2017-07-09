@@ -4,6 +4,8 @@ package com.zxr.medicalaid.mvp.model.base;
  * Created by 猿人 on 2017/5/24.
  */
 
+import android.util.Log;
+
 import com.zxr.medicalaid.mvp.entity.Data;
 import com.zxr.medicalaid.net.Api;
 import com.zxr.medicalaid.net.ApiException;
@@ -43,8 +45,11 @@ public class BaseModelImpl {
         @Override
         public T call(Data<T> tHttpBean) {
             if (tHttpBean.getCode() != 200) {
+                Log.e("BaseModelImpl","出错了");
                 throw new ApiException(tHttpBean.getCode());
+
             }
+            Log.e("BaseModelImpl","tHttpBean.getData();");
             return tHttpBean.getData();
         }
     }

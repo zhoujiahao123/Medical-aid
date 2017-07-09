@@ -8,12 +8,16 @@ import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.TextView;
 
+import com.zxr.medicalaid.DaoSession;
 import com.zxr.medicalaid.R;
+import com.zxr.medicalaid.User;
+import com.zxr.medicalaid.UserDao;
 import com.zxr.medicalaid.mvp.ui.activities.AboutUsActivity;
 import com.zxr.medicalaid.mvp.ui.activities.InquiryActivity;
 import com.zxr.medicalaid.mvp.ui.activities.TreatmentRecordActivity;
 import com.zxr.medicalaid.mvp.ui.activities.UserInfoEditActivity;
 import com.zxr.medicalaid.mvp.ui.fragments.base.BaseFragment;
+import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 import com.zxr.medicalaid.widget.CircleImageView;
 import com.zxr.medicalaid.widget.MaskableImageView;
@@ -53,7 +57,8 @@ public class PersonFragment extends BaseFragment {
     @InjectView(R.id.page_num)
     TextView pageNum;
 
-
+    DaoSession daoSession= DbUtil.getDaosession();
+    UserDao userDao=daoSession.getUserDao();
 
     @Override
     public void initInjector() {
@@ -62,7 +67,8 @@ public class PersonFragment extends BaseFragment {
 
     @Override
     public void initViews() {
-
+        User user = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
+        userName.setText(user.getUName());
         //长按可编辑用户信息
         userInfoLayout.setOnLongClickListener(
                 (v -> {
