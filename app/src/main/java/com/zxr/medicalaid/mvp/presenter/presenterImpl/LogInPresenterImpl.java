@@ -1,7 +1,5 @@
 package com.zxr.medicalaid.mvp.presenter.presenterImpl;
 
-import android.util.Log;
-
 import com.zxr.medicalaid.DaoSession;
 import com.zxr.medicalaid.User;
 import com.zxr.medicalaid.UserDao;
@@ -31,7 +29,6 @@ public class LogInPresenterImpl extends BasePresenterImpl<LogInView> implements 
     }
     @Override
     public void logIn(String nickName, String password) {
-        Log.e("LogInPresenterImpl","logIn");
         model.logIn(nickName,password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

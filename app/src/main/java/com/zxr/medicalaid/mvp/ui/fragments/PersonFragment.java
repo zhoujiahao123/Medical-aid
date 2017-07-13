@@ -108,12 +108,26 @@ public class PersonFragment extends BaseFragment {
                 //跳转到系统的闹钟
                 Intent alarm = new Intent(AlarmClock.ACTION_SHOW_ALARMS);
                 startActivity(alarm);
-
                 break;
             case R.id.treat_record_bt:
                 ToActivityUtil.toNextActivity(getContext(), TreatmentRecordActivity.class);
                 break;
             case R.id.generate_qb:
+                //可能有bug
+                String type = DbUtil.getDaosession().getUserDao().loadAll().get(0).getType();
+                if(type.equals("doctor")){
+
+                }else{
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("提示")
+                            .setMessage("只有医生才能生成二维码哦")
+                            .setPositiveButton("我知道了",
+                                    (dialog,what) -> {
+                                        dialog.dismiss();
+                                    })
+                            .setCancelable(true)
+                            .show();
+                }
                 break;
 
         }
