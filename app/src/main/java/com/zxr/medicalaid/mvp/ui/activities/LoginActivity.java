@@ -76,8 +76,6 @@ public class LoginActivity extends BaseActivity implements LogInView{
                     if(isNetWork()){
                         String name = doEncrypt(mAccountEt.getText().toString(), ResponseCons.KEY_PHONENUMBER);
                         String password = doEncrypt(mPasswordEt.getText().toString(),ResponseCons.KEY_PASSWORD);
-                        Log.e(TAG,name);
-                        Log.e(TAG,password);
                         presenter.logIn(name,password);
                     }else {
                         Toast.makeText(this,"请检查您的网络设置",Toast.LENGTH_SHORT).show();

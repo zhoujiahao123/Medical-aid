@@ -1,5 +1,7 @@
 package com.zxr.medicalaid.mvp.view;
 
+import android.graphics.Bitmap;
+
 import com.zxr.medicalaid.mvp.view.base.BaseView;
 
 /**
@@ -7,5 +9,5 @@ import com.zxr.medicalaid.mvp.view.base.BaseView;
  */
 
 public interface QbImageView extends BaseView {
-    void showQB();
+    void showQB(Bitmap bitmap);
 }

@@ -37,13 +37,11 @@ public class LogInPresenterImpl extends BasePresenterImpl<LogInView> implements 
                     public void onCompleted() {
 
                     }
-
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
                         mView.showMsg(error);
                     }
-
                     @Override
                     public void onNext(UserInfo userInfo) {
                         DaoSession daoSession = DbUtil.getDaosession();

@@ -29,7 +29,7 @@ public interface Api {
                                     @Field("type")String type);
     @POST("user/signIn")
     @FormUrlEncoded
-    Observable<UserInfo> logIn(@Field("phoneNumber")String phoneNumber, @Field("password")String password);
+    Observable<Data<UserInfo>> logIn(@Field("phoneNumber")String phoneNumber, @Field("password")String password);
 
     @POST("link")
     @FormUrlEncoded

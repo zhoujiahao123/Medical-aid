@@ -3,10 +3,10 @@ package com.zxr.medicalaid;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.stetho.Stetho;
 import com.zxr.medicalaid.dagger.component.ApplicationComponent;
 import com.zxr.medicalaid.dagger.component.DaggerApplicationComponent;
 import com.zxr.medicalaid.dagger.module.ApplicationModule;
-
 import com.zxr.medicalaid.utils.image.GlideImageLoader;
 
 import cn.finalteam.galleryfinal.CoreConfig;
@@ -33,6 +33,7 @@ public class App extends Application {
         super.onCreate();
         initApplicationComponent();
         initGallerFinal();
+        Stetho.initializeWithDefaults(this);
         this.context = this;
     }
 

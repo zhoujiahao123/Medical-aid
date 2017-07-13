@@ -13,6 +13,6 @@ import rx.Observable;
 public class LogInModelImpl extends BaseModelImpl implements LogInModel {
     @Override
     public Observable<UserInfo> logIn(String nickName, String password) {
-        return api.logIn(nickName,password);
+        return filterStatus(api.logIn(nickName,password));
     }
 }
