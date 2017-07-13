@@ -58,7 +58,7 @@ public class LogInPresenterImpl extends BasePresenterImpl<LogInView> implements 
                         user.setIdString(userInfo.getIdString());
                         user.setIsAlready(1);
                         userDao.insert(user);
-                        mView.showMsg("");
+                        mView.showMsg(null);
                     }
                 });
 //        OkHttpClient client =new OkHttpClient();

@@ -1,10 +1,12 @@
 package com.zxr.medicalaid.mvp.ui.fragments;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.provider.AlarmClock;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.TextView;
+
 import com.zxr.medicalaid.DaoSession;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.User;
@@ -43,8 +45,6 @@ public class PersonFragment extends BaseFragment {
     CircleImageView userImage;
     @InjectView(R.id.user_name)
     TextView userName;
-    @InjectView(R.id.user_sex)
-    TextView userSex;
     @InjectView(R.id.user_info_layout)
     ConstraintLayout userInfoLayout;
     @InjectView(R.id.time_wenzhen)
@@ -54,8 +54,8 @@ public class PersonFragment extends BaseFragment {
     @InjectView(R.id.page_num)
     TextView pageNum;
 
-    DaoSession daoSession= DbUtil.getDaosession();
-    UserDao userDao=daoSession.getUserDao();
+    DaoSession daoSession = DbUtil.getDaosession();
+    UserDao userDao = daoSession.getUserDao();
 
     @Override
     public void initInjector() {
@@ -95,7 +95,7 @@ public class PersonFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.presribe_bt, R.id.about_us_bt, R.id.caution_bt, R.id.treat_record_bt})
+    @OnClick({R.id.presribe_bt, R.id.about_us_bt, R.id.caution_bt, R.id.treat_record_bt,R.id.generate_qb})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.presribe_bt:
@@ -105,7 +105,6 @@ public class PersonFragment extends BaseFragment {
                 ToActivityUtil.toNextActivity(getContext(), AboutUsActivity.class);
                 break;
             case R.id.caution_bt:
-
                 //跳转到系统的闹钟
                 Intent alarm = new Intent(AlarmClock.ACTION_SHOW_ALARMS);
                 startActivity(alarm);
@@ -114,10 +113,12 @@ public class PersonFragment extends BaseFragment {
             case R.id.treat_record_bt:
                 ToActivityUtil.toNextActivity(getContext(), TreatmentRecordActivity.class);
                 break;
-
+            case R.id.generate_qb:
+                break;
 
         }
     }
+
 
 
 }

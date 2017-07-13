@@ -80,7 +80,7 @@ public class SearchFragment extends BaseFragment {
         //不显示webview缩放按钮
         webSettings.setDisplayZoomControls(false);
         mWebView.setWebViewClient(new WebViewClient());
-        mWebView.loadUrl("http://baike.baidu.com/item/%E5%BD%93%E5%BD%92");
+        mWebView.loadUrl("https://www.baidu.com/s?wd=%E5%BD%93%E5%BD%92&rsv_spt=1&rsv_iqid=0x8cbc1ac00000720d&issp=1&f=8&rsv_bp=0&rsv_idx=2&ie=utf-8&tn=22073068_2_dg&rsv_enter=1&rsv_sug3=5&rsv_sug2=0&inputT=3238&rsv_sug4=3635");
     }
 
     @Override

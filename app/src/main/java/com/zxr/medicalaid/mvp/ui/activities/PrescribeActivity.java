@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -55,14 +56,15 @@ public class PrescribeActivity extends BaseActivity {
     //写入数据流
     OutputStream os;
     //ip地址和端口(公网,私有地址不行)
-    public static final String IP_ADD="113.250.152.104";
-    public static final int PORT=20000;
+    public static final String IP_ADD = "113.251.171.142";
+    public static final int PORT = 5566;
     private List<String> listName = new ArrayList<>();
     private List<String> listWeight = new ArrayList<>();
     /**
      * 数据
      */
     private PrescribeTableAdapter adapter;
+
     @Override
     public void initInjector() {
 
@@ -122,28 +124,31 @@ public class PrescribeActivity extends BaseActivity {
                         .setTitle("提醒")
                         .setMessage("您确定要进行提交吗?")
                         .setPositiveButton("确定",
-                                (dialog, which) ->{
+                                (dialog, which) -> {
                                     //进行相关逻辑
-                                    new Thread(){
+                                    new Thread() {
                                         @Override
                                         public void run() {
                                             Socket socket;
-                                            try{
-                                                socket = new Socket(IP_ADD,PORT);
+                                            try {
+                                                socket = new Socket(IP_ADD, PORT);
                                                 os = socket.getOutputStream();
                                                 StringBuffer buffer = new StringBuffer();
-                                                for(int i=0;i<listName.size();i++){
+//                                                for (int i = 0; i < listName.size(); i++) {
                                                     //将药材信息装入
-                                                    buffer.append(listName.get(i)+":"+listWeight.get(i)+",");
-                                                }
-                                                os.write((buffer+"\r\n").getBytes("utf-8"));
-                                            }catch (Exception e){
+                                                    String medicineInfo = "ID2:"+listName.get(0)+","+listWeight.get(0);
+                                                    Log.e(TAG,medicineInfo);
+                                                    buffer.append(medicineInfo);
+//                                                }
+                                                os.write((buffer + "\r\n").getBytes("utf-8"));
+                                            } catch (Exception e) {
+                                                Log.e(TAG,"cuowu发送");
                                                 e.printStackTrace();
                                             }
                                         }
                                     }.start();
                                     dialog.dismiss();
-                                    }
+                                }
                         )
                         .setNegativeButton("取消",
                                 (dialog, which) ->
