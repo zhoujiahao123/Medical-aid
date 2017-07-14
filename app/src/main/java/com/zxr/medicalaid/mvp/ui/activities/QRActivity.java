@@ -1,6 +1,7 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -35,6 +36,7 @@ public class QRActivity extends BaseActivity  implements LinkView{
     public final static int SCANNING_REQUEST_CODE = 1;
     @Inject
     LinkPresenterImpl presenter;
+
     @Override
     public void initInjector() {
         mActivityComponent.inject(this);
@@ -43,10 +45,18 @@ public class QRActivity extends BaseActivity  implements LinkView{
 
     @Override
     public void initViews() {
-        Intent qrReaderIntent = new Intent(QRActivity.this, CaptureActivity.class);
-        qrReaderIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivityForResult(qrReaderIntent,SCANNING_REQUEST_CODE);
-
+        SharedPreferences preferences=getSharedPreferences("isConnect",MODE_PRIVATE);
+        String doctorId =preferences.getString("uId","");
+        if(!doctorId.equals("")){
+            Intent intent = new Intent(QRActivity.this,CurrentPatientsActivity.class);
+            intent.putExtra("uId",doctorId);
+            startActivity(intent);
+            finish();
+        }else {
+            Intent qrReaderIntent = new Intent(QRActivity.this, CaptureActivity.class);
+            qrReaderIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(qrReaderIntent,SCANNING_REQUEST_CODE);
+        }
     }
 
     private void alreadyConnect() {
@@ -129,6 +139,7 @@ public class QRActivity extends BaseActivity  implements LinkView{
     public void showMsg(String msg) {
         Log.e(TAG,"alreadyConnect");
         observable.subscribe(observer);
+        finish();
     }
     Observer<String> observer = new Observer<String>() {
         @Override
@@ -143,11 +154,14 @@ public class QRActivity extends BaseActivity  implements LinkView{
 
         @Override
         public void onNext(String s) {
+            SharedPreferences preferences=getSharedPreferences("isConnect",MODE_PRIVATE);
+            Log.e(TAG,"观察者已经收到数据了"+s);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("uId",s);
+            editor.commit();
             Intent intent = new Intent(QRActivity.this,CurrentPatientsActivity.class);
             intent.putExtra("uId",s);
             startActivity(intent);
-            finish();
-            Log.e(TAG,"观察者已经收到数据了"+s);
         }
     };
 }
