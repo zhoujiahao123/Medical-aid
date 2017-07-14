@@ -2,12 +2,12 @@ package com.zxr.medicalaid.mvp.ui.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.lazylibrary.util.ToastUtils;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.presenter.presenterImpl.LogInPresenterImpl;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
@@ -125,6 +125,11 @@ public class LoginActivity extends BaseActivity implements LogInView{
 
     @Override
     public void showMsg(String msg) {
+        ToastUtils.showToast(this,msg);
+    }
+
+    @Override
+    public void loginSuccess() {
         ToActivityUtil.toNextActivityAndFinish(this, MainViewActivity.class);
     }
 }

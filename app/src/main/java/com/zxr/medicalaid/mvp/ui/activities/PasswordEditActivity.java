@@ -7,7 +7,14 @@ import android.widget.EditText;
 
 import com.github.lazylibrary.util.ToastUtils;
 import com.zxr.medicalaid.R;
+import com.zxr.medicalaid.mvp.presenter.presenterImpl.ChangPasswordPresenterImpl;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
+import com.zxr.medicalaid.mvp.view.ChangPasswordView;
+import com.zxr.medicalaid.net.ResponseCons;
+import com.zxr.medicalaid.utils.db.DbUtil;
+import com.zxr.medicalaid.utils.encode.EncodeUtil;
+
+import javax.inject.Inject;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -16,7 +23,7 @@ import butterknife.OnClick;
  * Created by 猿人 on 2017/7/7.
  */
 
-public class PasswordEditActivity extends BaseActivity {
+public class PasswordEditActivity extends BaseActivity implements ChangPasswordView {
     @InjectView(R.id.old_password_input)
     EditText oldPasswordInput;
     @InjectView(R.id.new_password_input)
@@ -27,14 +34,14 @@ public class PasswordEditActivity extends BaseActivity {
     Toolbar mToolbar;
 
 
-    /**
-     * 设置一个标志位
-     */
-    private boolean oldPasswordIsRight = false;
+    @Inject
+    ChangPasswordPresenterImpl mPresenter;
+
 
     @Override
     public void initInjector() {
-
+        mActivityComponent.inject(this);
+        mPresenter.injectView(this);
     }
 
     @Override
@@ -45,17 +52,7 @@ public class PasswordEditActivity extends BaseActivity {
         mToolbar.setTitle(R.string.reset_password);
         mToolbar.setTitleTextColor(Color.WHITE);
 
-        oldPasswordInput.setOnFocusChangeListener(
-                (v, hasFocus) -> {
-                    if (!hasFocus) {
-                        //当失去焦点的时候,进行网络请求，原密码是否正确
-                        //如果不正确就显示错误信息
-                        String oldPasswordTv;
-                        //如果源密码正确就把标志位设置为正确
-                        oldPasswordIsRight = true;
-                    }
-                }
-        );
+        oldPasswordInput.requestFocus();
     }
 
     @Override
@@ -75,19 +72,37 @@ public class PasswordEditActivity extends BaseActivity {
 
     @OnClick(R.id.finish_bt)
     public void onViewClicked() {
-        if (!oldPasswordIsRight) {
-            ToastUtils.showToast(this, "原密码不正确，请检查");
-            return;
-        }
         //检查两个新密码是否相同
+        String oldPassowrd = oldPasswordInput.getText().toString();
         String newPassword = newPasswordInput.getText().toString();
-        String newPasswordConfimr = confirmPasswordInput.getText().toString();
-        if (!newPassword.equals(newPasswordConfimr)) {
-            ToastUtils.showToast(this, "两次密码不相同,请检查");
+        String newPasswordConfirm = confirmPasswordInput.getText().toString();
+        if (!newPasswordConfirm.equals(newPassword)){
+            ToastUtils.showToast(this,"两次密码不一致");
             return;
         }
-        //在这里进行更改密码的请求
+        String idString = DbUtil.getDaosession().getUserDao().loadAll().get(0).getIdString();
+        mPresenter.changPassword(idString, EncodeUtil.doEncrypt(oldPassowrd, ResponseCons.KEY_PASSWORD),EncodeUtil.doEncrypt(newPassword,ResponseCons.KEY_PASSWORD));
     }
 
 
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void showMsg(String msg) {
+        ToastUtils.showToast(this,msg);
+    }
+
+    @Override
+    public void changSuccess() {
+        ToastUtils.showToast(this,"修改成功");
+        finish();
+    }
 }

@@ -7,5 +7,5 @@ import com.zxr.medicalaid.mvp.view.base.BaseView;
  */
 
 public interface LogInView extends BaseView{
-
+    void loginSuccess();
 }

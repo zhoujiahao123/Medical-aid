@@ -39,4 +39,10 @@ public interface Api {
     @POST("link/QR.png")
     @FormUrlEncoded
     Observable<ResponseBody> getQBImg(@Field("idString") String idString);
+
+    //修改密码
+    @POST("user/updatePassword")
+    @FormUrlEncoded
+    Observable<Data<String>> changPassword(@Field("idString") String idString,@Field("oldPassword") String oldPassword,
+                                           @Field("newPassword") String newPassword);
 }
