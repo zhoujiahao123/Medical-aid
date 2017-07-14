@@ -13,6 +13,7 @@ import com.zxr.medicalaid.User;
 import com.zxr.medicalaid.UserDao;
 import com.zxr.medicalaid.mvp.ui.activities.AboutUsActivity;
 import com.zxr.medicalaid.mvp.ui.activities.InquiryActivity;
+import com.zxr.medicalaid.mvp.ui.activities.QbShowActivity;
 import com.zxr.medicalaid.mvp.ui.activities.TreatmentRecordActivity;
 import com.zxr.medicalaid.mvp.ui.activities.UserInfoEditActivity;
 import com.zxr.medicalaid.mvp.ui.fragments.base.BaseFragment;
@@ -47,7 +48,6 @@ public class PersonFragment extends BaseFragment {
     TextView userName;
     @InjectView(R.id.user_info_layout)
     ConstraintLayout userInfoLayout;
-
 
     DaoSession daoSession = DbUtil.getDaosession();
     UserDao userDao = daoSession.getUserDao();
@@ -90,7 +90,7 @@ public class PersonFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.presribe_bt, R.id.about_us_bt, R.id.caution_bt, R.id.treat_record_bt,R.id.generate_qb})
+    @OnClick({R.id.presribe_bt, R.id.about_us_bt, R.id.caution_bt, R.id.treat_record_bt, R.id.generate_qb})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.presribe_bt:
@@ -110,14 +110,17 @@ public class PersonFragment extends BaseFragment {
             case R.id.generate_qb:
                 //可能有bug
                 String type = DbUtil.getDaosession().getUserDao().loadAll().get(0).getType();
-                if(type.equals("doctor")){
-
-                }else{
+                if (type.equals("doctor")) {
+                    String id = DbUtil.getDaosession().getUserDao().loadAll().get(0).getIdString();
+                    Intent intent = new Intent(getContext(), QbShowActivity.class);
+                    intent.putExtra("doctorId", id);
+                    getContext().startActivity(intent);
+                } else {
                     new AlertDialog.Builder(getContext())
                             .setTitle("提示")
                             .setMessage("只有医生才能生成二维码哦")
                             .setPositiveButton("我知道了",
-                                    (dialog,what) -> {
+                                    (dialog, what) -> {
                                         dialog.dismiss();
                                     })
                             .setCancelable(true)
@@ -127,7 +130,6 @@ public class PersonFragment extends BaseFragment {
 
         }
     }
-
 
 
 }

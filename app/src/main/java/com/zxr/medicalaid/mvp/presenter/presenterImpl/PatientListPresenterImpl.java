@@ -44,6 +44,7 @@ public class PatientListPresenterImpl extends BasePresenterImpl<PatientListView>
                     @Override
                     public void onNext(PatientInfo patientInfo) {
                         Log.e("TAG","请求列表成功");
+                        mView.showPatient(patientInfo);
                     }
                 });
     }

@@ -1,5 +1,6 @@
 package com.zxr.medicalaid.mvp.view;
 
+import com.zxr.medicalaid.mvp.entity.moudle.PatientInfo;
 import com.zxr.medicalaid.mvp.view.base.BaseView;
 
 /**
@@ -7,5 +8,5 @@ import com.zxr.medicalaid.mvp.view.base.BaseView;
  */
 
 public interface PatientListView extends BaseView{
-
+    void showPatient(PatientInfo patientInfo);
 }

@@ -9,28 +9,40 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.dagger.scope.ContextLife;
 import com.zxr.medicalaid.mvp.entity.Person;
+import com.zxr.medicalaid.mvp.entity.moudle.PatientInfo;
+import com.zxr.medicalaid.mvp.presenter.presenterImpl.CanclePresenterImpl;
 import com.zxr.medicalaid.mvp.presenter.presenterImpl.PatientListPresenterImpl;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.PatientListAdapter;
+import com.zxr.medicalaid.mvp.view.CancleView;
 import com.zxr.medicalaid.mvp.view.PatientListView;
+import com.zxr.medicalaid.net.ResponseCons;
 import com.zxr.medicalaid.utils.db.IdUtil;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
+import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 
 import butterknife.InjectView;
@@ -38,18 +50,23 @@ import butterknife.InjectView;
 /**
  * 区分药师和病人
  */
-public class CurrentPatientsActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, RecyclerArrayAdapter.OnLoadMoreListener,PatientListView {
+public class CurrentPatientsActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, RecyclerArrayAdapter.OnLoadMoreListener, PatientListView,CancleView {
 
     @Inject
     PatientListPresenterImpl presenter;
+    @Inject
+    CanclePresenterImpl canclePresenter;
     @InjectView(R.id.mToolbar)
     Toolbar mToolbar;
     @InjectView(R.id.person_list)
     EasyRecyclerView mRecycler;
     public static final String GET_FROM = "get_from";
+    @InjectView(R.id.image_stop)
+    ImageView imageStop;
     private int type = 0;
     public static final int DOCTOR = 1;
     public static final int PATIENT = 2;
+    MessageDigest md;
     /**
      * adapter
      */
@@ -64,11 +81,12 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
 
     //===============================================测试
     private List<Person> lists = new ArrayList<>();
-
+    private List<String> listId = new ArrayList<>();
     @Override
     public void initInjector() {
         mActivityComponent.inject(this);
         presenter.injectView(this);
+        canclePresenter.injectView(this);
     }
 
     @Override
@@ -79,7 +97,22 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mToolbar.setTitle(R.string.current_patients_num);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        presenter.getPatient(IdUtil.getIdString(),1);
+        String doctorId = getIntent().getStringExtra("uId");
+        if (doctorId != null) {
+            Log.e(TAG, doctorId);
+            type = PATIENT;
+            presenter.getPatient(doctorId, 1);
+            imageStop.setVisibility(View.VISIBLE);
+        } else {
+            presenter.getPatient(IdUtil.getIdString(), 1);
+            imageStop.setVisibility(View.INVISIBLE);
+        }
+        imageStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                canclePresenter.cancleLink(doctorId,IdUtil.getIdString());
+            }
+        });
         //recyclerview
         //adapter设置
         adapter = new PatientListAdapter(this);
@@ -101,16 +134,17 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
                     }
                 }
         );
-        if (type == PATIENT) {
+        if (type == DOCTOR) {
             adapter.setOnItemLongClickListener(
                     position -> {
                         new AlertDialog.Builder(this)
                                 .setTitle("提示")
                                 .setCancelable(true)
-                                .setMessage("您确定要退出当前队列?")
+                                .setMessage("确定要将他出当前队列?")
                                 .setPositiveButton("确定",
                                         (dialog, what) -> {
                                             adapter.remove(position);
+                                            canclePresenter.cancleLink(IdUtil.getIdString(),listId.get(position));
                                             dialog.dismiss();
                                         }
                                 )
@@ -196,5 +230,66 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
     @Override
     public void showMsg(String msg) {
 
+    }
+
+    public String doEncode(String data, String keyString) {
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        //生成字节Key
+        byte[] byteKey = md.digest(keyString.getBytes());
+        //Key转换
+        Key convertKey = new SecretKeySpec(byteKey, "AES");
+        Key myKey = convertKey;
+        try {
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            //解密
+            cipher.init(Cipher.DECRYPT_MODE, myKey);
+            byte[] decodeByte = cipher.doFinal(hex2byte(data));
+            String decodeString = new String(decodeByte);
+            Log.e("decodeString", new String(decodeString));
+            return decodeString;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static final byte[] hex2byte(String hex)
+            throws IllegalArgumentException {
+        if (hex.length() % 2 != 0) {
+            throw new IllegalArgumentException();
+        }
+        char[] arr = hex.toCharArray();
+        byte[] b = new byte[hex.length() / 2];
+        for (int i = 0, j = 0, l = hex.length(); i < l; i++, j++) {
+            String swap = "" + arr[i++] + arr[i];
+            int byteint = Integer.parseInt(swap, 16) & 0xFF;
+            b[j] = new Integer(byteint).byteValue();
+        }
+        return b;
+    }
+
+    @Override
+    public void showPatient(PatientInfo patientInfo) {
+        for (int i = 0; i < patientInfo.getBody().getList().size(); i++) {
+            String name = doEncode(patientInfo.getBody().getList().get(i).getNickName(), ResponseCons.KEY_NAME);
+            Person person = new Person(name, "", "120.77.87.78:8080/arti-sports/image//user15.png");
+            lists.add(person);
+            listId.add(patientInfo.getBody().getList().get(i).getIdString());
+        }
+        adapter.addAll(lists);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void cancleLinkSucceed() {
+        if(type ==PATIENT)
+        finish();
+        else {
+
+        }
     }
 }

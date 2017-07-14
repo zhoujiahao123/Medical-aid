@@ -16,7 +16,6 @@ import com.zxr.medicalaid.mvp.view.LinkView;
 import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.db.IdUtil;
 import com.zxr.medicalaid.utils.encode.EncodeUtil;
-import com.zxr.medicalaid.utils.system.ToActivityUtil;
 import com.zxr.medicalaid.zxing.CaptureActivity;
 
 import java.security.Key;
@@ -28,11 +27,14 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+
 public class QRActivity extends BaseActivity  implements LinkView{
     public final static int SCANNING_REQUEST_CODE = 1;
     @Inject
     LinkPresenterImpl presenter;
-
     @Override
     public void initInjector() {
         mActivityComponent.inject(this);
@@ -48,11 +50,9 @@ public class QRActivity extends BaseActivity  implements LinkView{
     }
 
     private void alreadyConnect() {
-        ToActivityUtil.toNextActivity(this, CaptureActivity.class,
-                new String[]{CurrentPatientsActivity.GET_FROM}, new int[]{CurrentPatientsActivity.PATIENT});
-        finish();
-    }
 
+    }
+    Observable<String> observable;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -70,6 +70,12 @@ public class QRActivity extends BaseActivity  implements LinkView{
                             UserDao userDao = daoSession.getUserDao();
                             List<User> list = userDao.queryBuilder().list();
                             Log.e(TAG,list.size()+"");
+                            observable = Observable.create(new Observable.OnSubscribe<String>() {
+                                @Override
+                                public void call(Subscriber<? super String> subscriber) {
+                                    subscriber.onNext(doctorId);
+                                }
+                            });
                             presenter.linkDP(doctorId, IdUtil.getIdString());
                         }
                     });
@@ -121,6 +127,27 @@ public class QRActivity extends BaseActivity  implements LinkView{
 
     @Override
     public void showMsg(String msg) {
-         alreadyConnect();
+        Log.e(TAG,"alreadyConnect");
+        observable.subscribe(observer);
     }
+    Observer<String> observer = new Observer<String>() {
+        @Override
+        public void onCompleted() {
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+
+        }
+
+        @Override
+        public void onNext(String s) {
+            Intent intent = new Intent(QRActivity.this,CurrentPatientsActivity.class);
+            intent.putExtra("uId",s);
+            startActivity(intent);
+            finish();
+            Log.e(TAG,"观察者已经收到数据了"+s);
+        }
+    };
 }

@@ -1,11 +1,15 @@
 package com.zxr.medicalaid.mvp.presenter.presenterImpl;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.zxr.medicalaid.mvp.model.ModelImpl.QbImageModelImpl;
-import com.zxr.medicalaid.mvp.model.QbImageModel;
-import com.zxr.medicalaid.mvp.presenter.base.BasePresenterImpl;
 import com.zxr.medicalaid.mvp.presenter.QbImagePresenter;
+import com.zxr.medicalaid.mvp.presenter.base.BasePresenterImpl;
 import com.zxr.medicalaid.mvp.view.QbImageView;
 import com.zxr.medicalaid.net.FilterSubscriber;
+
+import javax.inject.Inject;
 
 import okhttp3.ResponseBody;
 import rx.android.schedulers.AndroidSchedulers;
@@ -17,8 +21,12 @@ import rx.schedulers.Schedulers;
 
 public class QbImagePresenterImpl extends BasePresenterImpl<QbImageView> implements QbImagePresenter {
 
-    QbImageModel qbModel = new QbImageModelImpl();
+    @Inject
+    QbImageModelImpl qbModel;
 
+    @Inject
+    public QbImagePresenterImpl() {
+    }
 
     @Override
     public void showQbImage(String id) {
@@ -34,7 +42,14 @@ public class QbImagePresenterImpl extends BasePresenterImpl<QbImageView> impleme
 
                     @Override
                     public void onNext(ResponseBody responseBody) {
+                        Bitmap bitmap = BitmapFactory.decodeStream(responseBody.byteStream());
+                        mView.showQB(bitmap);
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        mView.showMsg(error);
                     }
                 });
     }

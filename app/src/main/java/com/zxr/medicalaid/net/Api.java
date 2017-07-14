@@ -2,6 +2,7 @@ package com.zxr.medicalaid.net;
 
 
 import com.zxr.medicalaid.mvp.entity.Data;
+import com.zxr.medicalaid.mvp.entity.moudle.CancleInfo;
 import com.zxr.medicalaid.mvp.entity.moudle.DrugInfo;
 import com.zxr.medicalaid.mvp.entity.moudle.LinkInfo;
 import com.zxr.medicalaid.mvp.entity.moudle.PatientInfo;
@@ -30,7 +31,7 @@ public interface Api {
                                     @Field("type")String type);
     @POST("user/signIn")
     @FormUrlEncoded
-    Observable<UserInfo> logIn(@Field("phoneNumber")String phoneNumber, @Field("password")String password);
+    Observable<Data<UserInfo>> logIn(@Field("phoneNumber")String phoneNumber, @Field("password")String password);
 
     @POST("link")
     @FormUrlEncoded
@@ -42,7 +43,11 @@ public interface Api {
     Observable<ResponseBody> getQBImg(@Field("idString") String idString);
 
     //医生获取连接的患者‘
-    @POST
+    @POST("link/list")
     @FormUrlEncoded
     Observable<PatientInfo> getPatient(@Field("doctorId")String doctorId,@Field("currentPage") int currentPage);
+
+    @POST("link/cancle")
+    @FormUrlEncoded
+    Observable<CancleInfo> cancleLink(@Field("doctorId")String doctorId,@Field("patientId")String patientId);
 }
