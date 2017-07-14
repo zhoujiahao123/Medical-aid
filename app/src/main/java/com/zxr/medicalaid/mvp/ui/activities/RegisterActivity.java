@@ -166,9 +166,12 @@ public class RegisterActivity extends BaseActivity implements SignInView {
 //                        if (patient.isChecked()){
 //                            type = "patient";
 //                        }
-//                        String name = doEncrypt(mNameInput.getText().toString(), KEY_NAME);
-//                        String password = doEncrypt(mPasswordEt.getText().toString().trim(), KEY_PASSWORD);
-//                        String phoneNumber = doEncrypt(mAccountEt.getText().toString().trim(), KEY_PHONENUMBER);
+                        String name = doEncrypt(mNameInput.getText().toString(), KEY_NAME);
+                        String password = doEncrypt(mPasswordEt.getText().toString().trim(), KEY_PASSWORD);
+                        String phoneNumber = doEncrypt(mAccountEt.getText().toString().trim(), KEY_PHONENUMBER);
+                        Log.e(TAG,name);
+                        Log.e(TAG,password);
+                        Log.e(TAG,phoneNumber);
                     } else {
                         Snackbar.make(container, "请检查您的网络连接", Snackbar.LENGTH_SHORT).show();
                     }
