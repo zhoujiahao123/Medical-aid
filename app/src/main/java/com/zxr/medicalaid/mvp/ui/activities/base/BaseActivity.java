@@ -5,7 +5,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-
 import com.zxr.medicalaid.App;
 import com.zxr.medicalaid.dagger.component.ActivityComponent;
 import com.zxr.medicalaid.dagger.component.DaggerActivityComponent;

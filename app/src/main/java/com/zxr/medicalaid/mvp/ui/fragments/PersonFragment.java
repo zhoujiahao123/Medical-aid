@@ -47,12 +47,7 @@ public class PersonFragment extends BaseFragment {
     TextView userName;
     @InjectView(R.id.user_info_layout)
     ConstraintLayout userInfoLayout;
-    @InjectView(R.id.time_wenzhen)
-    TextView whenZhenNum;
-    @InjectView(R.id.time_jiuzhen)
-    TextView jiuZhenNum;
-    @InjectView(R.id.page_num)
-    TextView pageNum;
+
 
     DaoSession daoSession = DbUtil.getDaosession();
     UserDao userDao = daoSession.getUserDao();

@@ -4,6 +4,7 @@ package com.zxr.medicalaid.net;
 import com.zxr.medicalaid.mvp.entity.Data;
 import com.zxr.medicalaid.mvp.entity.moudle.DrugInfo;
 import com.zxr.medicalaid.mvp.entity.moudle.LinkInfo;
+import com.zxr.medicalaid.mvp.entity.moudle.PatientInfo;
 import com.zxr.medicalaid.mvp.entity.moudle.UserInfo;
 
 import okhttp3.ResponseBody;
@@ -33,10 +34,15 @@ public interface Api {
 
     @POST("link")
     @FormUrlEncoded
-    Observable<LinkInfo> linkDP(@Field("doctorId")String doctorId,@Field("patient")String patientId);
+    Observable<LinkInfo> linkDP(@Field("doctorId")String doctorId,@Field("patientId")String patientId);
 
     //医生获取二维码
     @POST("link/QR.png")
     @FormUrlEncoded
     Observable<ResponseBody> getQBImg(@Field("idString") String idString);
+
+    //医生获取连接的患者‘
+    @POST
+    @FormUrlEncoded
+    Observable<PatientInfo> getPatient(@Field("doctorId")String doctorId,@Field("currentPage") int currentPage);
 }

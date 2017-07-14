@@ -1,5 +1,7 @@
 package com.zxr.medicalaid.mvp.presenter.presenterImpl;
 
+import android.util.Log;
+
 import com.zxr.medicalaid.DaoSession;
 import com.zxr.medicalaid.User;
 import com.zxr.medicalaid.UserDao;
@@ -55,6 +57,7 @@ public class LogInPresenterImpl extends BasePresenterImpl<LogInView> implements 
                         user.setIdString(userInfo.getIdString());
                         user.setIsAlready(1);
                         userDao.insert(user);
+                        Log.e("TAG",userInfo.getIdString()+userInfo.getNickName()+userInfo.getPhoneNumber());
                         mView.showMsg(null);
                     }
                 });

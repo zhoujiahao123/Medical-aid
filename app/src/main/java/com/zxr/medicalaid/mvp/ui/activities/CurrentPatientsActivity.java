@@ -21,8 +21,11 @@ import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.dagger.scope.ContextLife;
 import com.zxr.medicalaid.mvp.entity.Person;
+import com.zxr.medicalaid.mvp.presenter.presenterImpl.PatientListPresenterImpl;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.PatientListAdapter;
+import com.zxr.medicalaid.mvp.view.PatientListView;
+import com.zxr.medicalaid.utils.db.IdUtil;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
 import java.util.ArrayList;
@@ -35,20 +38,18 @@ import butterknife.InjectView;
 /**
  * 区分药师和病人
  */
-public class CurrentPatientsActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, RecyclerArrayAdapter.OnLoadMoreListener {
+public class CurrentPatientsActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, RecyclerArrayAdapter.OnLoadMoreListener,PatientListView {
 
-
+    @Inject
+    PatientListPresenterImpl presenter;
     @InjectView(R.id.mToolbar)
     Toolbar mToolbar;
     @InjectView(R.id.person_list)
     EasyRecyclerView mRecycler;
-
     public static final String GET_FROM = "get_from";
     private int type = 0;
     public static final int DOCTOR = 1;
     public static final int PATIENT = 2;
-
-
     /**
      * adapter
      */
@@ -67,6 +68,7 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
     @Override
     public void initInjector() {
         mActivityComponent.inject(this);
+        presenter.injectView(this);
     }
 
     @Override
@@ -77,16 +79,16 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mToolbar.setTitle(R.string.current_patients_num);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
-
+        presenter.getPatient(IdUtil.getIdString(),1);
         //recyclerview
         //adapter设置
         adapter = new PatientListAdapter(this);
         //===============================================测试
-        for (int i = 0; i < 5; i++) {
-            Person person = new Person("张兴锐", "13:19", "120.77.87.78:8080/arti-sports/image//user15.png");
-            lists.add(person);
-        }
-        adapter.addAll(lists);
+//        for (int i = 0; i < 5; i++) {
+//            Person person = new Person("张兴锐", "13:19", "120.77.87.78:8080/arti-sports/image//user15.png");
+//            lists.add(person);
+//        }
+//        adapter.addAll(lists);
         //设置item的点击监听
         adapter.setOnItemClickListener(
                 pos -> {
@@ -178,6 +180,21 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
 
     @Override
     public void onLoadMore() {
+
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void showMsg(String msg) {
 
     }
 }
