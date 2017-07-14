@@ -20,11 +20,17 @@ public class ResponseCons {
     public static final int STATUS_SUCCESS = 200;
     public static final String SUCCESS_MSG = "成功";
 
+    public static final int STATUS_CHANGE_SUCCESS = 201;
+    public static final String SUCCESS_CHANGE_MSG = "成功修改数据";
+
     public static final int STATUS_FILED = 500;
     public static final String FILED_MSG = "服务器出现问题";
 
     public static final int STATUS_FALED_AES=400;
     public static final String FILED_AES_MSG = "加密出现错误";
+
+    public static final int STATUS_NO_THIS_DATA = 404;
+    public static final String NO_THIS_DATA_MSG = "没有该用户";
 
     public static final int STATUS_FALED_NAME=406;
     public static final String FILED_NAME_MSG="用户名被占用";

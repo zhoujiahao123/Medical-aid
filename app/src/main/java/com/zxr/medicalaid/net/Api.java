@@ -6,6 +6,7 @@ import com.zxr.medicalaid.mvp.entity.moudle.DrugInfo;
 import com.zxr.medicalaid.mvp.entity.moudle.LinkInfo;
 import com.zxr.medicalaid.mvp.entity.moudle.UserInfo;
 
+import okhttp3.ResponseBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
@@ -28,9 +29,20 @@ public interface Api {
                                     @Field("type")String type);
     @POST("user/signIn")
     @FormUrlEncoded
-    Observable<UserInfo> logIn(@Field("phoneNumber")String phoneNumber, @Field("password")String password);
+    Observable<Data<UserInfo>> logIn(@Field("phoneNumber")String phoneNumber, @Field("password")String password);
 
     @POST("link")
     @FormUrlEncoded
     Observable<LinkInfo> linkDP(@Field("doctorId")String doctorId,@Field("patient")String patientId);
+
+    //医生获取二维码
+    @POST("link/QR.png")
+    @FormUrlEncoded
+    Observable<ResponseBody> getQBImg(@Field("idString") String idString);
+
+    //修改密码
+    @POST("user/updatePassword")
+    @FormUrlEncoded
+    Observable<Data<String>> changPassword(@Field("idString") String idString,@Field("oldPassword") String oldPassword,
+                                           @Field("newPassword") String newPassword);
 }

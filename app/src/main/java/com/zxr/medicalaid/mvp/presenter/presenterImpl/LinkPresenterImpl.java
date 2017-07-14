@@ -22,9 +22,8 @@ import rx.schedulers.Schedulers;
 public class LinkPresenterImpl extends BasePresenterImpl<LinkView> implements LinkPresenter {
     LinkModel model = new LinkModelImpl();
     @Inject
-    public LinkPresenterImpl(){
+    public LinkPresenterImpl(){}
 
-    }
     @Override
     public void linkDP(String doctorId, String patientId) {
         model.linkDP(doctorId, patientId)

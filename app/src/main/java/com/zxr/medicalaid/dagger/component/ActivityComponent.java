@@ -24,7 +24,9 @@ import com.zxr.medicalaid.dagger.scope.ContextLife;
 import com.zxr.medicalaid.dagger.scope.PerActivity;
 import com.zxr.medicalaid.mvp.ui.activities.CurrentPatientsActivity;
 import com.zxr.medicalaid.mvp.ui.activities.LoginActivity;
+import com.zxr.medicalaid.mvp.ui.activities.PasswordEditActivity;
 import com.zxr.medicalaid.mvp.ui.activities.QRActivity;
+import com.zxr.medicalaid.mvp.ui.activities.QbShowActivity;
 import com.zxr.medicalaid.mvp.ui.activities.RegisterActivity;
 
 import dagger.Component;
@@ -45,6 +47,6 @@ public interface ActivityComponent {
     void inject(RegisterActivity currentPatientsActivity);
     void inject(LoginActivity currentPatientsActivity);
     void inject(QRActivity currentPatientsActivity);
-
-
+    void inject(QbShowActivity qbShowActivity);
+    void inject(PasswordEditActivity passwordEditActivity);
 }

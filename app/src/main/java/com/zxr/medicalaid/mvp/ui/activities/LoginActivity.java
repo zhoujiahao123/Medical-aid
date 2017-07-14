@@ -2,17 +2,18 @@ package com.zxr.medicalaid.mvp.ui.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.lazylibrary.util.ToastUtils;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.presenter.presenterImpl.LogInPresenterImpl;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.view.LogInView;
 import com.zxr.medicalaid.net.ResponseCons;
+import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.encode.EncodeUtil;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
@@ -48,7 +49,9 @@ public class LoginActivity extends BaseActivity implements LogInView{
 
     @Override
     public void initViews() {
-
+        if(DbUtil.getDaosession().getUserDao().loadAll().size() != 0){
+            ToActivityUtil.toNextActivityAndFinish(this,MainViewActivity.class);
+        }
     }
 
     @Override
@@ -73,8 +76,6 @@ public class LoginActivity extends BaseActivity implements LogInView{
                     if(isNetWork()){
                         String name = doEncrypt(mAccountEt.getText().toString(), ResponseCons.KEY_PHONENUMBER);
                         String password = doEncrypt(mPasswordEt.getText().toString(),ResponseCons.KEY_PASSWORD);
-                        Log.e(TAG,name);
-                        Log.e(TAG,password);
                         presenter.logIn(name,password);
                     }else {
                         Toast.makeText(this,"请检查您的网络设置",Toast.LENGTH_SHORT).show();
@@ -124,6 +125,11 @@ public class LoginActivity extends BaseActivity implements LogInView{
 
     @Override
     public void showMsg(String msg) {
+        ToastUtils.showToast(this,msg);
+    }
+
+    @Override
+    public void loginSuccess() {
         ToActivityUtil.toNextActivityAndFinish(this, MainViewActivity.class);
     }
 }

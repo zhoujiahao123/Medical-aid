@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.zxr.medicalaid.R;
@@ -42,7 +43,7 @@ import static com.zxr.medicalaid.net.ResponseCons.KEY_PHONENUMBER;
 
 public class RegisterActivity extends BaseActivity implements SignInView {
 
-    MessageDigest md ;
+    MessageDigest md;
     @Inject
     SignInPresenterImpl presenter;
     @InjectView(R.id.acount_input)
@@ -57,12 +58,20 @@ public class RegisterActivity extends BaseActivity implements SignInView {
     TextView mSendCodeTv;
     @InjectView(R.id.container)
     ConstraintLayout container;
+    @InjectView(R.id.doctor)
+    RadioButton doctor;
+    @InjectView(R.id.patient)
+    RadioButton patient;
+    @InjectView(R.id.name_input)
+    EditText mNameInput;
+
     private String countryCode;
     private static final String code = "42";
     private String phoneNum;
     //用于数据加密
 
     private static String TAG = "RegisterActivity";
+
     @Override
     public void initInjector() {
         mActivityComponent.inject(this);
@@ -101,9 +110,14 @@ public class RegisterActivity extends BaseActivity implements SignInView {
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         Log.e("提交验证码成", "成功");
 //                        String name= doEncrypt(String.valueOf(Math.random()*100));
-                        String password = doEncrypt(mPasswordEt.getText().toString().trim(),KEY_PASSWORD);
-                        String phoneNumber =doEncrypt(mAccountEt.getText().toString().trim(),KEY_PHONENUMBER);
-                        presenter.signIn("啦啦",password,phoneNumber,"doctor");
+                        String name = doEncrypt(mNameInput.getText().toString().trim(),KEY_NAME);
+                        String password = doEncrypt(mPasswordEt.getText().toString().trim(), KEY_PASSWORD);
+                        String phoneNumber = doEncrypt(mAccountEt.getText().toString().trim(), KEY_PHONENUMBER);
+                        String type = "doctor";
+                        if (patient.isChecked()){
+                            type = "patient";
+                        }
+                        presenter.signIn(name, password, phoneNumber, type);
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
 
                     } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
@@ -121,9 +135,9 @@ public class RegisterActivity extends BaseActivity implements SignInView {
 
     /**
      * 加密算法
+     *
      * @param
      */
-
 
 
     @OnClick({R.id.identifying_number_send, R.id.confirm_bt})
@@ -147,24 +161,25 @@ public class RegisterActivity extends BaseActivity implements SignInView {
             case R.id.confirm_bt:
                 if (mAccountEt.getText() != null && mPasswordEt.getText() != null) {
                     if (isNetWork()) {
-                       SMSSDK.submitVerificationCode(SMSSDK.getCountry("42")[1], mAccountEt.getText().toString(), mIdentifyintEt.getText().toString());
-                        String name= doEncrypt("的哒",KEY_NAME);
-                        String password =doEncrypt(mPasswordEt.getText().toString().trim(),KEY_PASSWORD);
-                        String phoneNumber = doEncrypt(mAccountEt.getText().toString().trim(),KEY_PHONENUMBER);
-                        Log.e("name",name);
-                        Log.e("name",password);
-                        Log.e("name",phoneNumber);
-                        presenter.signIn(name,password,phoneNumber,"patient");
+                        SMSSDK.submitVerificationCode(SMSSDK.getCountry("42")[1], mAccountEt.getText().toString(), mIdentifyintEt.getText().toString());
+//                        String type = "doctor";
+//                        if (patient.isChecked()){
+//                            type = "patient";
+//                        }
+//                        String name = doEncrypt(mNameInput.getText().toString(), KEY_NAME);
+//                        String password = doEncrypt(mPasswordEt.getText().toString().trim(), KEY_PASSWORD);
+//                        String phoneNumber = doEncrypt(mAccountEt.getText().toString().trim(), KEY_PHONENUMBER);
                     } else {
-                        Snackbar.make(container,"请检查您的网络连接",Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(container, "请检查您的网络连接", Snackbar.LENGTH_SHORT).show();
                     }
-                }else {
-                    Snackbar.make(container,"信息不能为空",Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(container, "信息不能为空", Snackbar.LENGTH_SHORT).show();
                 }
                 break;
         }
     }
-    public  String doEncrypt(String data,String keyString){
+
+    public String doEncrypt(String data, String keyString) {
         try {
             md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
@@ -174,7 +189,7 @@ public class RegisterActivity extends BaseActivity implements SignInView {
         byte[] byteKey = md.digest(keyString.getBytes());
         //Key转换
         Key convertKey = new SecretKeySpec(byteKey, "AES");
-        Key myKey=convertKey;
+        Key myKey = convertKey;
         try {
             //加密
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -182,12 +197,12 @@ public class RegisterActivity extends BaseActivity implements SignInView {
             byte[] encode = cipher.doFinal(data.getBytes());
             String encodeString = EncodeUtil.byte2hex(encode);
             return encodeString;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
     @Override
     public void showProgress() {
 
@@ -200,13 +215,13 @@ public class RegisterActivity extends BaseActivity implements SignInView {
 
     @Override
     public void showMsg(String msg) {
-        if(msg.equals("OK")){
+        if (msg.equals("OK")) {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             intent.putExtra("phoneNumber", mAccountEt.getText().toString().trim());
             startActivity(intent);
             finish();
-        }else {
-            Snackbar.make(container,"请求服务器出现了一点问题",Snackbar.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(container, "请求服务器出现了一点问题", Snackbar.LENGTH_SHORT).show();
         }
     }
 
