@@ -23,7 +23,9 @@ import com.zxr.medicalaid.widget.CircleImageView;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -56,7 +58,7 @@ public class PrescribeActivity extends BaseActivity {
     //写入数据流
     OutputStream os;
     //ip地址和端口(公网,私有地址不行)
-    public static final String IP_ADD = "113.251.171.142";
+    public static final String IP_ADD = "113.251.223.3";
     public static final int PORT = 5566;
     private List<String> listName = new ArrayList<>();
     private List<String> listWeight = new ArrayList<>();
@@ -64,6 +66,8 @@ public class PrescribeActivity extends BaseActivity {
      * 数据
      */
     private PrescribeTableAdapter adapter;
+
+    private Map<String, String> medicineTable = new HashMap<>();
 
     @Override
     public void initInjector() {
@@ -102,6 +106,15 @@ public class PrescribeActivity extends BaseActivity {
         mTable.setAdapter(adapter);
         //设置重量输入框的弹起类型
         mWeightInput.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+
+        initData();
+    }
+
+    private void initData() {
+        medicineTable.put("何首乌", "a");
+        medicineTable.put("冬虫夏草", "b");
+        medicineTable.put("人参", "c");
+        medicineTable.put("当归", "d");
     }
 
     @Override
@@ -109,6 +122,8 @@ public class PrescribeActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.precribe_confirm, menu);
         return super.onCreatePanelMenu(featureId, menu);
     }
+
+    Thread sendTread = new SendMedicineThread();
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -126,27 +141,7 @@ public class PrescribeActivity extends BaseActivity {
                         .setPositiveButton("确定",
                                 (dialog, which) -> {
                                     //进行相关逻辑
-                                    new Thread() {
-                                        @Override
-                                        public void run() {
-                                            Socket socket;
-                                            try {
-                                                socket = new Socket(IP_ADD, PORT);
-                                                os = socket.getOutputStream();
-                                                StringBuffer buffer = new StringBuffer();
-//                                                for (int i = 0; i < listName.size(); i++) {
-                                                    //将药材信息装入
-                                                    String medicineInfo = "ID2:"+listName.get(0)+","+listWeight.get(0);
-                                                    Log.e(TAG,medicineInfo);
-                                                    buffer.append(medicineInfo);
-//                                                }
-                                                os.write((buffer + "\r\n").getBytes("utf-8"));
-                                            } catch (Exception e) {
-                                                Log.e(TAG,"cuowu发送");
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }.start();
+                                    sendTread.start();
                                     dialog.dismiss();
                                 }
                         )
@@ -206,5 +201,35 @@ public class PrescribeActivity extends BaseActivity {
             }
         }
         return x;
+    }
+
+
+    class SendMedicineThread extends Thread {
+        @Override
+        public void run() {
+            super.run();
+            Socket socket;
+            try {
+                socket = new Socket(IP_ADD, PORT);
+                os = socket.getOutputStream();
+                StringBuffer buffer = new StringBuffer();
+                long sleep_interval = 200;
+                int size = listName.size();
+                for (int i = 0; i < size; i++) {
+                    for (int j = 1; j <= 5; j++) {
+                        String medicineInfo = medicineTable.get(listName.get(i)) + listWeight.get(i);
+                        buffer.append(medicineInfo);
+                        Log.e(TAG, buffer.toString());
+                        os.write((buffer.toString()).getBytes("utf-8"));
+                        buffer = new StringBuffer();
+                        Thread.sleep(sleep_interval);
+                    }
+                    Thread.sleep(sleep_interval);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "出错");
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -1,7 +1,5 @@
 package com.zxr.medicalaid.mvp.presenter.presenterImpl;
 
-import android.util.Log;
-
 import com.zxr.medicalaid.DaoSession;
 import com.zxr.medicalaid.User;
 import com.zxr.medicalaid.UserDao;
@@ -23,15 +21,17 @@ import rx.schedulers.Schedulers;
  * Created by ASUS-NB on 2017/7/7.
  */
 
-public class LogInPresenterImpl extends BasePresenterImpl<LogInView> implements LogInPresenter{
+public class LogInPresenterImpl extends BasePresenterImpl<LogInView> implements LogInPresenter {
     LogInModel model = new LogInModelImpl();
+
     @Inject
-    public LogInPresenterImpl(){
+    public LogInPresenterImpl() {
 
     }
+
     @Override
     public void logIn(String nickName, String password) {
-        model.logIn(nickName,password)
+        model.logIn(nickName, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new FilterSubscriber<UserInfo>() {
@@ -39,11 +39,13 @@ public class LogInPresenterImpl extends BasePresenterImpl<LogInView> implements 
                     public void onCompleted() {
 
                     }
+
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
                         mView.showMsg(error);
                     }
+
                     @Override
                     public void onNext(UserInfo userInfo) {
                         DaoSession daoSession = DbUtil.getDaosession();
@@ -60,4 +62,5 @@ public class LogInPresenterImpl extends BasePresenterImpl<LogInView> implements 
                     }
                 });
 
+    }
 }
