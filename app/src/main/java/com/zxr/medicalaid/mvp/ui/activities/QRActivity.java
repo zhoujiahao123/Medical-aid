@@ -56,6 +56,7 @@ public class QRActivity extends BaseActivity  implements LinkView{
             Intent qrReaderIntent = new Intent(QRActivity.this, CaptureActivity.class);
             qrReaderIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(qrReaderIntent,SCANNING_REQUEST_CODE);
+            finish();
         }
     }
 
