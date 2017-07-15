@@ -1,13 +1,16 @@
 package com.zxr.medicalaid.mvp.presenter.presenterImpl;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import com.zxr.medicalaid.App;
 import com.zxr.medicalaid.mvp.entity.moudle.PatientInfo;
 import com.zxr.medicalaid.mvp.model.ModelImpl.PatientListModelImpl;
 import com.zxr.medicalaid.mvp.model.PatientListModel;
 import com.zxr.medicalaid.mvp.presenter.PatientPresent;
 import com.zxr.medicalaid.mvp.presenter.base.BasePresenterImpl;
 import com.zxr.medicalaid.mvp.view.PatientListView;
+import com.zxr.medicalaid.utils.others.CodeUtil;
 
 import javax.inject.Inject;
 
@@ -44,7 +47,9 @@ public class PatientListPresenterImpl extends BasePresenterImpl<PatientListView>
                     @Override
                     public void onNext(PatientInfo patientInfo) {
                         Log.e("TAG","请求列表成功");
+                        if(CodeUtil.codeCheck(patientInfo.getCode()).equals("OK"))
                         mView.showPatient(patientInfo);
+                        else Toast.makeText(App.getBaseApplicationContext(),CodeUtil.codeCheck(patientInfo.getCode()),Toast.LENGTH_SHORT).show();
                     }
                 });
     }
