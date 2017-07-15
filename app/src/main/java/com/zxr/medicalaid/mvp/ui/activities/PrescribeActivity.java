@@ -227,7 +227,6 @@ public class PrescribeActivity extends BaseActivity {
                     Thread.sleep(sleep_interval);
                 }
             } catch (Exception e) {
-                Log.e(TAG, "出错");
                 e.printStackTrace();
             }
         }
