@@ -1,6 +1,7 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -309,7 +310,13 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
     @Override
     public void cancleLinkSucceed() {
         if(type ==PATIENT)
-        finish();
+        {
+            SharedPreferences preferences =getSharedPreferences("isConnect",MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.commit();
+            finish();
+        }
         else {
 
         }

@@ -38,7 +38,6 @@ public class SignInPresenterImpl extends BasePresenterImpl<SignInView> implement
                     @Override
                     public void onNext(String s) {
                         mView.showMsg("OK");
-
                     }
 
                     @Override
