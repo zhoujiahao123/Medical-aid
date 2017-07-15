@@ -2,6 +2,8 @@ package com.zxr.medicalaid.mvp.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -54,6 +56,31 @@ public class PrescribeActivity extends BaseActivity {
     @InjectView(R.id.medicine_weight_input)
     EditText mWeightInput;
 
+    final int CONNECT_FAILED = 0;
+    final int NO_THIS_MEIDICINE = 1;
+    final int CONNECT_SUCCESS = 2;
+    final int SEND_SUCCESS = 3;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case CONNECT_FAILED:
+                    ToastUtils.showToast(PrescribeActivity.this, "连接失败，请重试");
+                    break;
+                case NO_THIS_MEIDICINE:
+                    ToastUtils.showToast(PrescribeActivity.this, "暂时不支持" + msg.obj.toString() + "发送");
+                    break;
+                case CONNECT_SUCCESS:
+                    ToastUtils.showToast(PrescribeActivity.this, "连接成功，正在发送");
+                    break;
+                case SEND_SUCCESS:
+                    ToastUtils.showToast(PrescribeActivity.this, "已成功发送");
+                    finish();
+                    break;
+            }
+        }
+    };
 
     //写入数据流
     OutputStream os;
@@ -205,6 +232,7 @@ public class PrescribeActivity extends BaseActivity {
 
 
     class SendMedicineThread extends Thread {
+
         @Override
         public void run() {
             super.run();
@@ -212,22 +240,30 @@ public class PrescribeActivity extends BaseActivity {
             try {
                 socket = new Socket(IP_ADD, PORT);
                 os = socket.getOutputStream();
+                handler.sendEmptyMessage(CONNECT_SUCCESS);
                 StringBuffer buffer = new StringBuffer();
-                long sleep_interval = 200;
+                long sleep_interval = 1000;
                 int size = listName.size();
                 for (int i = 0; i < size; i++) {
-                    for (int j = 1; j <= 5; j++) {
-                        String medicineInfo = medicineTable.get(listName.get(i)) + listWeight.get(i);
-                        buffer.append(medicineInfo);
-                        Log.e(TAG, buffer.toString());
-                        os.write((buffer.toString()).getBytes("utf-8"));
-                        buffer = new StringBuffer();
-                        Thread.sleep(sleep_interval);
+                    String medicine = medicineTable.get(listName.get(i));
+                    if (medicine == null) {
+                        Message msg = new Message();
+                        msg.what = NO_THIS_MEIDICINE;
+                        msg.obj = listName.get(i);
+                        handler.sendMessage(msg);
+                       continue;
                     }
+                    String medicineInfo = medicineTable.get(listName.get(i)) + listWeight.get(i) + "g";
+                    buffer.append(medicineInfo);
+                    Log.e(TAG, buffer.toString());
+                    os.write((buffer.toString()).getBytes("utf-8"));
+                    buffer = new StringBuffer();
                     Thread.sleep(sleep_interval);
                 }
+                handler.sendEmptyMessage(SEND_SUCCESS);
             } catch (Exception e) {
                 e.printStackTrace();
+                handler.sendEmptyMessage(CONNECT_FAILED);
             }
         }
     }

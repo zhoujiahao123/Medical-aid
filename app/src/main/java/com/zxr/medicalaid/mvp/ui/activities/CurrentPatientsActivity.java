@@ -12,13 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.LinearInterpolator;
-import android.widget.ImageView;
 
 import com.github.lazylibrary.util.ToastUtils;
 import com.jude.easyrecyclerview.EasyRecyclerView;
@@ -63,8 +61,6 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
     @InjectView(R.id.person_list)
     EasyRecyclerView mRecycler;
     public static final String GET_FROM = "get_from";
-    @InjectView(R.id.image_stop)
-    ImageView imageStop;
     private int type = 0;
     public static final int DOCTOR = 1;
     public static final int PATIENT = 2;
@@ -108,10 +104,8 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
             Log.e(TAG, doctorId);
             type = PATIENT;
             presenter.getPatient(doctorId, 1);
-            imageStop.setVisibility(View.VISIBLE);
         } else {
             presenter.getPatient(IdUtil.getIdString(), 1);
-            imageStop.setVisibility(View.INVISIBLE);
         }
 
         //recyclerview
