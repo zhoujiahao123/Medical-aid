@@ -34,6 +34,7 @@ import butterknife.OnClick;
 
 public class PrescribeActivity extends BaseActivity {
 
+
     /**
      * view
      */
@@ -57,9 +58,10 @@ public class PrescribeActivity extends BaseActivity {
     EditText mWeightInput;
 
     final int CONNECT_FAILED = 0;
-    final int NO_THIS_MEIDICINE = 1;
+    final int NO_THIS_MEDICINE = 1;
     final int CONNECT_SUCCESS = 2;
     final int SEND_SUCCESS = 3;
+     final int EMPTY_MEDICINE = 4;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -68,8 +70,8 @@ public class PrescribeActivity extends BaseActivity {
                 case CONNECT_FAILED:
                     ToastUtils.showToast(PrescribeActivity.this, "连接失败，请重试");
                     break;
-                case NO_THIS_MEIDICINE:
-                    ToastUtils.showToast(PrescribeActivity.this, "暂时不支持" + msg.obj.toString() + "发送");
+                case NO_THIS_MEDICINE:
+                    ToastUtils.showToast(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送");
                     break;
                 case CONNECT_SUCCESS:
                     ToastUtils.showToast(PrescribeActivity.this, "连接成功，正在发送");
@@ -77,6 +79,9 @@ public class PrescribeActivity extends BaseActivity {
                 case SEND_SUCCESS:
                     ToastUtils.showToast(PrescribeActivity.this, "已成功发送");
                     finish();
+                    break;
+                case EMPTY_MEDICINE:
+                    ToastUtils.showToast(PrescribeActivity.this,"药方现在为空呢");
                     break;
             }
         }
@@ -118,6 +123,8 @@ public class PrescribeActivity extends BaseActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             adapter.remove(position);
+                            listName.remove(position);
+                            listWeight.remove(position);
                             dialog.dismiss();
                         }
                     }, "取消", new DialogInterface.OnClickListener() {
@@ -236,6 +243,7 @@ public class PrescribeActivity extends BaseActivity {
         @Override
         public void run() {
             super.run();
+            boolean flag = true;
             Socket socket;
             try {
                 socket = new Socket(IP_ADD, PORT);
@@ -244,14 +252,19 @@ public class PrescribeActivity extends BaseActivity {
                 StringBuffer buffer = new StringBuffer();
                 long sleep_interval = 1000;
                 int size = listName.size();
+                if (size == 0){
+                    handler.sendEmptyMessage(EMPTY_MEDICINE);
+                    return;
+                }
                 for (int i = 0; i < size; i++) {
                     String medicine = medicineTable.get(listName.get(i));
                     if (medicine == null) {
+                        flag = false;
                         Message msg = new Message();
-                        msg.what = NO_THIS_MEIDICINE;
+                        msg.what = NO_THIS_MEDICINE;
                         msg.obj = listName.get(i);
                         handler.sendMessage(msg);
-                       continue;
+                        continue;
                     }
                     String medicineInfo = medicineTable.get(listName.get(i)) + listWeight.get(i) + "g";
                     buffer.append(medicineInfo);
@@ -260,10 +273,13 @@ public class PrescribeActivity extends BaseActivity {
                     buffer = new StringBuffer();
                     Thread.sleep(sleep_interval);
                 }
-                handler.sendEmptyMessage(SEND_SUCCESS);
+                if (flag){
+                    handler.sendEmptyMessage(SEND_SUCCESS);
+                }
             } catch (Exception e) {
                 Log.e(TAG,"连接超时");
                 e.printStackTrace();
+                sendTread = new SendMedicineThread();
                 handler.sendEmptyMessage(CONNECT_FAILED);
             }
         }
