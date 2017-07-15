@@ -262,6 +262,7 @@ public class PrescribeActivity extends BaseActivity {
                 }
                 handler.sendEmptyMessage(SEND_SUCCESS);
             } catch (Exception e) {
+                Log.e(TAG,"连接超时");
                 e.printStackTrace();
                 handler.sendEmptyMessage(CONNECT_FAILED);
             }
