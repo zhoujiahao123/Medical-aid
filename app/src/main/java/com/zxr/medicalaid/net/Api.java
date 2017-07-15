@@ -42,6 +42,7 @@ public interface Api {
     @FormUrlEncoded
     Observable<ResponseBody> getQBImg(@Field("idString") String idString);
 
+
     //医生获取连接的患者‘
     @POST("link/list")
     @FormUrlEncoded
@@ -50,4 +51,11 @@ public interface Api {
     @POST("link/cancle")
     @FormUrlEncoded
     Observable<CancleInfo> cancleLink(@Field("doctorId")String doctorId,@Field("patientId")String patientId);
+
+    //修改密码
+    @POST("user/updatePassword")
+    @FormUrlEncoded
+    Observable<Data<String>> changPassword(@Field("idString") String idString,@Field("oldPassword") String oldPassword,
+                                           @Field("newPassword") String newPassword);
+
 }

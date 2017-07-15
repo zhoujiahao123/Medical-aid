@@ -11,6 +11,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationSet;
@@ -20,6 +21,7 @@ import android.view.animation.LayoutAnimationController;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
+import com.github.lazylibrary.util.ToastUtils;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.zxr.medicalaid.R;
@@ -73,6 +75,10 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
      */
     private PatientListAdapter adapter;
     /**
+     *
+     */
+    String doctorId;
+    /**
      * context
      */
 
@@ -98,7 +104,7 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mToolbar.setTitle(R.string.current_patients_num);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        String doctorId = getIntent().getStringExtra("uId");
+         doctorId = getIntent().getStringExtra("uId");
         if (doctorId != null) {
             Log.e(TAG, doctorId);
             type = PATIENT;
@@ -108,12 +114,7 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
             presenter.getPatient(IdUtil.getIdString(), 1);
             imageStop.setVisibility(View.INVISIBLE);
         }
-        imageStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                canclePresenter.cancleLink(doctorId,IdUtil.getIdString());
-            }
-        });
+
         //recyclerview
         //adapter设置
         adapter = new PatientListAdapter(this);
@@ -177,6 +178,13 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
 
     }
 
+    @Override
+    public boolean onCreatePanelMenu(int featureId, Menu menu) {
+        if (type == PATIENT){
+            getMenuInflater().inflate(R.menu.patient_quit_menu,menu);
+        }
+        return super.onCreatePanelMenu(featureId, menu);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -185,6 +193,26 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.quit:
+                if (doctorId == null){
+                    ToastUtils.showToast(this,"出现异常，请重试");
+                    return super.onOptionsItemSelected(item);
+                }
+                new AlertDialog.Builder(this)
+                        .setTitle("提示")
+                        .setMessage("您确定要取消挂号吗?")
+                        .setPositiveButton("确定",
+                                (dialog,what) -> {
+                                    canclePresenter.cancleLink(doctorId,IdUtil.getIdString());
+                                    dialog.dismiss();
+                                })
+                        .setNegativeButton("取消",
+                                (dialog,what) ->
+                                    dialog.dismiss()
+                                )
+                        .setCancelable(true)
+                        .show();
                 break;
         }
         return super.onOptionsItemSelected(item);

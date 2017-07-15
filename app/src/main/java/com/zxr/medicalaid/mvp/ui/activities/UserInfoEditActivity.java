@@ -10,6 +10,7 @@ import android.widget.EditText;
 import com.github.lazylibrary.util.ToastUtils;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
+import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.system.ActivityStack;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 import com.zxr.medicalaid.widget.CircleImageView;
@@ -94,6 +95,7 @@ public class UserInfoEditActivity extends BaseActivity {
                 break;
             case R.id.log_off:
                 mUserName.setCursorVisible(false);
+                DbUtil.getDaosession().getUserDao().deleteAll();
                 ToActivityUtil.toNextActivity(this, LoginActivity.class);
                 ActivityStack.getScreenManager().clearAllActivity();
                 //同时进行一些数据清除，如数据库的清理

@@ -20,24 +20,14 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/mToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:theme="@style/WhiteToolbarStyle">
-        </android.support.v7.widget.Toolbar>
-            <ImageView
-                android:id="@+id/image_stop"
-                android:src="@drawable/stop"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:layout_alignParentRight="true"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/mToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:theme="@style/WhiteToolbarStyle">
+         </android.support.v7.widget.Toolbar>
         </RelativeLayout>
     </android.support.design.widget.AppBarLayout>
-
-
 
     <com.jude.easyrecyclerview.EasyRecyclerView
         android:id="@+id/person_list"

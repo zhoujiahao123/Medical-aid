@@ -1,5 +1,12 @@
 package com.zxr.medicalaid.utils.encode;
 
+import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
 /**
  * Created by ASUS-NB on 2017/7/7.
  */
@@ -47,28 +54,28 @@ public class EncodeUtil {
         return hs.toUpperCase();
     }
 
-//    public static String doEncrypt(String data, String keyString) {
-//        MessageDigest md = null;
-//        try {
-//             md = MessageDigest.getInstance("MD5");
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
-//        //生成字节Key
-//        byte[] byteKey = md.digest(keyString.getBytes());
-//        //Key转换
-//        Key convertKey = new SecretKeySpec(byteKey, "AES");
-//        Key myKey = convertKey;
-//        try {
-//            //加密
-//            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-//            cipher.init(Cipher.ENCRYPT_MODE, myKey);
-//            byte[] encode = cipher.doFinal(data.getBytes());
-//            String encodeString = EncodeUtil.byte2hex(encode);
-//            return encodeString;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public static String doEncrypt(String data, String keyString) {
+        MessageDigest md = null;
+        try {
+             md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        //生成字节Key
+        byte[] byteKey = md.digest(keyString.getBytes());
+        //Key转换
+        Key convertKey = new SecretKeySpec(byteKey, "AES");
+        Key myKey = convertKey;
+        try {
+            //加密
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, myKey);
+            byte[] encode = cipher.doFinal(data.getBytes());
+            String encodeString = EncodeUtil.byte2hex(encode);
+            return encodeString;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
