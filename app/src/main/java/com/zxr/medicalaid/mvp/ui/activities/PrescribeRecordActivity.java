@@ -32,16 +32,15 @@ public class PrescribeRecordActivity extends BaseActivity {
         adapter = new PrescribeTableAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
-
+        String name = getIntent().getStringExtra("name");
+        String medicalName[] = name.split(",");
+        String weight = getIntent().getStringExtra("weight");
+        String medicalWeight[] = weight.split(",");
         List<PrescriptionItem> list = new ArrayList<>();
-        list.add(new PrescriptionItem("人参", "3"));
-        list.add(new PrescriptionItem("人参", "3"));
-        list.add(new PrescriptionItem("人参", "3"));
-        list.add(new PrescriptionItem("人参", "3"));
-        list.add(new PrescriptionItem("人参", "3"));
-        list.add(new PrescriptionItem("人参", "3"));
+        for(int i=0;i<medicalName.length;i++){
+            list.add(new PrescriptionItem(medicalName[i],medicalWeight[i]));
+        }
         adapter.addAll(list);
-
         findViewById(android.R.id.content).setOnClickListener(
                 v -> finish()
         );
