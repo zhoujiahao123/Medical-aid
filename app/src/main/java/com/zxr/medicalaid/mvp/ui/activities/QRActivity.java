@@ -5,9 +5,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.zxr.medicalaid.DaoSession;
+import com.zxr.medicalaid.Date;
+import com.zxr.medicalaid.DateDao;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.User;
 import com.zxr.medicalaid.UserDao;
@@ -22,6 +25,7 @@ import com.zxr.medicalaid.zxing.CaptureActivity;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.crypto.Cipher;
@@ -36,7 +40,10 @@ public class QRActivity extends BaseActivity  implements LinkView{
     public final static int SCANNING_REQUEST_CODE = 1;
     @Inject
     LinkPresenterImpl presenter;
-
+    private boolean isFirstTime = true;
+    DaoSession daoSession ;
+    UserDao userDao;
+    DateDao dateDao;
     @Override
     public void initInjector() {
         mActivityComponent.inject(this);
@@ -44,25 +51,60 @@ public class QRActivity extends BaseActivity  implements LinkView{
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(isFirstTime){}
+        else {
+            finish();
+        }
+        isFirstTime = false;
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
     public void initViews() {
-        SharedPreferences preferences=getSharedPreferences("isConnect",MODE_PRIVATE);
-        String doctorId =preferences.getString("uId","");
-        if(!doctorId.equals("")){
-            Intent intent = new Intent(QRActivity.this,CurrentPatientsActivity.class);
-            intent.putExtra("uId",doctorId);
-            startActivity(intent);
-            finish();
+        daoSession = DbUtil.getDaosession();
+        userDao = daoSession.getUserDao();
+        User user = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
+        String type = user.getType();
+        if(type.equals("doctor")){
+            new AlertDialog.Builder(this)
+                    .setTitle("提示")
+                    .setMessage("您没有权限进行以下操作")
+                    .setPositiveButton("确定",
+                            (dialog,what) -> {
+                                dialog.dismiss();
+                                finish();
+                            })
+                    .setCancelable(true)
+                    .show();
         }else {
-            Intent qrReaderIntent = new Intent(QRActivity.this, CaptureActivity.class);
-            qrReaderIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivityForResult(qrReaderIntent,SCANNING_REQUEST_CODE);
-            finish();
+            SharedPreferences preferences=getSharedPreferences("isConnect",MODE_PRIVATE);
+            String doctorId =preferences.getString("uId","");
+            if(!doctorId.equals("")){
+                Intent intent = new Intent(QRActivity.this,CurrentPatientsActivity.class);
+                intent.putExtra("uId",doctorId);
+                startActivity(intent);
+                finish();
+            }else {
+                Intent qrReaderIntent = new Intent(QRActivity.this, CaptureActivity.class);
+                qrReaderIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(qrReaderIntent,SCANNING_REQUEST_CODE);
+//          finish();
+            }
         }
     }
 
     private void alreadyConnect() {
 
     }
+
+
     Observable<String> observable;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -140,6 +182,11 @@ public class QRActivity extends BaseActivity  implements LinkView{
     public void showMsg(String msg) {
         Log.e(TAG,"alreadyConnect");
         observable.subscribe(observer);
+        dateDao = daoSession.getDateDao();
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+        date.setDate(simpleDateFormat.format(new java.util.Date()));
+        dateDao.insert(date);
         finish();
     }
     Observer<String> observer = new Observer<String>() {

@@ -1,6 +1,7 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,7 +35,6 @@ import com.zxr.medicalaid.mvp.view.CancleView;
 import com.zxr.medicalaid.mvp.view.PatientListView;
 import com.zxr.medicalaid.net.ResponseCons;
 import com.zxr.medicalaid.utils.db.IdUtil;
-import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
 import java.security.Key;
 import java.security.MessageDigest;
@@ -95,12 +95,19 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
     @Override
     public void initViews() {
         //toolbar
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mToolbar.setTitle(R.string.current_patients_num);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
-         doctorId = getIntent().getStringExtra("uId");
+        doctorId = getIntent().getStringExtra("uId");
+        SharedPreferences preferences=getSharedPreferences("isConnect",MODE_PRIVATE);
+        String uId =preferences.getString("uId","");
+        if(!uId.equals("")){
+            doctorId = uId;
+        }
+        Log.e(TAG,"收到");
         if (doctorId != null) {
             Log.e(TAG, doctorId);
             type = PATIENT;
@@ -126,7 +133,10 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
                         return;
                     } else {
 //                        Toast.makeText(this, "医生，点击进行开药", Toast.LENGTH_SHORT).show();
-                        ToActivityUtil.toNextActivity(mContext, PrescribeActivity.class);
+//                        ToActivityUtil.toNextActivity(mContext, PrescribeActivity.class);
+                        Intent intent = new Intent(CurrentPatientsActivity.this,PrescribeActivity.class);
+                        intent.putExtra("name",lists.get(pos).getName());
+                        startActivity(intent);
                     }
                 }
         );

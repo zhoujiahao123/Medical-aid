@@ -6,11 +6,10 @@ package com.zxr.medicalaid.mvp.entity;
 
 public class TreatmentRecordItem {
     private String time;
-    private String prescription;
 
     public TreatmentRecordItem(String time, String prescription) {
         this.time = time;
-        this.prescription = prescription;
+
     }
 
     public String getTime() {
@@ -21,11 +20,5 @@ public class TreatmentRecordItem {
         this.time = time;
     }
 
-    public String getPrescription() {
-        return prescription;
-    }
 
-    public void setPrescription(String prescription) {
-        this.prescription = prescription;
-    }
 }

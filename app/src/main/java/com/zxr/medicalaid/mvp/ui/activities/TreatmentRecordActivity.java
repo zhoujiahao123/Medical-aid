@@ -10,12 +10,17 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.zxr.medicalaid.DaoSession;
+import com.zxr.medicalaid.Date;
+import com.zxr.medicalaid.DateDao;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.entity.TreatmentRecordItem;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.TreatmentRecordAdapter;
+import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.others.EasyRecyViewInitUtils;
-import com.zxr.medicalaid.utils.system.ToActivityUtil;
+
+import java.util.List;
 
 import butterknife.InjectView;
 
@@ -28,6 +33,8 @@ public class TreatmentRecordActivity extends BaseActivity implements SwipeRefres
     Toolbar mToolbar;
     @InjectView(R.id.easy_recycler_view)
     EasyRecyclerView mRecyclerView;
+    DaoSession daoSession;
+    DateDao dateDao;
 
     /**
      * 数据
@@ -51,7 +58,7 @@ public class TreatmentRecordActivity extends BaseActivity implements SwipeRefres
         adapter.setOnItemClickListener(
                 position -> {
                     //传递该条药方数据到
-                    ToActivityUtil.toNextActivity(this, PrescribeRecordActivity.class);
+//                    ToActivityUtil.toNextActivity(this, PrescribeRecordActivity.class);
                 }
         );
         //easyrecyclerview初始化
@@ -89,10 +96,12 @@ public class TreatmentRecordActivity extends BaseActivity implements SwipeRefres
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                adapter.add(new TreatmentRecordItem("2015-11-2", "当归任岑八角"));
-                adapter.add(new TreatmentRecordItem("2015-11-2", "当归任岑八角"));
-                adapter.add(new TreatmentRecordItem("2015-11-2", "当归任岑八角"));
-                adapter.add(new TreatmentRecordItem("2015-11-2", "当归任岑八角"));
+                daoSession = DbUtil.getDaosession();
+                dateDao = daoSession.getDateDao();
+                List<Date> dates = dateDao.queryBuilder().list();
+                for(int i=0;i<dates.size();i++){
+                    adapter.add(new TreatmentRecordItem(dates.get(i).getDate(),""));
+                }
                 adapter.notifyDataSetChanged();
             }
         }, 1000);
