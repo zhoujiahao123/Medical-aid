@@ -34,7 +34,6 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.zxing.Result;
 import com.zxr.medicalaid.R;
@@ -199,7 +198,6 @@ public class CaptureActivity extends AppCompatActivity
         bundle.putInt("height", mCropRect.height());
         bundle.putString("result", rawResult.getText());
         resultIntent.putExtras(bundle);
-        Toast.makeText(this,"扫描了",Toast.LENGTH_LONG).show();
         this.setResult(RESULT_OK,resultIntent);
         this.finish();
     }

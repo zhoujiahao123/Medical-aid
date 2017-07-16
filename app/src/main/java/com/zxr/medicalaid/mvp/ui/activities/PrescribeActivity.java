@@ -64,12 +64,7 @@ public class PrescribeActivity extends BaseActivity {
     @InjectView(R.id.medicine_weight_input)
     EditText mWeightInput;
 
-    final int CONNECT_FAILED = 0;
-    final int NO_THIS_MEDICINE = 1;
-    final int CONNECT_SUCCESS = 2;
-    final int SEND_SUCCESS = 3;
-    final int EMPTY_MEDICINE = 4;
-    final int REMOVE_ONE_ITEM = 5;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -93,10 +88,11 @@ public class PrescribeActivity extends BaseActivity {
                     MedicalList medicalList = new MedicalList();
                     medicalList.setPatient(patientName);
                     StringBuilder name = new StringBuilder();
+
                     StringBuilder weight = new StringBuilder();
-                    for (int i = 0; i < listName.size(); i++) {
-                        name.append(listName.get(i) + ",");
-                        weight.append(listWeight.get(i) + ",");
+                    for (int i = 0; i < dbNameList.size(); i++) {
+                        name.append(dbNameList.get(i) + ",");
+                        weight.append(dbWeightList.get(i) + ",");
                     }
                     medicalList.setName(name.toString());
                     medicalList.setWeight(weight.toString());
@@ -115,6 +111,8 @@ public class PrescribeActivity extends BaseActivity {
                     break;
                 case REMOVE_ONE_ITEM:
                     adapter.remove(msg.arg1);
+                    dbNameList.add(listName.get(msg.arg1));
+                    dbWeightList.add(listWeight.get(msg.arg1));
                     listName.remove(msg.arg1);
                     listWeight.remove(msg.arg1);
                     break;
@@ -128,6 +126,14 @@ public class PrescribeActivity extends BaseActivity {
     //ip地址和端口(公网,私有地址不行)
     public static final String IP_ADD = "113.251.223.3";
     public static final int PORT = 5566;
+    private final int CONNECT_FAILED = 0;
+    private final int NO_THIS_MEDICINE = 1;
+    private final int CONNECT_SUCCESS = 2;
+    private final int SEND_SUCCESS = 3;
+    private final int EMPTY_MEDICINE = 4;
+    private final int REMOVE_ONE_ITEM = 5;
+    private List<String> dbNameList = new ArrayList<>();
+    private List<String> dbWeightList = new ArrayList<>();
     private List<String> listName = new ArrayList<>();
     private List<String> listWeight = new ArrayList<>();
     private String patientName;

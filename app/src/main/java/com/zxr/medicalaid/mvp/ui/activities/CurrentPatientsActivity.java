@@ -82,7 +82,7 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
     @ContextLife("Activity")
     Context mContext;
 
-    //===============================================测试
+
     private List<Person> lists = new ArrayList<>();
     private List<String> listId = new ArrayList<>();
     private List<String> listNumber = new ArrayList<>();
@@ -110,14 +110,6 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
             doctorId = uId;
         }
         Log.e(TAG, "收到");
-
-//        if (doctorId != null) {
-//            Log.e(TAG, doctorId);
-//            type = PATIENT;
-//            presenter.getPatient(doctorId, 1);
-//        } else {
-//            presenter.getPatient(IdUtil.getIdString(), 1);
-//        }
 
         //recyclerview
         //adapter设置
@@ -336,6 +328,12 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
             listNumber.add(phoneNumber);
         }
         adapter.addAll(lists);
+        if (!listId.contains(IdUtil.getIdString())){
+            SharedPreferences spf = getSharedPreferences("isConnect",MODE_PRIVATE);
+            SharedPreferences.Editor editor = spf.edit();
+            editor.clear();
+            editor.commit();
+        }
     }
 
     @Override

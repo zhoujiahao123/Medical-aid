@@ -82,8 +82,8 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
         StickyHeaderDecoration decoration = new StickyHeaderDecoration(new InquiryHeaderAdapter(this, adapter));
         decoration.setIncludeHeader(true);
         mEasyRecyclerView.addItemDecoration(decoration);
-//        mEasyRecyclerView.setRefreshListener(this);
-//        mEasyRecyclerView.setRefreshing(true, true);
+        mEasyRecyclerView.setRefreshListener(this);
+        mEasyRecyclerView.setRefreshing(true, true);
 
     }
 
@@ -113,7 +113,10 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
         //进行加载
         daoSession = DbUtil.getDaosession();
         medicalListDao = daoSession.getMedicalListDao();
-        lists = medicalListDao.queryBuilder().list();
+        lists = medicalListDao.loadAll();
+        datas.clear();
+        adapter.clear();
+        adapter.notifyDataSetChanged();
         handler.postDelayed(() -> {
             for (int i = 0; i < lists.size(); i++) {
                 datas.add(new Person(lists.get(i).getPatient(), lists.get(i).getDate(), ""));
