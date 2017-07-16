@@ -189,12 +189,14 @@ public class PersonFragment extends RxBusFragment {
         RxBus.getDefault().toObservable(String.class)
                 .subscribe(
                         s -> {
-                            Log.e(TAG,s);
-                            String name = DbUtil.getDaosession().getUserDao().loadAll().get(0).getUName();
-                            if (name == null){
-                                return;
+                            if (s.equals("修改昵称成功")) {
+                                String name = DbUtil.getDaosession().getUserDao().loadAll().get(0).getUName();
+                                if (name == null) {
+                                    return;
+                                }
+                                userName.setText(doEncode(name, ResponseCons.KEY_NAME));
                             }
-                            userName.setText(doEncode(name,ResponseCons.KEY_NAME));
+                            Log.e(TAG, s);
                         }
                 );
     }

@@ -25,6 +25,7 @@ import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.PrescribeTableAdapter;
 import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.others.DialogUtils;
+import com.zxr.medicalaid.utils.system.RxBus;
 import com.zxr.medicalaid.widget.CircleImageView;
 
 import java.io.OutputStream;
@@ -39,7 +40,6 @@ import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
-import retrofit2.http.HEAD;
 
 public class PrescribeActivity extends BaseActivity {
     /**
@@ -87,7 +87,27 @@ public class PrescribeActivity extends BaseActivity {
                     break;
                 case SEND_SUCCESS:
                     ToastUtils.showToast(PrescribeActivity.this, "已成功发送");
-//                    RxBus.getDefault().post();
+                    //存入数据库
+                    daoSession = DbUtil.getDaosession();
+                    medicalListDao = daoSession.getMedicalListDao();
+                    MedicalList medicalList = new MedicalList();
+                    medicalList.setPatient(patientName);
+                    StringBuilder name = new StringBuilder();
+                    StringBuilder weight = new StringBuilder();
+                    for (int i = 0; i < listName.size(); i++) {
+                        name.append(listName.get(i) + ",");
+                        weight.append(listWeight.get(i) + ",");
+                    }
+                    medicalList.setName(name.toString());
+                    medicalList.setWeight(weight.toString());
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+                    String date = simpleDateFormat.format(new Date());
+                    medicalList.setDate(date);
+                    medicalListDao.insert(medicalList);
+                    //提醒病人列表界面更新
+                    if (patientId != null) {
+                        RxBus.getDefault().post(new String(patientId));
+                    }
                     finish();
                     break;
                 case EMPTY_MEDICINE:
@@ -114,6 +134,7 @@ public class PrescribeActivity extends BaseActivity {
     private String phoneNumber;
     DaoSession daoSession;
     MedicalListDao medicalListDao;
+    private String patientId;
     /**
      * 数据
      */
@@ -128,6 +149,7 @@ public class PrescribeActivity extends BaseActivity {
 
     @Override
     public void initViews() {
+
         //设置toolbar
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -135,8 +157,9 @@ public class PrescribeActivity extends BaseActivity {
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
         patientName = getIntent().getStringExtra("name");
         phoneNumber = getIntent().getStringExtra("number");
+        patientId = getIntent().getStringExtra("id");
         int randomNum = (int) ((Math.random() * 4 + 1.9) * 10);
-        mSex.setText(((randomNum / 2) == 1) ? "男" : "女");
+        mSex.setText(((randomNum % 2) == 1) ? "男" : "女");
         mAge.setText(randomNum + "");
         mName.setText(patientName);
         mRegisterTime.setText("电话号码：   " + phoneNumber);
@@ -274,8 +297,6 @@ public class PrescribeActivity extends BaseActivity {
                 os = socket.getOutputStream();
                 handler.sendEmptyMessage(CONNECT_SUCCESS);
                 StringBuffer buffer = new StringBuffer();
-                StringBuffer medicalNameBuffer = new StringBuffer();
-                StringBuffer medicalWeightBuffer = new StringBuffer();
                 long sleep_interval = 1000;
                 int size = listName.size();
                 if (size == 0) {
@@ -293,8 +314,6 @@ public class PrescribeActivity extends BaseActivity {
                         continue;
                     }
                     String medicineInfo = medicineTable.get(listName.get(i)) + listWeight.get(i) + "g";
-                    medicalNameBuffer.append(medicineTable.get(listName.get(i)) + ",");
-                    medicalWeightBuffer.append(listWeight.get(i) + ",");
                     buffer.append(medicineInfo);
                     Log.e(TAG, buffer.toString());
                     os.write((buffer.toString()).getBytes("utf-8"));
@@ -306,17 +325,6 @@ public class PrescribeActivity extends BaseActivity {
                     Thread.sleep(sleep_interval);
                 }
                 if (flag) {
-                    daoSession = DbUtil.getDaosession();
-                    medicalListDao = daoSession.getMedicalListDao();
-                    MedicalList medicalList = new MedicalList();
-                    medicalList.setPatient(patientName);
-                    medicalList.setName(medicalNameBuffer.toString());
-                    medicalList.setWeight(medicalWeightBuffer.toString());
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
-                    String date = simpleDateFormat.format(new Date());
-                    Log.e(TAG, date);
-                    medicalList.setDate(date);
-                    medicalListDao.insert(medicalList);
                     handler.sendEmptyMessage(SEND_SUCCESS);
                 }
             } catch (Exception e) {

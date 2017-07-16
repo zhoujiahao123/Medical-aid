@@ -65,25 +65,25 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
 
         adapter.setOnItemClickListener((position) -> {
             //进行详细药方详细信息显示
-            Intent intent = new Intent(InquiryActivity.this,PrescribeRecordActivity.class);
-            intent.putExtra("name",lists.get(position).getName());
-            intent.putExtra("weight",lists.get(position).getWeight());
+            Intent intent = new Intent(InquiryActivity.this, PrescribeRecordActivity.class);
+            intent.putExtra("name", lists.get(position).getName());
+            intent.putExtra("weight", lists.get(position).getWeight());
             startActivity(intent);
         });
         //初始化RecyclerView
+        EasyRecyViewInitUtils.initEasyRecyclerView(mEasyRecyclerView);
         mEasyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY, DensityUtil.dip2px(this, 0.5f), DensityUtil.dip2px(this, 8f), DensityUtil.dip2px(this, 8f));
         itemDecoration.setDrawLastItem(false);
         mEasyRecyclerView.addItemDecoration(itemDecoration);
         mEasyRecyclerView.setAdapter(adapter);
-        EasyRecyViewInitUtils.initEasyRecyclerView(mEasyRecyclerView);
 
         //加入header
         StickyHeaderDecoration decoration = new StickyHeaderDecoration(new InquiryHeaderAdapter(this, adapter));
         decoration.setIncludeHeader(true);
         mEasyRecyclerView.addItemDecoration(decoration);
-        mEasyRecyclerView.setRefreshListener(this);
-        mEasyRecyclerView.setRefreshing(true, true);
+//        mEasyRecyclerView.setRefreshListener(this);
+//        mEasyRecyclerView.setRefreshing(true, true);
 
     }
 
@@ -115,8 +115,8 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
         medicalListDao = daoSession.getMedicalListDao();
         lists = medicalListDao.queryBuilder().list();
         handler.postDelayed(() -> {
-            for(int i=0;i<lists.size();i++){
-                datas.add(new Person(lists.get(i).getPatient(),lists.get(i).getDate(),""));
+            for (int i = 0; i < lists.size(); i++) {
+                datas.add(new Person(lists.get(i).getPatient(), lists.get(i).getDate(), ""));
             }
             adapter.addAll(datas);
         }, 1000);

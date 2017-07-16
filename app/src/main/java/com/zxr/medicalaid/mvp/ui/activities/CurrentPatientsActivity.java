@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -36,7 +35,6 @@ import com.zxr.medicalaid.mvp.view.PatientListView;
 import com.zxr.medicalaid.net.ResponseCons;
 import com.zxr.medicalaid.utils.db.IdUtil;
 import com.zxr.medicalaid.utils.system.RxBus;
-
 
 import java.security.Key;
 import java.security.MessageDigest;
@@ -106,20 +104,20 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
         mToolbar.setTitle(R.string.current_patients_num);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
         doctorId = getIntent().getStringExtra("uId");
-        SharedPreferences preferences=getSharedPreferences("isConnect",MODE_PRIVATE);
-        String uId =preferences.getString("uId","");
-        if(!uId.equals("")){
+        SharedPreferences preferences = getSharedPreferences("isConnect", MODE_PRIVATE);
+        String uId = preferences.getString("uId", "");
+        if (!uId.equals("")) {
             doctorId = uId;
         }
-        Log.e(TAG,"收到");
+        Log.e(TAG, "收到");
 
-        if (doctorId != null) {
-            Log.e(TAG, doctorId);
-            type = PATIENT;
-            presenter.getPatient(doctorId, 1);
-        } else {
-            presenter.getPatient(IdUtil.getIdString(), 1);
-        }
+//        if (doctorId != null) {
+//            Log.e(TAG, doctorId);
+//            type = PATIENT;
+//            presenter.getPatient(doctorId, 1);
+//        } else {
+//            presenter.getPatient(IdUtil.getIdString(), 1);
+//        }
 
         //recyclerview
         //adapter设置
@@ -133,9 +131,10 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
                     } else {
 //                        Toast.makeText(this, "医生，点击进行开药", Toast.LENGTH_SHORT).show();
 //                        ToActivityUtil.toNextActivity(mContext, PrescribeActivity.class);
-                        Intent intent = new Intent(CurrentPatientsActivity.this,PrescribeActivity.class);
-                        intent.putExtra("name",lists.get(pos).getName());
-                        intent.putExtra("number",listNumber.get(pos));
+                        Intent intent = new Intent(CurrentPatientsActivity.this, PrescribeActivity.class);
+                        intent.putExtra("name", lists.get(pos).getName());
+                        intent.putExtra("number", listNumber.get(pos));
+                        intent.putExtra("id", listId.get(pos));
                         startActivity(intent);
                     }
                 }
@@ -229,9 +228,17 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
 
     @Override
     public void initRxBus() {
-        RxBus.getDefault().toObservable(Integer.class)
+        RxBus.getDefault().toObservable(String.class)
                 .subscribe(
-                        integer -> canclePresenter.cancleLink(IdUtil.getIdString(), String.valueOf(integer.intValue()))
+                        str -> {
+                            //网路断开
+                            canclePresenter.cancleLink(IdUtil.getIdString(), str);
+                            //更新UI
+                            int index = listId.indexOf(str);
+                            if (index >= 0) {
+                                adapter.remove(index);
+                            }
+                        }
                 );
     }
 
@@ -242,15 +249,15 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
     }
 
 
-    Handler handler = new Handler();
-
     @Override
     public void onRefresh() {
-        handler.postDelayed(
-                () -> {
-                    adapter.notifyDataSetChanged();
-                    return;
-                }, 2000);
+        if (doctorId != null) {
+            Log.e(TAG, doctorId);
+            type = PATIENT;
+            presenter.getPatient(doctorId, 1);
+        } else {
+            presenter.getPatient(IdUtil.getIdString(), 1);
+        }
     }
 
     @Override
@@ -315,16 +322,20 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
 
     @Override
     public void showPatient(PatientInfo patientInfo) {
+        adapter.clear();
+        adapter.notifyDataSetChanged();
+        listId.clear();
+        lists.clear();
+        listNumber.clear();
         for (int i = 0; i < patientInfo.getBody().getList().size(); i++) {
             String name = doEncode(patientInfo.getBody().getList().get(i).getNickName(), ResponseCons.KEY_NAME);
-            String phoneNumber= doEncode(patientInfo.getBody().getList().get(i).getPhoneNumber(),ResponseCons.KEY_PHONENUMBER);
+            String phoneNumber = doEncode(patientInfo.getBody().getList().get(i).getPhoneNumber(), ResponseCons.KEY_PHONENUMBER);
             Person person = new Person(name, "", "120.77.87.78:8080/arti-sports/image//user15.png");
             lists.add(person);
             listId.add(patientInfo.getBody().getList().get(i).getIdString());
             listNumber.add(phoneNumber);
         }
         adapter.addAll(lists);
-        adapter.notifyDataSetChanged();
     }
 
     @Override
