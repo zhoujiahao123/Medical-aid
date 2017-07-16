@@ -58,4 +58,8 @@ public interface Api {
     Observable<Data<String>> changPassword(@Field("idString") String idString,@Field("oldPassword") String oldPassword,
                                            @Field("newPassword") String newPassword);
 
+    //修改昵称
+    @POST("user/updateNickname")
+    @FormUrlEncoded
+    Observable<Data<String>> changName(@Field("idString") String idString,@Field("newNickname") String newName);
 }

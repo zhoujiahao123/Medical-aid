@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.lazylibrary.util.ToastUtils;
 import com.jude.easyrecyclerview.EasyRecyclerView;
@@ -23,6 +24,7 @@ import com.zxr.medicalaid.utils.others.DialogUtils;
 import com.zxr.medicalaid.widget.CircleImageView;
 
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,8 +35,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class PrescribeActivity extends BaseActivity {
-
-
     /**
      * view
      */
@@ -61,7 +61,8 @@ public class PrescribeActivity extends BaseActivity {
     final int NO_THIS_MEDICINE = 1;
     final int CONNECT_SUCCESS = 2;
     final int SEND_SUCCESS = 3;
-     final int EMPTY_MEDICINE = 4;
+    final int EMPTY_MEDICINE = 4;
+    final int REMOVE_ONE_ITEM = 5;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -71,21 +72,29 @@ public class PrescribeActivity extends BaseActivity {
                     ToastUtils.showToast(PrescribeActivity.this, "连接失败，请重试");
                     break;
                 case NO_THIS_MEDICINE:
-                    ToastUtils.showToast(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送");
+//                    ToastUtils.showToast(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送");
+                    Toast.makeText(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送", Toast.LENGTH_SHORT);
                     break;
                 case CONNECT_SUCCESS:
                     ToastUtils.showToast(PrescribeActivity.this, "连接成功，正在发送");
                     break;
                 case SEND_SUCCESS:
                     ToastUtils.showToast(PrescribeActivity.this, "已成功发送");
+//                    RxBus.getDefault().post();
                     finish();
                     break;
                 case EMPTY_MEDICINE:
-                    ToastUtils.showToast(PrescribeActivity.this,"药方现在为空呢");
+                    ToastUtils.showToast(PrescribeActivity.this, "药方现在为空呢");
+                    break;
+                case REMOVE_ONE_ITEM:
+                    adapter.remove(msg.arg1);
+                    listName.remove(msg.arg1);
+                    listWeight.remove(msg.arg1);
                     break;
             }
         }
     };
+
 
     //写入数据流
     OutputStream os;
@@ -135,7 +144,6 @@ public class PrescribeActivity extends BaseActivity {
                     });
                     return false;
                 }
-
         );
         mTable.setAdapter(adapter);
         //设置重量输入框的弹起类型
@@ -237,26 +245,25 @@ public class PrescribeActivity extends BaseActivity {
         return x;
     }
 
-
     class SendMedicineThread extends Thread {
-
         @Override
         public void run() {
             super.run();
             boolean flag = true;
             Socket socket;
             try {
-                socket = new Socket(IP_ADD, PORT);
+                socket = new Socket();
+                socket.connect(new InetSocketAddress(IP_ADD, PORT), 1500);
                 os = socket.getOutputStream();
                 handler.sendEmptyMessage(CONNECT_SUCCESS);
                 StringBuffer buffer = new StringBuffer();
                 long sleep_interval = 1000;
                 int size = listName.size();
-                if (size == 0){
+                if (size == 0) {
                     handler.sendEmptyMessage(EMPTY_MEDICINE);
                     return;
                 }
-                for (int i = 0; i < size; i++) {
+                for (int i = size - 1; i >= 0; i--) {
                     String medicine = medicineTable.get(listName.get(i));
                     if (medicine == null) {
                         flag = false;
@@ -271,13 +278,17 @@ public class PrescribeActivity extends BaseActivity {
                     Log.e(TAG, buffer.toString());
                     os.write((buffer.toString()).getBytes("utf-8"));
                     buffer = new StringBuffer();
+                    Message msg = new Message();
+                    msg.what = REMOVE_ONE_ITEM;
+                    msg.arg1 = i;
+                    handler.sendMessage(msg);
                     Thread.sleep(sleep_interval);
                 }
-                if (flag){
+                if (flag) {
                     handler.sendEmptyMessage(SEND_SUCCESS);
                 }
             } catch (Exception e) {
-                Log.e(TAG,"连接超时");
+                Log.e(TAG, "连接超时");
                 e.printStackTrace();
                 sendTread = new SendMedicineThread();
                 handler.sendEmptyMessage(CONNECT_FAILED);
