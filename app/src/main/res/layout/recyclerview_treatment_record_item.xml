@@ -26,20 +26,6 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="4dp"
             android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/prescription"
-                android:textColor="@color/primary_text" />
-
-            <TextView
-                android:id="@+id/prescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:text="当归10g,人参10g.................................."
-                android:textColor="@color/primary_text" />
         </LinearLayout>
 
 

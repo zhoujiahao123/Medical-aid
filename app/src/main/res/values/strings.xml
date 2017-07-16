@@ -10,7 +10,7 @@
     <string name="select_text">选择</string>
     <string name="qr_code">二维码</string>
     <string name="current_patients_num">当前患者</string>
-    <string name="registered_time">挂号时间:</string>
+    <string name="registered_time">电话号码:</string>
     <string name="prescibe_text">开药</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="title_home">Home</string>

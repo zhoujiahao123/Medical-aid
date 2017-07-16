@@ -16,23 +16,30 @@ import android.widget.Toast;
 
 import com.github.lazylibrary.util.ToastUtils;
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.zxr.medicalaid.DaoSession;
+import com.zxr.medicalaid.MedicalList;
+import com.zxr.medicalaid.MedicalListDao;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.entity.PrescriptionItem;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.PrescribeTableAdapter;
+import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.others.DialogUtils;
 import com.zxr.medicalaid.widget.CircleImageView;
 
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
+import retrofit2.http.HEAD;
 
 public class PrescribeActivity extends BaseActivity {
     /**
@@ -103,6 +110,10 @@ public class PrescribeActivity extends BaseActivity {
     public static final int PORT = 5566;
     private List<String> listName = new ArrayList<>();
     private List<String> listWeight = new ArrayList<>();
+    private String patientName;
+    private String phoneNumber;
+    DaoSession daoSession;
+    MedicalListDao medicalListDao;
     /**
      * 数据
      */
@@ -122,6 +133,13 @@ public class PrescribeActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.prescibe_text);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        patientName = getIntent().getStringExtra("name");
+        phoneNumber = getIntent().getStringExtra("number");
+        int randomNum = (int) ((Math.random() * 4 + 1.9) * 10);
+        mSex.setText(((randomNum / 2) == 1) ? "男" : "女");
+        mAge.setText(randomNum + "");
+        mName.setText(patientName);
+        mRegisterTime.setText("电话号码：   " + phoneNumber);
         //设置recyclerView
         mTable.setEmptyView(R.layout.view_empty);
         mTable.setLayoutManager(new LinearLayoutManager(this));
@@ -148,7 +166,6 @@ public class PrescribeActivity extends BaseActivity {
         mTable.setAdapter(adapter);
         //设置重量输入框的弹起类型
         mWeightInput.setRawInputType(InputType.TYPE_CLASS_NUMBER);
-
         initData();
     }
 
@@ -257,6 +274,8 @@ public class PrescribeActivity extends BaseActivity {
                 os = socket.getOutputStream();
                 handler.sendEmptyMessage(CONNECT_SUCCESS);
                 StringBuffer buffer = new StringBuffer();
+                StringBuffer medicalNameBuffer = new StringBuffer();
+                StringBuffer medicalWeightBuffer = new StringBuffer();
                 long sleep_interval = 1000;
                 int size = listName.size();
                 if (size == 0) {
@@ -274,6 +293,8 @@ public class PrescribeActivity extends BaseActivity {
                         continue;
                     }
                     String medicineInfo = medicineTable.get(listName.get(i)) + listWeight.get(i) + "g";
+                    medicalNameBuffer.append(medicineTable.get(listName.get(i)) + ",");
+                    medicalWeightBuffer.append(listWeight.get(i) + ",");
                     buffer.append(medicineInfo);
                     Log.e(TAG, buffer.toString());
                     os.write((buffer.toString()).getBytes("utf-8"));
@@ -285,6 +306,17 @@ public class PrescribeActivity extends BaseActivity {
                     Thread.sleep(sleep_interval);
                 }
                 if (flag) {
+                    daoSession = DbUtil.getDaosession();
+                    medicalListDao = daoSession.getMedicalListDao();
+                    MedicalList medicalList = new MedicalList();
+                    medicalList.setPatient(patientName);
+                    medicalList.setName(medicalNameBuffer.toString());
+                    medicalList.setWeight(medicalWeightBuffer.toString());
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+                    String date = simpleDateFormat.format(new Date());
+                    Log.e(TAG, date);
+                    medicalList.setDate(date);
+                    medicalListDao.insert(medicalList);
                     handler.sendEmptyMessage(SEND_SUCCESS);
                 }
             } catch (Exception e) {
