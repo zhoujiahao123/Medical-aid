@@ -18,6 +18,7 @@ package com.zxr.medicalaid.zxing;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +47,9 @@ import com.zxr.medicalaid.zxing.utils.InactivityTimer;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by lizhaotailang on 2017/2/13.
  */
@@ -54,6 +58,8 @@ public class CaptureActivity extends AppCompatActivity
         implements SurfaceHolder.Callback {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
+    @InjectView(R.id.toolbar)
+    Toolbar mToolbar;
 
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
@@ -84,6 +90,13 @@ public class CaptureActivity extends AppCompatActivity
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_scan);
+        ButterKnife.inject(this);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setTitle("扫码");
+        mToolbar.setTitleTextColor(Color.WHITE);
 
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
         scanContainer = (RelativeLayout) findViewById(R.id.capture_container);
@@ -101,7 +114,7 @@ public class CaptureActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-}
+    }
 
     @Override
     protected void onResume() {
@@ -198,12 +211,14 @@ public class CaptureActivity extends AppCompatActivity
         bundle.putInt("height", mCropRect.height());
         bundle.putString("result", rawResult.getText());
         resultIntent.putExtras(bundle);
-        this.setResult(RESULT_OK,resultIntent);
+        this.setResult(RESULT_OK, resultIntent);
         this.finish();
     }
 
+
     /**
      * Init the camera.
+     *
      * @param surfaceHolder The surface holder.
      */
     private void initCamera(SurfaceHolder surfaceHolder) {
