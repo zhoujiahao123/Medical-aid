@@ -85,6 +85,7 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
     //===============================================测试
     private List<Person> lists = new ArrayList<>();
     private List<String> listId = new ArrayList<>();
+    private List<String> listNumber = new ArrayList<>();
     @Override
     public void initInjector() {
         mActivityComponent.inject(this);
@@ -136,6 +137,7 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
 //                        ToActivityUtil.toNextActivity(mContext, PrescribeActivity.class);
                         Intent intent = new Intent(CurrentPatientsActivity.this,PrescribeActivity.class);
                         intent.putExtra("name",lists.get(pos).getName());
+                        intent.putExtra("number",listNumber.get(pos));
                         startActivity(intent);
                     }
                 }
@@ -309,9 +311,11 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
     public void showPatient(PatientInfo patientInfo) {
         for (int i = 0; i < patientInfo.getBody().getList().size(); i++) {
             String name = doEncode(patientInfo.getBody().getList().get(i).getNickName(), ResponseCons.KEY_NAME);
+            String phoneNumber= doEncode(patientInfo.getBody().getList().get(i).getPhoneNumber(),ResponseCons.KEY_PHONENUMBER);
             Person person = new Person(name, "", "120.77.87.78:8080/arti-sports/image//user15.png");
             lists.add(person);
             listId.add(patientInfo.getBody().getList().get(i).getIdString());
+            listNumber.add(phoneNumber);
         }
         adapter.addAll(lists);
         adapter.notifyDataSetChanged();

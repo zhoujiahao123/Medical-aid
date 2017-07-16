@@ -101,6 +101,7 @@ public class PrescribeActivity extends BaseActivity {
     private List<String> listName = new ArrayList<>();
     private List<String> listWeight = new ArrayList<>();
     private String patientName;
+    private String phoneNumber;
     DaoSession daoSession;
     MedicalListDao medicalListDao;
     /**
@@ -123,6 +124,12 @@ public class PrescribeActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.prescibe_text);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
         patientName = getIntent().getStringExtra("name");
+        phoneNumber = getIntent().getStringExtra("number");
+        int randomNum = (int) ((Math.random()*4+1.9)*10);
+        mSex.setText(((randomNum/2)==1)?"男":"女");
+        mAge.setText(randomNum+"");
+        mName.setText(patientName);
+        mRegisterTime.setText("电话号码：   "+phoneNumber);
         //设置recyclerView
         mTable.setEmptyView(R.layout.view_empty);
         mTable.setLayoutManager(new LinearLayoutManager(this));
