@@ -109,7 +109,6 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
         if (!uId.equals("")) {
             doctorId = uId;
         }
-        Log.e(TAG, "收到");
 
         //recyclerview
         //adapter设置
