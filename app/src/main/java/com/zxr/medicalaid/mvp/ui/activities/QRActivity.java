@@ -77,12 +77,12 @@ public class QRActivity extends BaseActivity  implements LinkView{
                     .setTitle("提示")
                     .setMessage("您没有权限进行以下操作")
                     .setPositiveButton("确定",
-                            (dialog,what) -> {
+                            (dialog,what) ->{
                                 dialog.dismiss();
-                                finish();
                             })
                     .setCancelable(true)
                     .show();
+            finish();
         }else {
             SharedPreferences preferences=getSharedPreferences("isConnect",MODE_PRIVATE);
             String doctorId =preferences.getString("uId","");

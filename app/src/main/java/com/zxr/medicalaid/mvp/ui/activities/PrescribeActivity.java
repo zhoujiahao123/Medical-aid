@@ -124,7 +124,7 @@ public class PrescribeActivity extends BaseActivity {
     //写入数据流
     OutputStream os;
     //ip地址和端口(公网,私有地址不行)
-    public static final String IP_ADD = "113.251.223.3";
+    public static final String IP_ADD = "202.115.29.11";
     public static final int PORT = 5566;
     private final int CONNECT_FAILED = 0;
     private final int NO_THIS_MEDICINE = 1;
