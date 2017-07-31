@@ -15,12 +15,27 @@ public class StatusUtils {
         String desc = "";
         boolean isSuccess = false;
         switch (status) {
-            case ResponseCons.STATUS_SUCCESS:
-                desc = ResponseCons.SUCCESS_MSG;
-                isSuccess = true;
+//            case ResponseCons.STATUS_SUCCESS:
+//                desc = ResponseCons.SUCCESS_MSG;
+//                isSuccess = true;
+//                break;
+            case ResponseCons.STATUS_NO_THIS_DATA:
+                desc = ResponseCons.NO_THIS_DATA_MSG;
                 break;
             case ResponseCons.STATUS_FILED:
                 desc = ResponseCons.FILED_MSG;
+                break;
+            case ResponseCons.STATUS_FALED_AES:
+                desc = ResponseCons.FILED_AES_MSG;
+                break;
+            case ResponseCons.STATUS_FALED_NAME:
+                desc = ResponseCons.FILED_NAME_MSG;
+                break;
+            case ResponseCons.STATUS_PASS_NAME:
+                desc = ResponseCons.FILED_PASS_MSG;
+                break;
+            case ResponseCons.STATUS_REPEAT_NAME:
+                desc = ResponseCons.REPEAT_NAME;
                 break;
         }
         mStatusResult.status = status;

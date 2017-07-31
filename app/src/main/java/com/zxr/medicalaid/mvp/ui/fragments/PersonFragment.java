@@ -4,18 +4,33 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.provider.AlarmClock;
 import android.support.constraint.ConstraintLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.zxr.medicalaid.DaoSession;
 import com.zxr.medicalaid.R;
+import com.zxr.medicalaid.User;
+import com.zxr.medicalaid.UserDao;
 import com.zxr.medicalaid.mvp.ui.activities.AboutUsActivity;
 import com.zxr.medicalaid.mvp.ui.activities.InquiryActivity;
+import com.zxr.medicalaid.mvp.ui.activities.QbShowActivity;
 import com.zxr.medicalaid.mvp.ui.activities.TreatmentRecordActivity;
 import com.zxr.medicalaid.mvp.ui.activities.UserInfoEditActivity;
-import com.zxr.medicalaid.mvp.ui.fragments.base.BaseFragment;
+import com.zxr.medicalaid.mvp.ui.fragments.base.RxBusFragment;
+import com.zxr.medicalaid.net.ResponseCons;
+import com.zxr.medicalaid.utils.db.DbUtil;
+import com.zxr.medicalaid.utils.system.RxBus;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 import com.zxr.medicalaid.widget.CircleImageView;
 import com.zxr.medicalaid.widget.MaskableImageView;
+
+import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -24,7 +39,8 @@ import butterknife.OnClick;
  * Created by 猿人 on 2017/4/20.
  */
 
-public class PersonFragment extends BaseFragment {
+
+public class PersonFragment extends RxBusFragment {
 
 
     private static final int REQUEST_CODE_GALLERY = 1;
@@ -40,25 +56,63 @@ public class PersonFragment extends BaseFragment {
     CircleImageView userImage;
     @InjectView(R.id.user_name)
     TextView userName;
-    @InjectView(R.id.user_sex)
-    TextView userSex;
     @InjectView(R.id.user_info_layout)
     ConstraintLayout userInfoLayout;
-    @InjectView(R.id.time_wenzhen)
-    TextView whenZhenNum;
-    @InjectView(R.id.time_jiuzhen)
-    TextView jiuZhenNum;
-    @InjectView(R.id.page_num)
-    TextView pageNum;
 
+    DaoSession daoSession = DbUtil.getDaosession();
+    UserDao userDao = daoSession.getUserDao();
 
     @Override
     public void initInjector() {
 
     }
 
+    public String doEncode(String data, String keyString) {
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        //生成字节Key
+        byte[] byteKey = md.digest(keyString.getBytes());
+        //Key转换
+        Key convertKey = new SecretKeySpec(byteKey, "AES");
+        Key myKey = convertKey;
+        try {
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            //解密
+            cipher.init(Cipher.DECRYPT_MODE, myKey);
+            byte[] decodeByte = cipher.doFinal(hex2byte(data));
+            String decodeString = new String(decodeByte);
+            Log.e("decodeString", new String(decodeString));
+            return decodeString;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    MessageDigest md;
+
+    public static final byte[] hex2byte(String hex)
+            throws IllegalArgumentException {
+        if (hex.length() % 2 != 0) {
+            throw new IllegalArgumentException();
+        }
+        char[] arr = hex.toCharArray();
+        byte[] b = new byte[hex.length() / 2];
+        for (int i = 0, j = 0, l = hex.length(); i < l; i++, j++) {
+            String swap = "" + arr[i++] + arr[i];
+            int byteint = Integer.parseInt(swap, 16) & 0xFF;
+            b[j] = new Integer(byteint).byteValue();
+        }
+        return b;
+    }
+
     @Override
     public void initViews() {
+        User user = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
+        userName.setText(doEncode(user.getUName(), ResponseCons.KEY_NAME));
         //长按可编辑用户信息
         userInfoLayout.setOnLongClickListener(
                 (v -> {
@@ -79,6 +133,7 @@ public class PersonFragment extends BaseFragment {
                     return false;
                 })
         );
+
     }
 
     @Override
@@ -87,7 +142,7 @@ public class PersonFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.presribe_bt, R.id.about_us_bt, R.id.caution_bt, R.id.treat_record_bt})
+    @OnClick({R.id.presribe_bt, R.id.about_us_bt, R.id.caution_bt, R.id.treat_record_bt, R.id.generate_qb})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.presribe_bt:
@@ -104,11 +159,47 @@ public class PersonFragment extends BaseFragment {
             case R.id.treat_record_bt:
                 ToActivityUtil.toNextActivity(getContext(), TreatmentRecordActivity.class);
                 break;
+            case R.id.generate_qb:
+                //可能有bug
+                String type = DbUtil.getDaosession().getUserDao().loadAll().get(0).getType();
+                if (type.equals("doctor")) {
+                    String id = DbUtil.getDaosession().getUserDao().loadAll().get(0).getIdString();
+                    Intent intent = new Intent(getContext(), QbShowActivity.class);
+                    intent.putExtra("doctorId", id);
+                    getContext().startActivity(intent);
+                } else {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("提示")
+                            .setMessage("只有医生才能生成二维码哦")
+                            .setPositiveButton("我知道了",
+                                    (dialog, what) -> {
+                                        dialog.dismiss();
+                                    })
+                            .setCancelable(true)
+                            .show();
+                }
+                break;
 
         }
     }
 
 
+    @Override
+    public void initRxBus() {
+        RxBus.getDefault().toObservable(String.class)
+                .subscribe(
+                        s -> {
+                            if (s.equals("修改昵称成功")) {
+                                String name = DbUtil.getDaosession().getUserDao().loadAll().get(0).getUName();
+                                if (name == null) {
+                                    return;
+                                }
+                                userName.setText(doEncode(name, ResponseCons.KEY_NAME));
+                            }
+                            Log.e(TAG, s);
+                        }
+                );
+    }
 }
 
 

@@ -6,7 +6,15 @@ package com.zxr.medicalaid.mvp.entity;
 
 public class Data<T> {
     private int code;
-    private T data;
+    private String message;
+    private T body;
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public int getCode() {
         return code;
@@ -17,10 +25,12 @@ public class Data<T> {
     }
 
     public T getData() {
-        return data;
+        return body;
     }
 
     public void setData(T data) {
-        this.data = data;
+        this.body = data;
     }
+
+
 }

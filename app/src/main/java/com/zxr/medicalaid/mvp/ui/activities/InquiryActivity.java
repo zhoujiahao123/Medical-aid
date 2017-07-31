@@ -1,5 +1,6 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -8,14 +9,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.github.lazylibrary.util.DensityUtil;
-import com.github.lazylibrary.util.ToastUtils;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
+import com.zxr.medicalaid.DaoSession;
+import com.zxr.medicalaid.MedicalList;
+import com.zxr.medicalaid.MedicalListDao;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.entity.Person;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.InquiryContentAdapter;
 import com.zxr.medicalaid.mvp.ui.adapters.InquiryHeaderAdapter;
+import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.others.EasyRecyViewInitUtils;
 import com.zxr.medicalaid.widget.StickyHeaderDecoration;
 
@@ -34,7 +38,9 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
     EasyRecyclerView mEasyRecyclerView;
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
-
+    DaoSession daoSession;
+    MedicalListDao medicalListDao;
+    List<MedicalList> lists;
     /**
      * 数据
      */
@@ -59,15 +65,18 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
 
         adapter.setOnItemClickListener((position) -> {
             //进行详细药方详细信息显示
-            ToastUtils.showToast(this, position + "");
+            Intent intent = new Intent(InquiryActivity.this, PrescribeRecordActivity.class);
+            intent.putExtra("name", lists.get(position).getName());
+            intent.putExtra("weight", lists.get(position).getWeight());
+            startActivity(intent);
         });
         //初始化RecyclerView
+        EasyRecyViewInitUtils.initEasyRecyclerView(mEasyRecyclerView);
         mEasyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY, DensityUtil.dip2px(this, 0.5f), DensityUtil.dip2px(this, 8f), DensityUtil.dip2px(this, 8f));
         itemDecoration.setDrawLastItem(false);
         mEasyRecyclerView.addItemDecoration(itemDecoration);
         mEasyRecyclerView.setAdapter(adapter);
-        EasyRecyViewInitUtils.initEasyRecyclerView(mEasyRecyclerView);
 
         //加入header
         StickyHeaderDecoration decoration = new StickyHeaderDecoration(new InquiryHeaderAdapter(this, adapter));
@@ -102,26 +111,16 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
     @Override
     public void onRefresh() {
         //进行加载
+        daoSession = DbUtil.getDaosession();
+        medicalListDao = daoSession.getMedicalListDao();
+        lists = medicalListDao.loadAll();
+        datas.clear();
+        adapter.clear();
+        adapter.notifyDataSetChanged();
         handler.postDelayed(() -> {
-            Person person1 = new Person("111", "2017-02-22", "111");
-            Person person2 = new Person("111", "2017-02-22", "111");
-            Person person3 = new Person("111", "2017-02-23", "111");
-            Person person4 = new Person("111", "2017-02-23", "111");
-            Person person5 = new Person("111", "2017-02-24", "111");
-            Person person6 = new Person("111", "2017-02-24", "111");
-            Person person7 = new Person("111", "2017-02-25", "111");
-            Person person8 = new Person("111", "2017-02-25", "111");
-            Person person9 = new Person("111", "2017-02-28", "111");
-            datas.add(person1);
-            datas.add(person2);
-            datas.add(person3);
-            datas.add(person4);
-            datas.add(person5);
-            datas.add(person6);
-            datas.add(person7);
-            datas.add(person8);
-            datas.add(person9);
-
+            for (int i = 0; i < lists.size(); i++) {
+                datas.add(new Person(lists.get(i).getPatient(), lists.get(i).getDate(), ""));
+            }
             adapter.addAll(datas);
         }, 1000);
 

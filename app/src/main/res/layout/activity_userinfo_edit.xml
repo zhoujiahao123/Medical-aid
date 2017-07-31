@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/go_on_1"
-            android:hint="Jacob"
+            android:hint="昵称"
             android:background="@null"
             android:textColor="@color/secondary_text"
             android:textSize="@dimen/font_normal" />

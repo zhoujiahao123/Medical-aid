@@ -1,7 +1,9 @@
 package com.zxr.medicalaid;
 
 import android.app.Application;
+import android.content.Context;
 
+import com.facebook.stetho.Stetho;
 import com.zxr.medicalaid.dagger.component.ApplicationComponent;
 import com.zxr.medicalaid.dagger.component.DaggerApplicationComponent;
 import com.zxr.medicalaid.dagger.module.ApplicationModule;
@@ -13,12 +15,13 @@ import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.ImageLoader;
 import cn.finalteam.galleryfinal.ThemeConfig;
 
+
 /**
  * Created by 猿人 on 2017/4/9.
  */
 
 public class App extends Application {
-
+    private static Context context;
     private ApplicationComponent mApplicationComponent;
 
     public ApplicationComponent getmApplicationComponent() {
@@ -30,6 +33,8 @@ public class App extends Application {
         super.onCreate();
         initApplicationComponent();
         initGallerFinal();
+        Stetho.initializeWithDefaults(this);
+        this.context = this;
     }
 
     private void initGallerFinal() {
@@ -52,7 +57,9 @@ public class App extends Application {
                 .build();
         GalleryFinal.init(coreConfig);
     }
-
+    public static  Context getBaseApplicationContext(){
+        return context;
+    }
     private void initApplicationComponent() {
         mApplicationComponent = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build();
     }

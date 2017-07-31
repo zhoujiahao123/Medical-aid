@@ -30,6 +30,5 @@ import dagger.Component;
 public interface ApplicationComponent {
     @ContextLife("Application")
     Context getApplication();
-
 }
 

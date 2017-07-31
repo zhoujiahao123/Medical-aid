@@ -1,5 +1,6 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v7.widget.Toolbar;
@@ -9,12 +10,20 @@ import android.widget.EditText;
 
 import com.github.lazylibrary.util.ToastUtils;
 import com.zxr.medicalaid.R;
+import com.zxr.medicalaid.mvp.presenter.presenterImpl.ChangUserNamePresenterImpl;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
+import com.zxr.medicalaid.mvp.view.ChangUserNameView;
+import com.zxr.medicalaid.net.ResponseCons;
+import com.zxr.medicalaid.utils.db.DbUtil;
+import com.zxr.medicalaid.utils.db.IdUtil;
+import com.zxr.medicalaid.utils.encode.EncodeUtil;
 import com.zxr.medicalaid.utils.system.ActivityStack;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 import com.zxr.medicalaid.widget.CircleImageView;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -25,7 +34,7 @@ import cn.finalteam.galleryfinal.model.PhotoInfo;
  * Created by 猿人 on 2017/7/7.
  */
 
-public class UserInfoEditActivity extends BaseActivity {
+public class UserInfoEditActivity extends BaseActivity implements ChangUserNameView {
     private static final int REQUEST_CODE_GALLERY = 1;
     @InjectView(R.id.circleImageView)
     CircleImageView mUserImage;
@@ -36,9 +45,13 @@ public class UserInfoEditActivity extends BaseActivity {
 
     private boolean hasChanged = false;
 
+    @Inject
+    ChangUserNamePresenterImpl mPresenter;
+
     @Override
     public void initInjector() {
-
+        mActivityComponent.inject(this);
+        mPresenter.injectView(this);
     }
 
     @Override
@@ -51,8 +64,6 @@ public class UserInfoEditActivity extends BaseActivity {
 
         //最开始设置姓名编辑光标不现实
         mUserName.setCursorVisible(false);
-
-
     }
 
     @Override
@@ -87,15 +98,23 @@ public class UserInfoEditActivity extends BaseActivity {
                 break;
             case R.id.finish_bt:
                 mUserName.setCursorVisible(false);
-                if (hasChanged) {
-                    //进行头像和姓名修改等上传
-
+                //进行头像和姓名修改等上传
+                String newName = EncodeUtil.doEncrypt(mUserName.getText().toString(), ResponseCons.KEY_NAME);
+                if (newName == null){
+                    ToastUtils.showToast(this,"暂未进行修改呢");
+                    return;
                 }
+                mPresenter.changUserName(IdUtil.getIdString(),newName);
                 break;
             case R.id.log_off:
                 mUserName.setCursorVisible(false);
+                DbUtil.getDaosession().getUserDao().deleteAll();
                 ToActivityUtil.toNextActivity(this, LoginActivity.class);
                 ActivityStack.getScreenManager().clearAllActivity();
+                SharedPreferences preferences = getSharedPreferences("isConnect", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.commit();
                 //同时进行一些数据清除，如数据库的清理
                 break;
         }
@@ -121,4 +140,18 @@ public class UserInfoEditActivity extends BaseActivity {
     };
 
 
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void showMsg(String msg) {
+        ToastUtils.showToast(this,msg);
+    }
 }
