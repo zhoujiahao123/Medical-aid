@@ -3,8 +3,6 @@ package com.zxr.medicalaid.utils.db;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.zxr.medicalaid.App;
-import com.zxr.medicalaid.DaoMaster;
-import com.zxr.medicalaid.DaoSession;
 
 /**
  * Created by ASUS-NB on 2017/7/7.

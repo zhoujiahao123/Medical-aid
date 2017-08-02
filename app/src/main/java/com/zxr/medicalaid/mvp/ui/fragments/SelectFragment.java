@@ -1,6 +1,7 @@
 package com.zxr.medicalaid.mvp.ui.fragments;
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -10,6 +11,7 @@ import com.zxr.medicalaid.dagger.scope.ContextLife;
 import com.zxr.medicalaid.mvp.ui.activities.CurrentPatientsActivity;
 import com.zxr.medicalaid.mvp.ui.activities.QRActivity;
 import com.zxr.medicalaid.mvp.ui.fragments.base.BaseFragment;
+import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.image.GildeImageLoader;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 
@@ -62,7 +64,8 @@ public class SelectFragment extends BaseFragment {
         return R.layout.fragment_select;
     }
 
-
+    DaoSession daoSession;
+    UserDao userDao;
     @OnClick({R.id.prescribe_bt, R.id.treat_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -71,7 +74,24 @@ public class SelectFragment extends BaseFragment {
                         new String[]{CurrentPatientsActivity.GET_FROM}, new int[]{CurrentPatientsActivity.DOCTOR});
                 break;
             case R.id.treat_bt:
-                ToActivityUtil.toNextActivity(mContext, QRActivity.class);
+                daoSession = DbUtil.getDaosession();
+                userDao = daoSession.getUserDao();
+                User user = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
+                String type = user.getType();
+                if(type.equals("doctor")){
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("提示")
+                            .setMessage("您没有权限进行以下操作")
+                            .setPositiveButton("确定",
+                                    (dialog,what) ->{
+                                        dialog.dismiss();
+                                    })
+                            .setCancelable(true)
+                            .show();
+
+                }else {
+                    ToActivityUtil.toNextActivity(mContext, QRActivity.class);
+                }
                 break;
         }
     }

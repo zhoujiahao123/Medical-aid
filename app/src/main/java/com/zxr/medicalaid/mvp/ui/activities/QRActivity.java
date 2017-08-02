@@ -8,12 +8,7 @@ import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
-import com.zxr.medicalaid.DaoSession;
-import com.zxr.medicalaid.Date;
-import com.zxr.medicalaid.DateDao;
 import com.zxr.medicalaid.R;
-import com.zxr.medicalaid.User;
-import com.zxr.medicalaid.UserDao;
 import com.zxr.medicalaid.mvp.presenter.presenterImpl.LinkPresenterImpl;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.view.LinkView;
@@ -65,7 +60,7 @@ public class QRActivity extends BaseActivity  implements LinkView{
     protected void onStart() {
         super.onStart();
     }
-
+    AlertDialog dialog1;
     @Override
     public void initViews() {
         daoSession = DbUtil.getDaosession();
@@ -73,16 +68,7 @@ public class QRActivity extends BaseActivity  implements LinkView{
         User user = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
         String type = user.getType();
         if(type.equals("doctor")){
-            new AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage("您没有权限进行以下操作")
-                    .setPositiveButton("确定",
-                            (dialog,what) ->{
-                                dialog.dismiss();
-                            })
-                    .setCancelable(true)
-                    .show();
-            finish();
+
         }else {
             SharedPreferences preferences=getSharedPreferences("isConnect",MODE_PRIVATE);
             String doctorId =preferences.getString("uId","");

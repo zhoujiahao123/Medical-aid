@@ -1,6 +1,5 @@
 package com.zxr.medicalaid.mvp.presenter.presenterImpl;
 
-import com.zxr.medicalaid.User;
 import com.zxr.medicalaid.mvp.model.ModelImpl.ChangUserNameModelImpl;
 import com.zxr.medicalaid.mvp.presenter.ChangeUserNamePresenter;
 import com.zxr.medicalaid.mvp.presenter.base.BasePresenterImpl;

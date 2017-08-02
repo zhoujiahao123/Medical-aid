@@ -10,9 +10,6 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
-import com.zxr.medicalaid.DaoSession;
-import com.zxr.medicalaid.Date;
-import com.zxr.medicalaid.DateDao;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.entity.TreatmentRecordItem;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;

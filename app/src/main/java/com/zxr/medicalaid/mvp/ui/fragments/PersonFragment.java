@@ -8,10 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.zxr.medicalaid.DaoSession;
 import com.zxr.medicalaid.R;
-import com.zxr.medicalaid.User;
-import com.zxr.medicalaid.UserDao;
 import com.zxr.medicalaid.mvp.ui.activities.AboutUsActivity;
 import com.zxr.medicalaid.mvp.ui.activities.InquiryActivity;
 import com.zxr.medicalaid.mvp.ui.activities.QbShowActivity;
@@ -41,6 +38,7 @@ import butterknife.OnClick;
 
 
 public class PersonFragment extends RxBusFragment {
+
 
 
     private static final int REQUEST_CODE_GALLERY = 1;
@@ -146,7 +144,22 @@ public class PersonFragment extends RxBusFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.presribe_bt:
-                ToActivityUtil.toNextActivity(getContext(), InquiryActivity.class);
+                User user = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
+                String type1 = user.getType();
+                if(!type1.equals("doctor")){
+                    new android.support.v7.app.AlertDialog.Builder(getContext())
+                            .setTitle("提示")
+                            .setMessage("您没有权限进行以下操作")
+                            .setPositiveButton("确定",
+                                    (dialog,what) ->{
+                                        dialog.dismiss();
+                                    })
+                            .setCancelable(true)
+                            .show();
+
+                }else {
+                    ToActivityUtil.toNextActivity(getContext(), InquiryActivity.class);
+                }
                 break;
             case R.id.about_us_bt:
                 ToActivityUtil.toNextActivity(getContext(), AboutUsActivity.class);
@@ -157,7 +170,22 @@ public class PersonFragment extends RxBusFragment {
                 startActivity(alarm);
                 break;
             case R.id.treat_record_bt:
-                ToActivityUtil.toNextActivity(getContext(), TreatmentRecordActivity.class);
+                User user1 = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
+                String type2 = user1.getType();
+                if(type2.equals("doctor")){
+                    new android.support.v7.app.AlertDialog.Builder(getContext())
+                            .setTitle("提示")
+                            .setMessage("您没有权限进行以下操作")
+                            .setPositiveButton("确定",
+                                    (dialog,what) ->{
+                                        dialog.dismiss();
+                                    })
+                            .setCancelable(true)
+                            .show();
+
+                }else {
+                    ToActivityUtil.toNextActivity(getContext(), TreatmentRecordActivity.class);
+                }
                 break;
             case R.id.generate_qb:
                 //可能有bug

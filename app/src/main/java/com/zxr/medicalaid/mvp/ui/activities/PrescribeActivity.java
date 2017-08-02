@@ -8,17 +8,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.lazylibrary.util.ToastUtils;
 import com.jude.easyrecyclerview.EasyRecyclerView;
-import com.zxr.medicalaid.DaoSession;
-import com.zxr.medicalaid.MedicalList;
-import com.zxr.medicalaid.MedicalListDao;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.entity.PrescriptionItem;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
@@ -40,6 +39,7 @@ import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
+import me.drakeet.materialdialog.MaterialDialog;
 
 public class PrescribeActivity extends BaseActivity {
     /**
@@ -71,7 +71,48 @@ public class PrescribeActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case CONNECT_FAILED:
-                    ToastUtils.showToast(PrescribeActivity.this, "连接失败，请重试");
+                    new AlertDialog.Builder(PrescribeActivity.this)
+                            .setTitle("提示")
+                            .setMessage("连接失败")
+                            .setPositiveButton("重试",
+                                    (dialog, which) -> {
+                                        //进行相关逻辑
+                                        sendTread.start();
+                                        dialog.dismiss();
+                                    }
+                            )
+                            .setNegativeButton("修改Ip",
+                                    (dialog, which) ->
+                                    {
+                                        dialog.dismiss();
+                                        MaterialDialog dialog1 = new MaterialDialog(PrescribeActivity.this);
+                                        dialog1.setContentView(R.layout.dialog_ip);
+                                        View view = LayoutInflater.from(PrescribeActivity.this).inflate(R.layout.dialog_ip,null);
+                                        TextView ipAddress = (TextView) view.findViewById(R.id.ip_address);
+                                        TextView port = (TextView) view.findViewById(R.id.port);
+                                        dialog1.setPositiveButton("确定", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                if(ipAddress.getText().equals("")&&port.getText().equals("")){
+                                                    IP_ADD = ipAddress.getText().toString();
+                                                    PORT = Integer.valueOf(port.getText().toString());
+                                                    dialog1.dismiss();
+                                                }else {
+                                                    Toast.makeText(PrescribeActivity.this,"信息不能为空",Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        }).setNegativeButton("取消", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog1.dismiss();
+                                            }
+                                        });
+                                        dialog1.show();
+                                    }
+
+                            )
+                            .show();
+//                    ToastUtils.showToast(PrescribeActivity.this, "连接失败，请重试");
                     break;
                 case NO_THIS_MEDICINE:
 //                    ToastUtils.showToast(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送");
@@ -124,8 +165,8 @@ public class PrescribeActivity extends BaseActivity {
     //写入数据流
     OutputStream os;
     //ip地址和端口(公网,私有地址不行)
-    public static final String IP_ADD = "202.115.29.11";
-    public static final int PORT = 5566;
+    public  String IP_ADD = "202.115.29.111";
+    public  int PORT = 5566;
     private final int CONNECT_FAILED = 0;
     private final int NO_THIS_MEDICINE = 1;
     private final int CONNECT_SUCCESS = 2;

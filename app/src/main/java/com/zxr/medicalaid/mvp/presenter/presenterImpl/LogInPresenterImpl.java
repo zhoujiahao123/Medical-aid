@@ -1,8 +1,5 @@
 package com.zxr.medicalaid.mvp.presenter.presenterImpl;
 
-import com.zxr.medicalaid.DaoSession;
-import com.zxr.medicalaid.User;
-import com.zxr.medicalaid.UserDao;
 import com.zxr.medicalaid.mvp.entity.moudle.UserInfo;
 import com.zxr.medicalaid.mvp.model.LogInModel;
 import com.zxr.medicalaid.mvp.model.ModelImpl.LogInModelImpl;

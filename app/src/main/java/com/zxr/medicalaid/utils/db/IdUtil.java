@@ -1,9 +1,5 @@
 package com.zxr.medicalaid.utils.db;
 
-import com.zxr.medicalaid.DaoSession;
-import com.zxr.medicalaid.User;
-import com.zxr.medicalaid.UserDao;
-
 /**
  * Created by ASUS-NB on 2017/7/8.
  */
