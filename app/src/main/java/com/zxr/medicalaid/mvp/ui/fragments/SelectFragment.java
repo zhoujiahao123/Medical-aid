@@ -26,7 +26,6 @@ import butterknife.OnClick;
  */
 
 public class SelectFragment extends BaseFragment {
-
     @InjectView(R.id.prescribe_bt)
     ImageView mPrescribeBt;
     @InjectView(R.id.treat_bt)
@@ -76,6 +75,5 @@ public class SelectFragment extends BaseFragment {
                 break;
         }
     }
-
 
 }

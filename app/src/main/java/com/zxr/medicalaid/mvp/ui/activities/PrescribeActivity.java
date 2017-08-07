@@ -2,28 +2,46 @@ package com.zxr.medicalaid.mvp.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.lazylibrary.util.ToastUtils;
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.zxr.medicalaid.DaoSession;
+import com.zxr.medicalaid.MedicalList;
+import com.zxr.medicalaid.MedicalListDao;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.entity.PrescriptionItem;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.PrescribeTableAdapter;
+import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.others.DialogUtils;
+import com.zxr.medicalaid.utils.system.RxBus;
 import com.zxr.medicalaid.widget.CircleImageView;
+
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class PrescribeActivity extends BaseActivity {
-
     /**
      * view
      */
@@ -47,11 +65,88 @@ public class PrescribeActivity extends BaseActivity {
     EditText mWeightInput;
 
 
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case CONNECT_FAILED:
+                    ToastUtils.showToast(PrescribeActivity.this, "连接失败，请重试");
+                    break;
+                case NO_THIS_MEDICINE:
+//                    ToastUtils.showToast(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送");
+                    Toast.makeText(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送", Toast.LENGTH_SHORT);
+                    break;
+                case CONNECT_SUCCESS:
+                    ToastUtils.showToast(PrescribeActivity.this, "连接成功，正在发送");
+                    break;
+                case SEND_SUCCESS:
+                    ToastUtils.showToast(PrescribeActivity.this, "已成功发送");
+                    //存入数据库
+                    daoSession = DbUtil.getDaosession();
+                    medicalListDao = daoSession.getMedicalListDao();
+                    MedicalList medicalList = new MedicalList();
+                    medicalList.setPatient(patientName);
+                    StringBuilder name = new StringBuilder();
+
+                    StringBuilder weight = new StringBuilder();
+                    for (int i = 0; i < dbNameList.size(); i++) {
+                        name.append(dbNameList.get(i) + ",");
+                        weight.append(dbWeightList.get(i) + ",");
+                    }
+                    medicalList.setName(name.toString());
+                    medicalList.setWeight(weight.toString());
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+                    String date = simpleDateFormat.format(new Date());
+                    medicalList.setDate(date);
+                    medicalListDao.insert(medicalList);
+                    //提醒病人列表界面更新
+                    if (patientId != null) {
+                        RxBus.getDefault().post(new String(patientId));
+                    }
+                    finish();
+                    break;
+                case EMPTY_MEDICINE:
+                    ToastUtils.showToast(PrescribeActivity.this, "药方现在为空呢");
+                    break;
+                case REMOVE_ONE_ITEM:
+                    adapter.remove(msg.arg1);
+                    dbNameList.add(listName.get(msg.arg1));
+                    dbWeightList.add(listWeight.get(msg.arg1));
+                    listName.remove(msg.arg1);
+                    listWeight.remove(msg.arg1);
+                    break;
+            }
+        }
+    };
+
+
+    //写入数据流
+    OutputStream os;
+    //ip地址和端口(公网,私有地址不行)
+    public static final String IP_ADD = "113.251.223.3";
+    public static final int PORT = 5566;
+    private final int CONNECT_FAILED = 0;
+    private final int NO_THIS_MEDICINE = 1;
+    private final int CONNECT_SUCCESS = 2;
+    private final int SEND_SUCCESS = 3;
+    private final int EMPTY_MEDICINE = 4;
+    private final int REMOVE_ONE_ITEM = 5;
+    private List<String> dbNameList = new ArrayList<>();
+    private List<String> dbWeightList = new ArrayList<>();
+    private List<String> listName = new ArrayList<>();
+    private List<String> listWeight = new ArrayList<>();
+    private String patientName;
+    private String phoneNumber;
+    DaoSession daoSession;
+    MedicalListDao medicalListDao;
+    private String patientId;
     /**
      * 数据
      */
     private PrescribeTableAdapter adapter;
 
+    private Map<String, String> medicineTable = new HashMap<>();
 
     @Override
     public void initInjector() {
@@ -60,16 +155,23 @@ public class PrescribeActivity extends BaseActivity {
 
     @Override
     public void initViews() {
+
         //设置toolbar
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.prescibe_text);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
-
+        patientName = getIntent().getStringExtra("name");
+        phoneNumber = getIntent().getStringExtra("number");
+        patientId = getIntent().getStringExtra("id");
+        int randomNum = (int) ((Math.random() * 4 + 1.9) * 10);
+        mSex.setText(((randomNum % 2) == 1) ? "男" : "女");
+        mAge.setText(randomNum + "");
+        mName.setText(patientName);
+        mRegisterTime.setText("电话号码：   " + phoneNumber);
         //设置recyclerView
         mTable.setEmptyView(R.layout.view_empty);
         mTable.setLayoutManager(new LinearLayoutManager(this));
-
         adapter = new PrescribeTableAdapter(this);
         adapter.setOnItemLongClickListener(
                 position -> {
@@ -77,6 +179,8 @@ public class PrescribeActivity extends BaseActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             adapter.remove(position);
+                            listName.remove(position);
+                            listWeight.remove(position);
                             dialog.dismiss();
                         }
                     }, "取消", new DialogInterface.OnClickListener() {
@@ -87,11 +191,18 @@ public class PrescribeActivity extends BaseActivity {
                     });
                     return false;
                 }
-
         );
         mTable.setAdapter(adapter);
         //设置重量输入框的弹起类型
         mWeightInput.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+        initData();
+    }
+
+    private void initData() {
+        medicineTable.put("何首乌", "a");
+        medicineTable.put("冬虫夏草", "b");
+        medicineTable.put("人参", "c");
+        medicineTable.put("当归", "d");
     }
 
     @Override
@@ -99,6 +210,8 @@ public class PrescribeActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.precribe_confirm, menu);
         return super.onCreatePanelMenu(featureId, menu);
     }
+
+    Thread sendTread = new SendMedicineThread();
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -114,11 +227,11 @@ public class PrescribeActivity extends BaseActivity {
                         .setTitle("提醒")
                         .setMessage("您确定要进行提交吗?")
                         .setPositiveButton("确定",
-                                (dialog, which) ->{
+                                (dialog, which) -> {
                                     //进行相关逻辑
+                                    sendTread.start();
                                     dialog.dismiss();
-                                    finish();
-                                    }
+                                }
                         )
                         .setNegativeButton("取消",
                                 (dialog, which) ->
@@ -159,6 +272,9 @@ public class PrescribeActivity extends BaseActivity {
         if (weight.charAt(weight.length() - 1) == '.') {
             weight = weight + '0';
         }
+        //获取到药名和重量
+        listName.add(name);
+        listWeight.add(weight);
         adapter.add(new PrescriptionItem(name, weight));
         adapter.notifyDataSetChanged();
         mNameInput.setText("");
@@ -173,5 +289,56 @@ public class PrescribeActivity extends BaseActivity {
             }
         }
         return x;
+    }
+
+    class SendMedicineThread extends Thread {
+        @Override
+        public void run() {
+            super.run();
+            boolean flag = true;
+            Socket socket;
+            try {
+                socket = new Socket();
+                socket.connect(new InetSocketAddress(IP_ADD, PORT), 1500);
+                os = socket.getOutputStream();
+                handler.sendEmptyMessage(CONNECT_SUCCESS);
+                StringBuffer buffer = new StringBuffer();
+                long sleep_interval = 1000;
+                int size = listName.size();
+                if (size == 0) {
+                    handler.sendEmptyMessage(EMPTY_MEDICINE);
+                    return;
+                }
+                for (int i = size - 1; i >= 0; i--) {
+                    String medicine = medicineTable.get(listName.get(i));
+                    if (medicine == null) {
+                        flag = false;
+                        Message msg = new Message();
+                        msg.what = NO_THIS_MEDICINE;
+                        msg.obj = listName.get(i);
+                        handler.sendMessage(msg);
+                        continue;
+                    }
+                    String medicineInfo = medicineTable.get(listName.get(i)) + listWeight.get(i) + "g";
+                    buffer.append(medicineInfo);
+                    Log.e(TAG, buffer.toString());
+                    os.write((buffer.toString()).getBytes("utf-8"));
+                    buffer = new StringBuffer();
+                    Message msg = new Message();
+                    msg.what = REMOVE_ONE_ITEM;
+                    msg.arg1 = i;
+                    handler.sendMessage(msg);
+                    Thread.sleep(sleep_interval);
+                }
+                if (flag) {
+                    handler.sendEmptyMessage(SEND_SUCCESS);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "连接超时");
+                e.printStackTrace();
+                sendTread = new SendMedicineThread();
+                handler.sendEmptyMessage(CONNECT_FAILED);
+            }
+        }
     }
 }

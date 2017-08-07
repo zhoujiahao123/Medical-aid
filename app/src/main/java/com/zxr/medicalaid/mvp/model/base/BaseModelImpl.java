@@ -42,8 +42,13 @@ public class BaseModelImpl {
     private class ResultFilter<T> implements Func1<Data<T>, T> {
         @Override
         public T call(Data<T> tHttpBean) {
-            if (tHttpBean.getCode() != 200) {
-                throw new ApiException(tHttpBean.getCode());
+            switch (tHttpBean.getCode()) {
+                case ResponseCons.STATUS_CHANGE_SUCCESS:
+                    break;
+                case ResponseCons.STATUS_SUCCESS:
+                    break;
+                default:
+                    throw new ApiException(tHttpBean.getCode());
             }
             return tHttpBean.getData();
         }

@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.zxr.medicalaid.mvp.ui.activities.QRActivity">
 
-    <Button
-        android:id="@+id/text_bt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="下一个activity" />
+
+
+
 </android.support.constraint.ConstraintLayout>

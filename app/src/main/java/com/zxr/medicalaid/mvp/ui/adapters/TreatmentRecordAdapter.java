@@ -26,19 +26,19 @@ public class TreatmentRecordAdapter extends RecyclerArrayAdapter<TreatmentRecord
     }
 
     class TreatmentVeiewHolder extends BaseViewHolder<TreatmentRecordItem> {
-        TextView timeTv, prescriptionTv;
+        TextView timeTv;
 
         public TreatmentVeiewHolder(ViewGroup parent, @LayoutRes int res) {
             super(parent, res);
             timeTv = $(R.id.time);
-            prescriptionTv = $(R.id.prescription);
+
         }
 
         @Override
         public void setData(TreatmentRecordItem data) {
             super.setData(data);
             timeTv.setText("时间:" + data.getTime());
-            prescriptionTv.setText(data.getPrescription());
+
         }
     }
 
