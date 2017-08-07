@@ -9,11 +9,12 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.zxr.medicalaid.DaoSession;
-import com.zxr.medicalaid.Date;
 import com.zxr.medicalaid.DateDao;
+import com.zxr.medicalaid.MedicalList;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.User;
 import com.zxr.medicalaid.UserDao;
+import com.zxr.medicalaid.mvp.entity.moudle.LinkInfo;
 import com.zxr.medicalaid.mvp.presenter.presenterImpl.LinkPresenterImpl;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.view.LinkView;
@@ -26,6 +27,7 @@ import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.crypto.Cipher;
@@ -182,14 +184,49 @@ public class QRActivity extends BaseActivity  implements LinkView{
 
     @Override
     public void showMsg(String msg) {
-        Log.e(TAG,"alreadyConnect");
+//        Log.e(TAG,"alreadyConnect");
+//        observable.subscribe(observer);
+////        dateDao = daoSession.getDateDao();
+//        Date date = new Date();
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.0");
+//        date.setDate(simpleDateFormat.format(new java.util.Date()));
+////        dateDao.insert(date);
+//        finish();
+    }
+    @Override
+    public void linkSucceed(LinkInfo linkInfo) {
+        Log.e(TAG,"linkSucceed");
         observable.subscribe(observer);
-        dateDao = daoSession.getDateDao();
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
-        date.setDate(simpleDateFormat.format(new java.util.Date()));
-        dateDao.insert(date);
-        finish();
+        Log.e(TAG,"linkSucceed");
+        long linkId = linkInfo.getBody().getId();
+        Log.e(TAG,"linkSucceed");
+        SharedPreferences sharedPreferences = getSharedPreferences("linkId",MODE_PRIVATE);
+        Log.e(TAG,"linkSucceed");
+        String id = sharedPreferences.getString("linkId","");
+        Log.e(TAG,"linkSucceed");
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Log.e(TAG,"linkSucceed");
+        if(!id.equals("")){
+            editor.putString("linkId",id+","+String.valueOf(linkId));
+            Log.e(TAG,"linkSucceed");
+        }else {
+            editor.putString("linkId",String.valueOf(linkId));
+        }
+        editor.commit();
+        Log.e(TAG,"linkSucceed");
+        User user = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
+        String type = user.getType();
+        MedicalList list =new MedicalList();
+        if(linkInfo.getBody().getPatient().getType().equals(type)){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            list.setDate((dateFormat.format(new Date())));
+            list.setName(linkInfo.getBody().getPatient().getNickName());
+        }else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            list.setDate((dateFormat.format(new Date())));
+            list.setName(linkInfo.getBody().getDoctor().getNickName());
+        }
+        daoSession.getMedicalListDao().insert(list);
     }
     Observer<String> observer = new Observer<String>() {
         @Override
@@ -216,4 +253,6 @@ public class QRActivity extends BaseActivity  implements LinkView{
             startActivity(intent);
         }
     };
+
+
 }

@@ -3,6 +3,7 @@ package com.example;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
+import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
 
 public class MyClass {
@@ -23,6 +24,13 @@ public class MyClass {
         user.addStringProperty("password");
         user.addStringProperty("type");
         user.addIntProperty("isAlready");
+        Property linkId = user.addLongProperty("linkId").getProperty();
+        Entity link = schema.addEntity("Link");
+        link.addIdProperty();
+        link.addIntProperty("uId");
+        link.addStringProperty("status");
+        link.addStringProperty("time");
+        user.addToOne(link,linkId);
     }
     public static void addMedicalList(Schema schema){
         Entity list = schema.addEntity("MedicalList");
@@ -34,7 +42,7 @@ public class MyClass {
     public static void addDate(Schema schema){
         Entity date = schema.addEntity("Date");
         date.addStringProperty("date");
-    }
+  }
     public static void addMedicalDate(Schema schema){
         Entity medicalDate = schema.addEntity("MedicalDateInfo");
         medicalDate.addIdProperty();
@@ -43,4 +51,5 @@ public class MyClass {
         medicalDate.addStringProperty("productDate");
         medicalDate.addStringProperty("shelfLife");
     }
+
 }

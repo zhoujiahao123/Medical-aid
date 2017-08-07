@@ -15,7 +15,6 @@ import com.zxr.medicalaid.UserDao;
 import com.zxr.medicalaid.mvp.ui.activities.AboutUsActivity;
 import com.zxr.medicalaid.mvp.ui.activities.InquiryActivity;
 import com.zxr.medicalaid.mvp.ui.activities.QbShowActivity;
-import com.zxr.medicalaid.mvp.ui.activities.TreatmentRecordActivity;
 import com.zxr.medicalaid.mvp.ui.activities.UserInfoEditActivity;
 import com.zxr.medicalaid.mvp.ui.fragments.base.RxBusFragment;
 import com.zxr.medicalaid.net.ResponseCons;
@@ -157,7 +156,7 @@ public class PersonFragment extends RxBusFragment {
                 startActivity(alarm);
                 break;
             case R.id.treat_record_bt:
-                ToActivityUtil.toNextActivity(getContext(), TreatmentRecordActivity.class);
+                ToActivityUtil.toNextActivity(getContext(), InquiryActivity.class);
                 break;
             case R.id.generate_qb:
                 //可能有bug
