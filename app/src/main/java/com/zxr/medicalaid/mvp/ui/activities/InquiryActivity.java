@@ -66,10 +66,11 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
         String str = sharedPreferences.getString("linkId","");
         if(!str.equals("")){
              linkIdArray=str.split(",");
+            for(int i=0;i<linkIdArray.length;i++){
+                linkIdList.add(linkIdArray[i]);
+            }
         }
-        for(int i=0;i<linkIdArray.length;i++){
-            linkIdList.add(linkIdArray[i]);
-        }
+        
         mToolbar.setTitle(R.string.inquiryRecord);
         mToolbar.setTitleTextColor(Color.WHITE);
         //初始化adaper
