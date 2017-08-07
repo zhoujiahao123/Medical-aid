@@ -171,7 +171,7 @@ public class MedicalDateSettingActivity extends BaseActivity {
             MedicalDateInfo m1 = new MedicalDateInfo(null,1, "何首乌", "2015-01-02", "2年");
             MedicalDateInfo m2 = new MedicalDateInfo(null,2, "冬虫夏草", "2015-01-02", "2年");
             MedicalDateInfo m3 = new MedicalDateInfo(null,3, "人参", "2015-01-02", "2年");
-            MedicalDateInfo m4 = new MedicalDateInfo(null,4, "当归", "2015-01-02", "2年");
+            MedicalDateInfo m4 = new MedicalDateInfo(null, 4, "当归", "2015-01-02", "2年");
             dao.insert(m1);
             dao.insert(m2);
             dao.insert(m3);
