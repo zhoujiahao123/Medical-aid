@@ -18,10 +18,16 @@ import android.widget.Toast;
 
 import com.github.lazylibrary.util.ToastUtils;
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.zxr.medicalaid.DaoSession;
+import com.zxr.medicalaid.LinkDao;
 import com.zxr.medicalaid.R;
+import com.zxr.medicalaid.UserDao;
 import com.zxr.medicalaid.mvp.entity.PrescriptionItem;
+import com.zxr.medicalaid.mvp.entity.moudle.PrescriptionInfo;
+import com.zxr.medicalaid.mvp.presenter.presenterImpl.UpLoadPrescriptionPresenterImpl;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.PrescribeTableAdapter;
+import com.zxr.medicalaid.mvp.view.UpLoadPrescriptionView;
 import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.others.DialogUtils;
 import com.zxr.medicalaid.utils.system.RxBus;
@@ -30,18 +36,19 @@ import com.zxr.medicalaid.widget.CircleImageView;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
 import me.drakeet.materialdialog.MaterialDialog;
 
-public class PrescribeActivity extends BaseActivity {
+public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptionView{
+
     /**
      * view
      */
@@ -64,55 +71,24 @@ public class PrescribeActivity extends BaseActivity {
     @InjectView(R.id.medicine_weight_input)
     EditText mWeightInput;
 
-
+    @Inject
+    UpLoadPrescriptionPresenterImpl presenter;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case CONNECT_FAILED:
-                    new AlertDialog.Builder(PrescribeActivity.this)
-                            .setTitle("提示")
-                            .setMessage("连接失败")
-                            .setPositiveButton("重试",
-                                    (dialog, which) -> {
-                                        //进行相关逻辑
-                                        sendTread.start();
-                                        dialog.dismiss();
-                                    }
-                            )
-                            .setNegativeButton("修改Ip",
-                                    (dialog, which) ->
-                                    {
-                                        dialog.dismiss();
-                                        MaterialDialog dialog1 = new MaterialDialog(PrescribeActivity.this);
-                                        dialog1.setContentView(R.layout.dialog_ip);
-                                        View view = LayoutInflater.from(PrescribeActivity.this).inflate(R.layout.dialog_ip,null);
-                                        TextView ipAddress = (TextView) view.findViewById(R.id.ip_address);
-                                        TextView port = (TextView) view.findViewById(R.id.port);
-                                        dialog1.setPositiveButton("确定", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                if(ipAddress.getText().equals("")&&port.getText().equals("")){
-                                                    IP_ADD = ipAddress.getText().toString();
-                                                    PORT = Integer.valueOf(port.getText().toString());
-                                                    dialog1.dismiss();
-                                                }else {
-                                                    Toast.makeText(PrescribeActivity.this,"信息不能为空",Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        }).setNegativeButton("取消", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                dialog1.dismiss();
-                                            }
-                                        });
-                                        dialog1.show();
-                                    }
+                    ToastUtils.showToast(PrescribeActivity.this, "连接失败，请重试");
+                    StringBuilder builder = new StringBuilder();
+                    for(int i=0;i<listName.size();i++){
+                        builder.append(listName.get(i)+"_"+listWeight.get(i)+",");
+                    }
+                    long linkId= daoSession.getLinkDao().queryBuilder().where(LinkDao.Properties.Id.eq(
+                            daoSession.getUserDao().queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique().getLinkId()
+                    )).unique().getUId();
+                    presenter.upLoadPrescription(linkId,builder.toString());
 
-                            )
-                            .show();
-//                    ToastUtils.showToast(PrescribeActivity.this, "连接失败，请重试");
                     break;
                 case NO_THIS_MEDICINE:
 //                    ToastUtils.showToast(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送");
@@ -123,28 +99,7 @@ public class PrescribeActivity extends BaseActivity {
                     break;
                 case SEND_SUCCESS:
                     ToastUtils.showToast(PrescribeActivity.this, "已成功发送");
-                    //存入数据库
-                    daoSession = DbUtil.getDaosession();
-                    medicalListDao = daoSession.getMedicalListDao();
-                    MedicalList medicalList = new MedicalList();
-                    medicalList.setPatient(patientName);
-                    StringBuilder name = new StringBuilder();
 
-                    StringBuilder weight = new StringBuilder();
-                    for (int i = 0; i < dbNameList.size(); i++) {
-                        name.append(dbNameList.get(i) + ",");
-                        weight.append(dbWeightList.get(i) + ",");
-                    }
-                    medicalList.setName(name.toString());
-                    medicalList.setWeight(weight.toString());
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
-                    String date = simpleDateFormat.format(new Date());
-                    medicalList.setDate(date);
-                    medicalListDao.insert(medicalList);
-                    //提醒病人列表界面更新
-                    if (patientId != null) {
-                        RxBus.getDefault().post(new String(patientId));
-                    }
                     finish();
                     break;
                 case EMPTY_MEDICINE:
@@ -179,7 +134,7 @@ public class PrescribeActivity extends BaseActivity {
     private List<String> listWeight = new ArrayList<>();
     private String patientName;
     private String phoneNumber;
-    DaoSession daoSession;
+    DaoSession daoSession= DbUtil.getDaosession();
     MedicalListDao medicalListDao;
     private String patientId;
     /**
@@ -191,7 +146,8 @@ public class PrescribeActivity extends BaseActivity {
 
     @Override
     public void initInjector() {
-
+        mActivityComponent.inject(this);
+        presenter.injectView(this);
     }
 
     @Override
@@ -332,6 +288,27 @@ public class PrescribeActivity extends BaseActivity {
         return x;
     }
 
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+    }
+
+    @Override
+    public void upLaodSucceed(PrescriptionInfo info) {
+
+    }
+
+
     class SendMedicineThread extends Thread {
         @Override
         public void run() {
@@ -364,6 +341,7 @@ public class PrescribeActivity extends BaseActivity {
                     buffer.append(medicineInfo);
                     Log.e(TAG, buffer.toString());
                     os.write((buffer.toString()).getBytes("utf-8"));
+
                     buffer = new StringBuffer();
                     Message msg = new Message();
                     msg.what = REMOVE_ONE_ITEM;
@@ -371,7 +349,8 @@ public class PrescribeActivity extends BaseActivity {
                     handler.sendMessage(msg);
                     Thread.sleep(sleep_interval);
                 }
-                if (flag) {
+
+                if (flag){
                     handler.sendEmptyMessage(SEND_SUCCESS);
                 }
             } catch (Exception e) {

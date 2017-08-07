@@ -111,7 +111,11 @@ public class UserInfoEditActivity extends BaseActivity implements ChangUserNameV
                 DbUtil.getDaosession().getUserDao().deleteAll();
                 ToActivityUtil.toNextActivity(this, LoginActivity.class);
                 ActivityStack.getScreenManager().clearAllActivity();
+<<<<<<< HEAD
                 SharedPreferences preferences = getSharedPreferences("isConnect", MODE_PRIVATE);
+=======
+                SharedPreferences preferences =getSharedPreferences("isConnect",MODE_PRIVATE);
+>>>>>>> master
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.clear();
                 editor.commit();

@@ -12,7 +12,6 @@ import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.mvp.ui.activities.AboutUsActivity;
 import com.zxr.medicalaid.mvp.ui.activities.InquiryActivity;
 import com.zxr.medicalaid.mvp.ui.activities.QbShowActivity;
-import com.zxr.medicalaid.mvp.ui.activities.TreatmentRecordActivity;
 import com.zxr.medicalaid.mvp.ui.activities.UserInfoEditActivity;
 import com.zxr.medicalaid.mvp.ui.fragments.base.RxBusFragment;
 import com.zxr.medicalaid.net.ResponseCons;
@@ -170,6 +169,7 @@ public class PersonFragment extends RxBusFragment {
                 startActivity(alarm);
                 break;
             case R.id.treat_record_bt:
+<<<<<<< HEAD
                 User user1 = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
                 String type2 = user1.getType();
                 if(type2.equals("doctor")){
@@ -186,6 +186,9 @@ public class PersonFragment extends RxBusFragment {
                 }else {
                     ToActivityUtil.toNextActivity(getContext(), TreatmentRecordActivity.class);
                 }
+=======
+                ToActivityUtil.toNextActivity(getContext(), InquiryActivity.class);
+>>>>>>> master
                 break;
             case R.id.generate_qb:
                 //可能有bug
