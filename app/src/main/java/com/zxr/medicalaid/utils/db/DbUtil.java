@@ -11,15 +11,15 @@ import com.zxr.medicalaid.DaoSession;
  */
 
 public class DbUtil {
-    public static DaoSession getDaosession(){
+    public static DaoSession getDaosession() {
         DaoSession daoSession;
         DaoMaster daoMaster;
         DaoMaster.DevOpenHelper helper;
         SQLiteDatabase db;
-        helper=new DaoMaster.DevOpenHelper(App.getBaseApplicationContext(),"Example-DB",null);
-        db=helper.getWritableDatabase();
-        daoMaster=new DaoMaster(db);
-        daoSession=daoMaster.newSession();
+        helper = new DaoMaster.DevOpenHelper(App.getBaseApplicationContext(), "Example-DB", null);
+        db = helper.getWritableDatabase();
+        daoMaster = new DaoMaster(db);
+        daoSession = daoMaster.newSession();
         return daoSession;
     }
 }

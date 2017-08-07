@@ -111,7 +111,7 @@ public class UserInfoEditActivity extends BaseActivity implements ChangUserNameV
                 break;
             case R.id.log_off:
                 mUserName.setCursorVisible(false);
-                DbUtil.getDaosession().getUserDao().deleteAll();
+                DbUtil.getDaosession().clear();
                 ToActivityUtil.toNextActivity(this, LoginActivity.class);
                 ActivityStack.getScreenManager().clearAllActivity();
                 SharedPreferences preferences = getSharedPreferences("isConnect", MODE_PRIVATE);
