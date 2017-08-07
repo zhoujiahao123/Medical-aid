@@ -41,6 +41,7 @@
             android:theme="@style/ActivitySemiTransparent" />
         <activity android:name=".mvp.ui.activities.UserInfoEditActivity" />
         <activity android:name=".mvp.ui.activities.PasswordEditActivity"></activity>
+        <activity android:name=".mvp.ui.activities.MedicalDateSettingActivity"></activity>
     </application>
 
 </manifest>

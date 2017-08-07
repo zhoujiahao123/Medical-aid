@@ -35,4 +35,5 @@
     <string name="new_password">新密码</string>
     <string name="confirm_password">确认密码</string>
     <string name="reset_password">重置密码</string>
+    <string name="medical_date_setting">药材日期</string>
 </resources>

@@ -70,7 +70,7 @@ public class UserInfoEditActivity extends BaseActivity {
         return R.layout.activity_userinfo_edit;
     }
 
-    @OnClick({R.id.head_relative, R.id.name_relative, R.id.log_off, R.id.password_relative, R.id.finish_bt})
+    @OnClick({R.id.head_relative, R.id.name_relative, R.id.log_off, R.id.password_relative,R.id.medical_date_setting_relative, R.id.finish_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.head_relative:
@@ -91,6 +91,9 @@ public class UserInfoEditActivity extends BaseActivity {
                     //进行头像和姓名修改等上传
 
                 }
+                break;
+            case R.id.medical_date_setting_relative:
+                ToActivityUtil.toNextActivity(this,MedicalDateSettingActivity.class);
                 break;
             case R.id.log_off:
                 mUserName.setCursorVisible(false);

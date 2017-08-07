@@ -55,4 +55,6 @@ dependencies {
     provided 'org.glassfish:javax.annotation:10.0-b28'
     //图片选择器
     compile 'cn.finalteam:galleryfinal:1.4.3'
+    //时间选择器
+    compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
 }
