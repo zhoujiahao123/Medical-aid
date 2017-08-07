@@ -18,6 +18,7 @@ import com.github.lazylibrary.util.ToastUtils;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.zxr.medicalaid.DaoSession;
 import com.zxr.medicalaid.LinkDao;
+import com.zxr.medicalaid.MedicalList;
 import com.zxr.medicalaid.MedicalListDao;
 import com.zxr.medicalaid.R;
 import com.zxr.medicalaid.UserDao;
@@ -35,7 +36,9 @@ import com.zxr.medicalaid.widget.CircleImageView;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,11 +75,6 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
 
     @Inject
     UpLoadPrescriptionPresenterImpl presenter;
-    final int CONNECT_FAILED = 0;
-    final int NO_THIS_MEDICINE = 1;
-    final int CONNECT_SUCCESS = 2;
-    final int SEND_SUCCESS = 3;
-     final int EMPTY_MEDICINE = 4;
 
     private Handler handler = new Handler() {
         @Override

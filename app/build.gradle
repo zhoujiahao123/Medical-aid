@@ -78,4 +78,6 @@ dependencies {
     //时间选择器
     compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
 
+    compile('com.github.hotchemi:permissionsdispatcher:2.4.0')
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
 }

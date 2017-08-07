@@ -68,6 +68,7 @@
             android:launchMode="singleTop"
             android:name=".mvp.ui.activities.MainViewActivity"
             android:windowSoftInputMode="adjustPan" />
+        
         <activity android:name=".mvp.ui.activities.CurrentPatientsActivity" />
         <activity android:name=".mvp.ui.activities.QRActivity" />
         <activity android:name=".mvp.ui.activities.PrescribeActivity" />
@@ -88,7 +89,7 @@
             android:name=".mvp.ui.service.AlarmReceiver"></receiver>
         <service
             android:process=":remote"
-            android:name=".mvp.ui.service.AlarmService"></service>
+        android:name=".mvp.ui.service.AlarmService"></service>
     </application>
 
 </manifest>

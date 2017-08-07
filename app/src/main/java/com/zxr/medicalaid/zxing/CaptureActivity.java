@@ -83,10 +83,11 @@ public class CaptureActivity extends AppCompatActivity
 
     private boolean isHasSurface = false;
 
+    
+    
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_scan);
@@ -330,4 +331,6 @@ public class CaptureActivity extends AppCompatActivity
         }
         return 0;
     }
+    
+  
 }

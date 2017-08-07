@@ -255,9 +255,9 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
         if (doctorId != null) {
             Log.e(TAG, doctorId);
             type = PATIENT;
-            presenter.getPatient(doctorId, 1);
+            presenter.getPatient(doctorId,"doctor",LINKING, 1);
         } else {
-            presenter.getPatient(IdUtil.getIdString(), 1);
+            presenter.getPatient(IdUtil.getIdString(),"doctor",LINKING, 1);
         }
     }
 
