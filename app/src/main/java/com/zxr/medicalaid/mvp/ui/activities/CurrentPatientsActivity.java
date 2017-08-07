@@ -33,7 +33,6 @@ import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.PatientListAdapter;
 import com.zxr.medicalaid.mvp.view.CancleView;
 import com.zxr.medicalaid.mvp.view.PatientListView;
-import com.zxr.medicalaid.net.ResponseCons;
 import com.zxr.medicalaid.utils.db.IdUtil;
 
 import java.security.Key;
@@ -70,6 +69,8 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
      * adapter
      */
     private PatientListAdapter adapter;
+    private static final String LINKING = "linking";
+    private static final String HISTORY = "history";
     /**
      *
      */
@@ -112,9 +113,9 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
         if (doctorId != null) {
             Log.e(TAG, doctorId);
             type = PATIENT;
-            presenter.getPatient(doctorId, 1);
+            presenter.getPatient(doctorId,"doctor",LINKING,1);
         } else {
-            presenter.getPatient(IdUtil.getIdString(), 1);
+            presenter.getPatient(IdUtil.getIdString(),"doctor",LINKING,1);
         }
 
         //recyclerview
@@ -310,11 +311,12 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
     @Override
     public void showPatient(PatientInfo patientInfo) {
         for (int i = 0; i < patientInfo.getBody().getList().size(); i++) {
-            String name = doEncode(patientInfo.getBody().getList().get(i).getNickName(), ResponseCons.KEY_NAME);
-            String phoneNumber= doEncode(patientInfo.getBody().getList().get(i).getPhoneNumber(),ResponseCons.KEY_PHONENUMBER);
-            Person person = new Person(name, "", "120.77.87.78:8080/arti-sports/image//user15.png");
+            String name =patientInfo.getBody().getList().get(i).getPatient().getNickName();
+            String phoneNumber= patientInfo.getBody().getList().get(i).getPatient().getPhoneNumber();
+            Log.e(TAG,patientInfo.getBody().getList().get(i).getPatient().getNickName());
+            Person person = new Person(name, phoneNumber, "120.77.87.78:8080/arti-sports/image//user15.png");
             lists.add(person);
-            listId.add(patientInfo.getBody().getList().get(i).getIdString());
+            listId.add(patientInfo.getBody().getList().get(i).getPatient().getIdString());
             listNumber.add(phoneNumber);
         }
         adapter.addAll(lists);

@@ -1,9 +1,7 @@
 package com.zxr.medicalaid.mvp.presenter.presenterImpl;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import com.zxr.medicalaid.App;
 import com.zxr.medicalaid.mvp.entity.moudle.LinkInfo;
 import com.zxr.medicalaid.mvp.model.LinkModel;
 import com.zxr.medicalaid.mvp.model.ModelImpl.LinkModelImpl;
@@ -45,10 +43,11 @@ public class LinkPresenterImpl extends BasePresenterImpl<LinkView> implements Li
 
                     @Override
                     public void onNext(LinkInfo linkInfo) {
+                        Log.e("TAG","linkInfo");
                         if(CodeUtil.codeCheck(linkInfo.getCode()).equals("OK"))
-                        mView.showMsg("");
+                        mView.linkSucceed(linkInfo);
                         else {
-                            Toast.makeText(App.getBaseApplicationContext(),CodeUtil.codeCheck(linkInfo.getCode()),Toast.LENGTH_SHORT).show();
+                            Log.e("TAG",CodeUtil.codeCheck(linkInfo.getCode()));
                         }
                     }
                 });

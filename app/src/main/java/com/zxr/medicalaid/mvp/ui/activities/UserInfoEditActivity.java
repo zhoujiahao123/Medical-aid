@@ -1,5 +1,6 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v7.widget.Toolbar;
@@ -98,6 +99,10 @@ public class UserInfoEditActivity extends BaseActivity {
                 DbUtil.getDaosession().getUserDao().deleteAll();
                 ToActivityUtil.toNextActivity(this, LoginActivity.class);
                 ActivityStack.getScreenManager().clearAllActivity();
+                SharedPreferences preferences =getSharedPreferences("isConnect",MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.commit();
                 //同时进行一些数据清除，如数据库的清理
                 break;
         }

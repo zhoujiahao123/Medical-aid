@@ -1,6 +1,7 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,7 +29,7 @@ import java.util.List;
 
 import butterknife.InjectView;
 
-public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener{
 
 
     /**
@@ -40,13 +41,16 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
     Toolbar mToolbar;
     DaoSession daoSession;
     MedicalListDao medicalListDao;
-    List<MedicalList> lists;
+    List<String> medicalName;
+    List<String> medicaldome;
     /**
      * 数据
      */
     private InquiryContentAdapter adapter;
 
 
+    List<String> linkIdList = new ArrayList<>();
+    String linkIdArray[];
     @Override
     public void initInjector() {
 
@@ -58,6 +62,14 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        SharedPreferences sharedPreferences = getSharedPreferences("linkId",MODE_PRIVATE);
+        String str = sharedPreferences.getString("linkId","");
+        if(!str.equals("")){
+             linkIdArray=str.split(",");
+        }
+        for(int i=0;i<linkIdArray.length;i++){
+            linkIdList.add(linkIdArray[i]);
+        }
         mToolbar.setTitle(R.string.inquiryRecord);
         mToolbar.setTitleTextColor(Color.WHITE);
         //初始化adaper
@@ -66,8 +78,7 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
         adapter.setOnItemClickListener((position) -> {
             //进行详细药方详细信息显示
             Intent intent = new Intent(InquiryActivity.this,PrescribeRecordActivity.class);
-            intent.putExtra("name",lists.get(position).getName());
-            intent.putExtra("weight",lists.get(position).getWeight());
+            intent.putExtra("linkId",linkIdList.get(position));
             startActivity(intent);
         });
         //初始化RecyclerView
@@ -112,16 +123,45 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
     public void onRefresh() {
         //进行加载
         daoSession = DbUtil.getDaosession();
-        medicalListDao = daoSession.getMedicalListDao();
-        lists = medicalListDao.queryBuilder().list();
-        handler.postDelayed(() -> {
-            for(int i=0;i<lists.size();i++){
-                datas.add(new Person(lists.get(i).getPatient(),lists.get(i).getDate(),""));
-            }
-            adapter.addAll(datas);
-        }, 1000);
+        List<MedicalList> lists = daoSession.getMedicalListDao().queryBuilder().list();
+        for(int i=0;i<lists.size();i++){
+            datas.add(new Person(lists.get(i).getName(),lists.get(i).getDate(),""));
+        }
+        adapter.addAll(datas);
+        adapter.notifyDataSetChanged();
+//        User user = daoSession.getUserDao().queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
+//        Link link =daoSession.getLinkDao().queryBuilder().where(LinkDao.Properties.Id.eq(user.getLinkId())).unique();
+//        handler.postDelayed(() -> {
+//            for(int i=0;i<lists.size();i++){
+//                datas.add(new Person(lists.get(i).getPatient(),lists.get(i).getDate(),""));
+//            }
+//            adapter.addAll(datas);
+//        }, 1000);
 
     }
 
 
+//    @Override
+//    public void showProgress() {
+//
+//    }
+//
+//    @Override
+//    public void hideProgress() {
+//
+//    }
+//
+//    @Override
+//    public void showMsg(String msg) {
+//        Log.e(TAG,msg);
+//    }
+//
+//    @Override
+//    public void getSucceed(PrescriptionInfo info) {
+//        List<DrugDose> drugDoses=info.getBody().getDrugs();
+//        for(int i=0;i<drugDoses.size();i++){
+//            medicaldome.add(drugDoses.get(i).getDose());
+//            medicalName.add(drugDoses.get(i).getDrugName());
+//        }
+//    }
 }
