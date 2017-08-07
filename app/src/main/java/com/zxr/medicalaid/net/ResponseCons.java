@@ -29,6 +29,9 @@ public class ResponseCons {
     public static final int STATUS_FALED_AES=400;
     public static final String FILED_AES_MSG = "加密出现错误";
 
+    public static final int STATUS_REPEAT_NAME = 403;
+    public static final String REPEAT_NAME = "重复的昵称";
+
     public static final int STATUS_NO_THIS_DATA = 404;
     public static final String NO_THIS_DATA_MSG = "没有该用户";
 

@@ -79,15 +79,16 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
             //进行详细药方详细信息显示
             Intent intent = new Intent(InquiryActivity.this,PrescribeRecordActivity.class);
             intent.putExtra("linkId",linkIdList.get(position));
+
             startActivity(intent);
         });
         //初始化RecyclerView
+        EasyRecyViewInitUtils.initEasyRecyclerView(mEasyRecyclerView);
         mEasyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY, DensityUtil.dip2px(this, 0.5f), DensityUtil.dip2px(this, 8f), DensityUtil.dip2px(this, 8f));
         itemDecoration.setDrawLastItem(false);
         mEasyRecyclerView.addItemDecoration(itemDecoration);
         mEasyRecyclerView.setAdapter(adapter);
-        EasyRecyViewInitUtils.initEasyRecyclerView(mEasyRecyclerView);
 
         //加入header
         StickyHeaderDecoration decoration = new StickyHeaderDecoration(new InquiryHeaderAdapter(this, adapter));
@@ -123,6 +124,7 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
     public void onRefresh() {
         //进行加载
         daoSession = DbUtil.getDaosession();
+
         List<MedicalList> lists = daoSession.getMedicalListDao().queryBuilder().list();
         for(int i=0;i<lists.size();i++){
             datas.add(new Person(lists.get(i).getName(),lists.get(i).getDate(),""));
@@ -137,6 +139,7 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
 //            }
 //            adapter.addAll(datas);
 //        }, 1000);
+
 
     }
 

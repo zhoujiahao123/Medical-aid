@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/go_on_1"
-            android:hint="Jacob"
+            android:hint="昵称"
             android:background="@null"
             android:textColor="@color/secondary_text"
             android:textSize="@dimen/font_normal" />
@@ -129,6 +129,42 @@
             android:textSize="@dimen/font_normal" />
     </RelativeLayout>
 
+
+    <RelativeLayout
+        android:id="@+id/medical_date_setting_relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/border_line"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:text="@string/medical_date_setting"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/font_large" />
+
+        <ImageView
+            android:id="@+id/go_on_4"
+            android:layout_width="@dimen/image_size_tiny"
+            android:layout_height="@dimen/image_size_tiny"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/more" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/go_on_4"
+            android:text="修改"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/font_normal" />
+    </RelativeLayout>
+    
     <LinearLayout
         android:layout_margin="8dp"
         android:orientation="horizontal"

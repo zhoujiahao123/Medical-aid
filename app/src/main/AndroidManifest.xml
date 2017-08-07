@@ -58,13 +58,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.mob.tools.MobUIShell"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!--<activity-->
+            <!--android:name="com.mob.tools.MobUIShell"-->
+            <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
+            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
+            <!--android:windowSoftInputMode="stateHidden|adjustResize" />-->
         <activity android:name=".mvp.ui.activities.RegisterActivity" />
         <activity
+            android:launchMode="singleTop"
             android:name=".mvp.ui.activities.MainViewActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".mvp.ui.activities.CurrentPatientsActivity" />
@@ -78,8 +79,16 @@
             android:theme="@style/ActivitySemiTransparent" />
         <activity android:name=".mvp.ui.activities.AlarmActivity" />
         <activity android:name=".mvp.ui.activities.UserInfoEditActivity" />
-        <activity android:name=".mvp.ui.activities.PasswordEditActivity" />
+        <activity android:name=".mvp.ui.activities.PasswordEditActivity"></activity>
+        <activity android:name=".mvp.ui.activities.MedicalDateSettingActivity"></activity>
         <activity android:name=".mvp.ui.activities.QbShowActivity"></activity>
+
+        <receiver
+            android:process=":remote"
+            android:name=".mvp.ui.service.AlarmReceiver"></receiver>
+        <service
+            android:process=":remote"
+            android:name=".mvp.ui.service.AlarmService"></service>
     </application>
 
 </manifest>

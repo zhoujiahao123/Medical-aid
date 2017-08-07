@@ -67,4 +67,10 @@ public interface Api {
     @POST("prescription/save")
     @FormUrlEncoded
     Observable<PrescriptionInfo> uploadPrescription(@Field("linkId") long linkId,String prescriptionMessage);
+
+    //修改昵称
+    @POST("user/updateNickname")
+    @FormUrlEncoded
+    Observable<Data<String>> changName(@Field("idString") String idString,@Field("newNickname") String newName);
+
 }

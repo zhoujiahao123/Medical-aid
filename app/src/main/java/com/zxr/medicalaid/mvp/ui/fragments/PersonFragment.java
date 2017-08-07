@@ -16,9 +16,10 @@ import com.zxr.medicalaid.mvp.ui.activities.AboutUsActivity;
 import com.zxr.medicalaid.mvp.ui.activities.InquiryActivity;
 import com.zxr.medicalaid.mvp.ui.activities.QbShowActivity;
 import com.zxr.medicalaid.mvp.ui.activities.UserInfoEditActivity;
-import com.zxr.medicalaid.mvp.ui.fragments.base.BaseFragment;
+import com.zxr.medicalaid.mvp.ui.fragments.base.RxBusFragment;
 import com.zxr.medicalaid.net.ResponseCons;
 import com.zxr.medicalaid.utils.db.DbUtil;
+import com.zxr.medicalaid.utils.system.RxBus;
 import com.zxr.medicalaid.utils.system.ToActivityUtil;
 import com.zxr.medicalaid.widget.CircleImageView;
 import com.zxr.medicalaid.widget.MaskableImageView;
@@ -38,7 +39,7 @@ import butterknife.OnClick;
  */
 
 
-public class PersonFragment extends BaseFragment {
+public class PersonFragment extends RxBusFragment {
 
 
     private static final int REQUEST_CODE_GALLERY = 1;
@@ -64,6 +65,7 @@ public class PersonFragment extends BaseFragment {
     public void initInjector() {
 
     }
+
     public String doEncode(String data, String keyString) {
         try {
             md = MessageDigest.getInstance("MD5");
@@ -88,7 +90,9 @@ public class PersonFragment extends BaseFragment {
             return null;
         }
     }
+
     MessageDigest md;
+
     public static final byte[] hex2byte(String hex)
             throws IllegalArgumentException {
         if (hex.length() % 2 != 0) {
@@ -103,10 +107,11 @@ public class PersonFragment extends BaseFragment {
         }
         return b;
     }
+
     @Override
     public void initViews() {
         User user = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
-        userName.setText(doEncode(user.getUName(),ResponseCons.KEY_NAME));
+        userName.setText(doEncode(user.getUName(), ResponseCons.KEY_NAME));
         //长按可编辑用户信息
         userInfoLayout.setOnLongClickListener(
                 (v -> {
@@ -178,6 +183,22 @@ public class PersonFragment extends BaseFragment {
     }
 
 
+    @Override
+    public void initRxBus() {
+        RxBus.getDefault().toObservable(String.class)
+                .subscribe(
+                        s -> {
+                            if (s.equals("修改昵称成功")) {
+                                String name = DbUtil.getDaosession().getUserDao().loadAll().get(0).getUName();
+                                if (name == null) {
+                                    return;
+                                }
+                                userName.setText(doEncode(name, ResponseCons.KEY_NAME));
+                            }
+                            Log.e(TAG, s);
+                        }
+                );
+    }
 }
 
 
