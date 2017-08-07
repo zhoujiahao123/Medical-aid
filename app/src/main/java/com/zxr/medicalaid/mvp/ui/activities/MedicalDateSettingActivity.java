@@ -11,10 +11,12 @@ import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
+import com.zxr.medicalaid.MedicalDateInfo;
+import com.zxr.medicalaid.MedicalDateInfoDao;
 import com.zxr.medicalaid.R;
-import com.zxr.medicalaid.mvp.entity.MedicalDataInfo;
 import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.MedicalDateSettingAdapter;
+import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.others.EasyRecyViewInitUtils;
 
 import java.text.SimpleDateFormat;
@@ -34,6 +36,11 @@ public class MedicalDateSettingActivity extends BaseActivity {
     Toolbar mToolbar;
     @InjectView(R.id.easy_recycler_view)
     EasyRecyclerView mRecyclerView;
+    /**
+     *
+     */
+    //第一次进入，先进行药品的固化
+    MedicalDateInfoDao dao = DbUtil.getDaosession().getMedicalDateInfoDao();
 
     /**
      * 数据
@@ -87,6 +94,10 @@ public class MedicalDateSettingActivity extends BaseActivity {
                                                         String date = new SimpleDateFormat("yyyy-MM-dd").format(millseconds);
                                                         adapter.getAllData().get(position).setProductDate(date);
                                                         adapter.notifyDataSetChanged();
+                                                        //刷新数据库
+                                                        MedicalDateInfo medicalDateInfo = dao.loadByRowId(position);
+                                                        medicalDateInfo = adapter.getAllData().get(position);
+                                                        dao.update(medicalDateInfo);
                                                     }
                                                 })
                                                 .setCancelStringId("取消")
@@ -121,11 +132,15 @@ public class MedicalDateSettingActivity extends BaseActivity {
                                                         if (month.equals("12")) {
                                                             year += 1;
                                                             adapter.getAllData().get(position).setShelfLife(year + "年");
-                                                            adapter.notifyDataSetChanged();
-                                                            return;
+                                                        } else {
+                                                            adapter.getAllData().get(position).setShelfLife(date);
                                                         }
-                                                        adapter.getAllData().get(position).setShelfLife(date);
+
                                                         adapter.notifyDataSetChanged();
+                                                        //刷新数据库
+                                                        MedicalDateInfo medicalDateInfo = dao.loadByRowId(position);
+                                                        medicalDateInfo = adapter.getAllData().get(position);
+                                                        dao.update(medicalDateInfo);
                                                     }
                                                 })
                                                 .setCancelStringId("取消")
@@ -150,13 +165,27 @@ public class MedicalDateSettingActivity extends BaseActivity {
 
 
     private void initDatas() {
-        List<MedicalDataInfo> dataList = new ArrayList<>();
-        dataList.add(new MedicalDataInfo("何首乌", "2年", "2015-01-01", 1));
-        dataList.add(new MedicalDataInfo("冬虫夏草", "2年", "2015-01-01", 2));
-        dataList.add(new MedicalDataInfo("人参", "2年", "2015-01-01", 3));
-        dataList.add(new MedicalDataInfo("当归", "2年", "2015-01-01", 4));
+        List<MedicalDateInfo> list = dao.loadAll();
+        if (list == null || DbUtil.getDaosession().getMedicalDateInfoDao().loadAll().size() == 0) {
+            //还未进行固化
+            MedicalDateInfo m1 = new MedicalDateInfo(null,1, "何首乌", "2015-01-02", "2年");
+            MedicalDateInfo m2 = new MedicalDateInfo(null,2, "冬虫夏草", "2015-01-02", "2年");
+            MedicalDateInfo m3 = new MedicalDateInfo(null,3, "人参", "2015-01-02", "2年");
+            MedicalDateInfo m4 = new MedicalDateInfo(null,4, "当归", "2015-01-02", "2年");
+            dao.insert(m1);
+            dao.insert(m2);
+            dao.insert(m3);
+            dao.insert(m4);
 
-        adapter.addAll(dataList);
+            list = new ArrayList<>();
+            list.add(m1);
+            list.add(m2);
+            list.add(m3);
+            list.add(m4);
+        }
+        adapter.addAll(list);
+
+
     }
 
     @Override
@@ -173,6 +202,4 @@ public class MedicalDateSettingActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

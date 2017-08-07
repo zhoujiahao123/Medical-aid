@@ -7,14 +7,14 @@ import android.widget.TextView;
 
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
+import com.zxr.medicalaid.MedicalDateInfo;
 import com.zxr.medicalaid.R;
-import com.zxr.medicalaid.mvp.entity.MedicalDataInfo;
 
 /**
  * Created by 张兴锐 on 2017/8/7.
  */
 
-public class MedicalDateSettingAdapter extends RecyclerArrayAdapter<MedicalDataInfo> {
+public class MedicalDateSettingAdapter extends RecyclerArrayAdapter<MedicalDateInfo> {
     
     public MedicalDateSettingAdapter(Context context) {
         super(context);
@@ -25,7 +25,7 @@ public class MedicalDateSettingAdapter extends RecyclerArrayAdapter<MedicalDataI
         return new MedicalDateSettingViewHolder(parent, R.layout.recyclerview_medical_date_item);
     }
     
-    class MedicalDateSettingViewHolder extends BaseViewHolder<MedicalDataInfo>{
+    class MedicalDateSettingViewHolder extends BaseViewHolder<MedicalDateInfo>{
 
         TextView drawerNum,currentName,productDate,shelfLife;
         
@@ -38,7 +38,7 @@ public class MedicalDateSettingAdapter extends RecyclerArrayAdapter<MedicalDataI
         }
 
         @Override
-        public void setData(MedicalDataInfo data) {
+        public void setData(MedicalDateInfo data) {
             super.setData(data);
             drawerNum.setText(data.getDrawerNum()+"号");
             currentName.setText(data.getName());
