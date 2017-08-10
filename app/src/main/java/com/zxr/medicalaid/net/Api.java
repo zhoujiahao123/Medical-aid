@@ -66,5 +66,5 @@ public interface Api {
     //上传药方
     @POST("prescription/save")
     @FormUrlEncoded
-    Observable<PrescriptionInfo> uploadPrescription(@Field("linkId") long linkId,String prescriptionMessage);
+    Observable<PrescriptionInfo> uploadPrescription(@Field("linkId") long linkId,@Field("prescriptionMessage") String prescriptionMessage);
 }

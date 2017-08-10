@@ -1,7 +1,6 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -43,11 +42,12 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
     MedicalListDao medicalListDao;
     List<String> medicalName;
     List<String> medicaldome;
+    List<String> patientName = new ArrayList<>();
     /**
      * 数据
      */
     private InquiryContentAdapter adapter;
-
+    private String idType;
 
     List<String> linkIdList = new ArrayList<>();
     String linkIdArray[];
@@ -62,14 +62,15 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        SharedPreferences sharedPreferences = getSharedPreferences("linkId",MODE_PRIVATE);
-        String str = sharedPreferences.getString("linkId","");
-        if(!str.equals("")){
-             linkIdArray=str.split(",");
-        }
-        for(int i=0;i<linkIdArray.length;i++){
-            linkIdList.add(linkIdArray[i]);
-        }
+//        SharedPreferences sharedPreferences = getSharedPreferences("linkId",MODE_PRIVATE);
+//        String str = sharedPreferences.getString("linkId","");
+//        if(!str.equals("")){
+//             linkIdArray=str.split(",");
+//        }
+//        for(int i=0;i<linkIdArray.length;i++){
+//            linkIdList.add(linkIdArray[i]);
+//        }
+        idType = getIntent().getStringExtra("type");
         mToolbar.setTitle(R.string.inquiryRecord);
         mToolbar.setTitleTextColor(Color.WHITE);
         //初始化adaper
@@ -78,7 +79,8 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
         adapter.setOnItemClickListener((position) -> {
             //进行详细药方详细信息显示
             Intent intent = new Intent(InquiryActivity.this,PrescribeRecordActivity.class);
-            intent.putExtra("linkId",linkIdList.get(position));
+            intent.putExtra("patientName",patientName.get(position));
+            intent.putExtra("idType",idType);
             startActivity(intent);
         });
         //初始化RecyclerView
@@ -123,10 +125,25 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
     public void onRefresh() {
         //进行加载
         daoSession = DbUtil.getDaosession();
-        List<MedicalList> lists = daoSession.getMedicalListDao().queryBuilder().list();
-        for(int i=0;i<lists.size();i++){
-            datas.add(new Person(lists.get(i).getName(),lists.get(i).getDate(),""));
+        MedicalListDao medicalListDao = daoSession.getMedicalListDao();
+        if(idType.equals("doctor")){
+            List<MedicalList> lists = medicalListDao.queryBuilder().where(MedicalListDao.Properties.Patient.eq("patient")).list();
+            for(int i=0;i<lists.size();i++){
+                datas.add(new Person(lists.get(i).getName(),lists.get(i).getDate(),""));
+                patientName.add(lists.get(i).getName());
+            }
+        }else if(idType.equals("patient")){
+            List<MedicalList> lists = medicalListDao.queryBuilder().where(MedicalListDao.Properties.Patient.eq("doctor")).list();
+            for(int i=0;i<lists.size();i++){
+                datas.add(new Person(lists.get(i).getName(),lists.get(i).getDate(),""));
+                patientName.add(lists.get(i).getName());
+            }
         }
+//        List<MedicalList> lists = daoSession.getMedicalListDao().queryBuilder().list();
+//        for(int i=0;i<lists.size();i++){
+//            datas.add(new Person(lists.get(i).getName(),lists.get(i).getDate(),""));
+//            patientName.add(lists.get(i).getName());
+//        }
         adapter.addAll(datas);
         adapter.notifyDataSetChanged();
 //        User user = daoSession.getUserDao().queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
