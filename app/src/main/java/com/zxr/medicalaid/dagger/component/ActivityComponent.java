@@ -31,6 +31,7 @@ import com.zxr.medicalaid.mvp.ui.activities.PrescribeRecordActivity;
 import com.zxr.medicalaid.mvp.ui.activities.QRActivity;
 import com.zxr.medicalaid.mvp.ui.activities.QbShowActivity;
 import com.zxr.medicalaid.mvp.ui.activities.RegisterActivity;
+import com.zxr.medicalaid.mvp.ui.activities.UserInfoEditActivity;
 
 import dagger.Component;
 
@@ -55,4 +56,6 @@ public interface ActivityComponent {
     void inject(InquiryActivity passwordEditActivity);
     void inject(PrescribeRecordActivity passwordEditActivity);
     void inject(PrescribeActivity passwordEditActivity);
+    void inject(UserInfoEditActivity userInfoEditActivity);
+
 }

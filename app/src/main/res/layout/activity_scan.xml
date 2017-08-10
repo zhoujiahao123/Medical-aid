@@ -16,6 +16,7 @@
         app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
+            app:theme="@style/WhiteToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:id="@+id/toolbar"

@@ -32,10 +32,12 @@
     <com.jude.easyrecyclerview.EasyRecyclerView
         android:id="@+id/person_list"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"></com.jude.easyrecyclerview.EasyRecyclerView>
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+       ></com.jude.easyrecyclerview.EasyRecyclerView>
 
 
 </android.support.constraint.ConstraintLayout>

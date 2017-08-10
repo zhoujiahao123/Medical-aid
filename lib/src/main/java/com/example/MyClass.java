@@ -12,6 +12,7 @@ public class MyClass {
         addUser(schema);
         addDate(schema);
         addMedicalList(schema);
+        addMedicalDate(schema);
         new DaoGenerator().generateAll(schema,"app/src/main/java-gen");
     }
     public static void addUser(Schema schema){
@@ -41,6 +42,14 @@ public class MyClass {
     public static void addDate(Schema schema){
         Entity date = schema.addEntity("Date");
         date.addStringProperty("date");
+  }
+    public static void addMedicalDate(Schema schema){
+        Entity medicalDate = schema.addEntity("MedicalDateInfo");
+        medicalDate.addIdProperty();
+        medicalDate.addIntProperty("drawerNum");
+        medicalDate.addStringProperty("name");
+        medicalDate.addStringProperty("productDate");
+        medicalDate.addStringProperty("shelfLife");
     }
 
 }

@@ -34,6 +34,9 @@ public class StatusUtils {
             case ResponseCons.STATUS_PASS_NAME:
                 desc = ResponseCons.FILED_PASS_MSG;
                 break;
+            case ResponseCons.STATUS_REPEAT_NAME:
+                desc = ResponseCons.REPEAT_NAME;
+                break;
         }
         mStatusResult.status = status;
         mStatusResult.desc = desc;

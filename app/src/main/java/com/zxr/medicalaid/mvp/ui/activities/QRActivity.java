@@ -91,6 +91,8 @@ public class QRActivity extends BaseActivity  implements LinkView{
             if(!doctorId.equals("")){
                 Intent intent = new Intent(QRActivity.this,CurrentPatientsActivity.class);
                 intent.putExtra("uId",doctorId);
+                intent.putExtra(CurrentPatientsActivity.GET_FROM,CurrentPatientsActivity.PATIENT);
+                intent.putExtra(CurrentPatientsActivity.GET_FROM,CurrentPatientsActivity.PATIENT);
                 startActivity(intent);
                 finish();
             }else {
@@ -226,6 +228,8 @@ public class QRActivity extends BaseActivity  implements LinkView{
             editor.putString("uId",s);
             editor.commit();
             Intent intent = new Intent(QRActivity.this,CurrentPatientsActivity.class);
+//            ToActivityUtil.toNextActivity(QRActivity.this, CurrentPatientsActivity.class,
+//                    new String[]{CurrentPatientsActivity.GET_FROM,"uId"}, new int[]{CurrentPatientsActivity.PATIENT,s});
             intent.putExtra("uId",s);
             startActivity(intent);
         }

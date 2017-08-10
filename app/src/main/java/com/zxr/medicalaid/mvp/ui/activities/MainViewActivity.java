@@ -1,5 +1,6 @@
 package com.zxr.medicalaid.mvp.ui.activities;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import com.zxr.medicalaid.mvp.ui.adapters.PagerAdapter.MainViewPagerAdapter;
 import com.zxr.medicalaid.mvp.ui.fragments.PersonFragment;
 import com.zxr.medicalaid.mvp.ui.fragments.SearchFragment;
 import com.zxr.medicalaid.mvp.ui.fragments.SelectFragment;
+import com.zxr.medicalaid.mvp.ui.service.AlarmService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +86,10 @@ public class MainViewActivity extends BaseActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+        
+        //检测药材过期
+        Intent intent = new Intent(this, AlarmService.class);
+        startService(intent);
     }
 
     @Override

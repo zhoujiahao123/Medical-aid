@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -29,11 +28,12 @@ import com.zxr.medicalaid.mvp.entity.Person;
 import com.zxr.medicalaid.mvp.entity.moudle.PatientInfo;
 import com.zxr.medicalaid.mvp.presenter.presenterImpl.CanclePresenterImpl;
 import com.zxr.medicalaid.mvp.presenter.presenterImpl.PatientListPresenterImpl;
-import com.zxr.medicalaid.mvp.ui.activities.base.BaseActivity;
+import com.zxr.medicalaid.mvp.ui.activities.base.RxBusSubscriberBaseActivity;
 import com.zxr.medicalaid.mvp.ui.adapters.PatientListAdapter;
 import com.zxr.medicalaid.mvp.view.CancleView;
 import com.zxr.medicalaid.mvp.view.PatientListView;
 import com.zxr.medicalaid.utils.db.IdUtil;
+import com.zxr.medicalaid.utils.system.RxBus;
 
 import java.security.Key;
 import java.security.MessageDigest;
@@ -50,7 +50,7 @@ import butterknife.InjectView;
 /**
  * 区分药师和病人
  */
-public class CurrentPatientsActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, RecyclerArrayAdapter.OnLoadMoreListener, PatientListView,CancleView {
+public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity implements SwipeRefreshLayout.OnRefreshListener, RecyclerArrayAdapter.OnLoadMoreListener, PatientListView, CancleView {
 
     @Inject
     PatientListPresenterImpl presenter;
@@ -83,12 +83,13 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
     @ContextLife("Activity")
     Context mContext;
 
-    //===============================================测试
+
     private List<Person> lists = new ArrayList<>();
     private List<String> listId = new ArrayList<>();
     private List<String> listNumber = new ArrayList<>();
     private List<Integer> listId1 = new ArrayList<>();
     private List<String> patientName = new ArrayList<>();
+
     @Override
     public void initInjector() {
         mActivityComponent.inject(this);
@@ -106,9 +107,9 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
         mToolbar.setTitle(R.string.current_patients_num);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
         doctorId = getIntent().getStringExtra("uId");
-        SharedPreferences preferences=getSharedPreferences("isConnect",MODE_PRIVATE);
-        String uId =preferences.getString("uId","");
-        if(!uId.equals("")){
+        SharedPreferences preferences = getSharedPreferences("isConnect", MODE_PRIVATE);
+        String uId = preferences.getString("uId", "");
+        if (!uId.equals("")) {
             doctorId = uId;
         }
         Log.e(TAG,"收到");
@@ -120,15 +121,10 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
             presenter.getPatient(IdUtil.getIdString(),"doctor",LINKING,1);
         }
 
+
         //recyclerview
         //adapter设置
         adapter = new PatientListAdapter(this);
-        //===============================================测试
-//        for (int i = 0; i < 5; i++) {
-//            Person person = new Person("张兴锐", "13:19", "120.77.87.78:8080/arti-sports/image//user15.png");
-//            lists.add(person);
-//        }
-//        adapter.addAll(lists);
         //设置item的点击监听
         adapter.setOnItemClickListener(
                 pos -> {
@@ -157,7 +153,7 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
                                 .setPositiveButton("确定",
                                         (dialog, what) -> {
                                             adapter.remove(position);
-                                            canclePresenter.cancleLink(IdUtil.getIdString(),listId.get(position));
+                                            canclePresenter.cancleLink(IdUtil.getIdString(), listId.get(position));
                                             dialog.dismiss();
                                         }
                                 )
@@ -191,8 +187,8 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
 
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
-        if (type == PATIENT){
-            getMenuInflater().inflate(R.menu.patient_quit_menu,menu);
+        if (type == PATIENT) {
+            getMenuInflater().inflate(R.menu.patient_quit_menu, menu);
         }
         return super.onCreatePanelMenu(featureId, menu);
     }
@@ -206,22 +202,22 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
                 finish();
                 break;
             case R.id.quit:
-                if (doctorId == null){
-                    ToastUtils.showToast(this,"出现异常，请重试");
+                if (doctorId == null) {
+                    ToastUtils.showToast(this, "出现异常，请重试");
                     return super.onOptionsItemSelected(item);
                 }
                 new AlertDialog.Builder(this)
                         .setTitle("提示")
                         .setMessage("您确定要取消挂号吗?")
                         .setPositiveButton("确定",
-                                (dialog,what) -> {
-                                    canclePresenter.cancleLink(doctorId,IdUtil.getIdString());
+                                (dialog, what) -> {
+                                    canclePresenter.cancleLink(doctorId, IdUtil.getIdString());
                                     dialog.dismiss();
                                 })
                         .setNegativeButton("取消",
-                                (dialog,what) ->
-                                    dialog.dismiss()
-                                )
+                                (dialog, what) ->
+                                        dialog.dismiss()
+                        )
                         .setCancelable(true)
                         .show();
                 break;
@@ -235,21 +231,37 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
     }
 
     @Override
+    public void initRxBus() {
+        RxBus.getDefault().toObservable(String.class)
+                .subscribe(
+                        str -> {
+                            //网路断开
+                            canclePresenter.cancleLink(IdUtil.getIdString(), str);
+                            //更新UI
+                            int index = listId.indexOf(str);
+                            if (index >= 0) {
+                                adapter.remove(index);
+                            }
+                        }
+                );
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         type = getIntent().getIntExtra(GET_FROM, 0);
         super.onCreate(savedInstanceState);
     }
 
 
-    Handler handler = new Handler();
-
     @Override
     public void onRefresh() {
-        handler.postDelayed(
-                () -> {
-                    adapter.notifyDataSetChanged();
-                    return;
-                }, 2000);
+        if (doctorId != null) {
+            Log.e(TAG, doctorId);
+            type = PATIENT;
+            presenter.getPatient(doctorId,"doctor",LINKING,1);
+        } else {
+            presenter.getPatient(IdUtil.getIdString(),"doctor",LINKING,1);
+        }
     }
 
     @Override
@@ -269,7 +281,7 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
 
     @Override
     public void showMsg(String msg) {
-
+        ToastUtils.showToast(this, msg);
     }
 
     public String doEncode(String data, String keyString) {
@@ -314,11 +326,17 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
 
     @Override
     public void showPatient(PatientInfo patientInfo) {
+        adapter.clear();
+        adapter.notifyDataSetChanged();
+        listId.clear();
+        lists.clear();
+        listNumber.clear();
         for (int i = 0; i < patientInfo.getBody().getList().size(); i++) {
             String name =patientInfo.getBody().getList().get(i).getPatient().getNickName();
             String phoneNumber= patientInfo.getBody().getList().get(i).getPatient().getPhoneNumber();
             Log.e(TAG,patientInfo.getBody().getList().get(i).getPatient().getNickName());
             Person person = new Person(name, phoneNumber, "120.77.87.78:8080/arti-sports/image//user15.png");
+
             lists.add(person);
             patientName.add(name);
             listId.add(patientInfo.getBody().getList().get(i).getPatient().getIdString());
@@ -326,20 +344,23 @@ public class CurrentPatientsActivity extends BaseActivity implements SwipeRefres
             listNumber.add(phoneNumber);
         }
         adapter.addAll(lists);
-        adapter.notifyDataSetChanged();
+        if (!listId.contains(IdUtil.getIdString())){
+            SharedPreferences spf = getSharedPreferences("isConnect",MODE_PRIVATE);
+            SharedPreferences.Editor editor = spf.edit();
+            editor.clear();
+            editor.commit();
+        }
     }
 
     @Override
     public void cancleLinkSucceed() {
-        if(type ==PATIENT)
-        {
-            SharedPreferences preferences =getSharedPreferences("isConnect",MODE_PRIVATE);
+        if (type == PATIENT) {
+            SharedPreferences preferences = getSharedPreferences("isConnect", MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
             editor.commit();
             finish();
-        }
-        else {
+        } else {
 
         }
     }

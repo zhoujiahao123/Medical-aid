@@ -84,12 +84,12 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
             startActivity(intent);
         });
         //初始化RecyclerView
+        EasyRecyViewInitUtils.initEasyRecyclerView(mEasyRecyclerView);
         mEasyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY, DensityUtil.dip2px(this, 0.5f), DensityUtil.dip2px(this, 8f), DensityUtil.dip2px(this, 8f));
         itemDecoration.setDrawLastItem(false);
         mEasyRecyclerView.addItemDecoration(itemDecoration);
         mEasyRecyclerView.setAdapter(adapter);
-        EasyRecyViewInitUtils.initEasyRecyclerView(mEasyRecyclerView);
 
         //加入header
         StickyHeaderDecoration decoration = new StickyHeaderDecoration(new InquiryHeaderAdapter(this, adapter));
@@ -154,6 +154,7 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
 //            }
 //            adapter.addAll(datas);
 //        }, 1000);
+
 
     }
 
