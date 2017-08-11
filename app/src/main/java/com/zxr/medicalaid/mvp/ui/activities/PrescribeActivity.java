@@ -73,8 +73,8 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
     EditText mWeightInput;
     @Inject
     UpLoadPrescriptionPresenterImpl presenter;
-
     long linkId ;
+
 
     private Handler handler = new Handler() {
         @Override
