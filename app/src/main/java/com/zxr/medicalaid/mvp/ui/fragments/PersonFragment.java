@@ -208,7 +208,10 @@ public class PersonFragment extends RxBusFragment {
                                 if (name == null) {
                                     return;
                                 }
-                                userName.setText(doEncode(name, ResponseCons.KEY_NAME));
+                                if (userName != null){
+                                    userName.setText(doEncode(name, ResponseCons.KEY_NAME));
+                                }
+                                
                             }
                             Log.e(TAG, s);
                         }
