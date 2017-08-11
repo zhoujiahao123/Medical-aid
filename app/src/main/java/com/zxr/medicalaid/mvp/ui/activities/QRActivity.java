@@ -219,37 +219,18 @@ public class QRActivity extends PermissionActivity implements LinkView {
 
     @Override
     public void linkSucceed(LinkInfo linkInfo) {
-        Log.e(TAG, "linkSucceed");
         observable.subscribe(observer);
-        Log.e(TAG, "linkSucceed");
         long linkId = linkInfo.getBody().getId();
-        Log.e(TAG, "linkSucceed");
-        SharedPreferences sharedPreferences = getSharedPreferences("linkId", MODE_PRIVATE);
-        Log.e(TAG, "linkSucceed");
-        String id = sharedPreferences.getString("linkId", "");
-        Log.e(TAG, "linkSucceed");
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Log.e(TAG, "linkSucceed");
-        if (!id.equals("")) {
-            editor.putString("linkId", id + "," + String.valueOf(linkId));
-            Log.e(TAG, "linkSucceed");
-        } else {
-            editor.putString("linkId", String.valueOf(linkId));
-        }
-        editor.commit();
-        Log.e(TAG, "linkSucceed");
-        User user = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
-        String type = user.getType();
-        MedicalList list = new MedicalList();
-        if (linkInfo.getBody().getPatient().getType().equals(type)) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            list.setDate((dateFormat.format(new Date())));
-            list.setName(linkInfo.getBody().getPatient().getNickName());
-        } else {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            list.setDate((dateFormat.format(new Date())));
-            list.setName(linkInfo.getBody().getDoctor().getNickName());
-        }
+        SharedPreferences sp = getSharedPreferences("linkIdForPat",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putLong(linkInfo.getBody().getDoctor().getNickName(),linkId);
+        Log.e(TAG,linkId+"");
+        editor.apply();
+        MedicalList list =new MedicalList();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        list.setDate((dateFormat.format(new Date())));
+        list.setName(linkInfo.getBody().getDoctor().getNickName());
+        list.setPatient("doctor");
         daoSession.getMedicalListDao().insert(list);
     }
 

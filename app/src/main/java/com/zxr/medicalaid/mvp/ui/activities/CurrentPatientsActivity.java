@@ -87,6 +87,8 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
     private List<Person> lists = new ArrayList<>();
     private List<String> listId = new ArrayList<>();
     private List<String> listNumber = new ArrayList<>();
+    private List<Integer> listId1 = new ArrayList<>();
+    private List<String> patientName = new ArrayList<>();
 
     @Override
     public void initInjector() {
@@ -132,10 +134,11 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
                     } else {
 //                        Toast.makeText(this, "医生，点击进行开药", Toast.LENGTH_SHORT).show();
 //                        ToActivityUtil.toNextActivity(mContext, PrescribeActivity.class);
-                        Intent intent = new Intent(CurrentPatientsActivity.this, PrescribeActivity.class);
-                        intent.putExtra("name", lists.get(pos).getName());
-                        intent.putExtra("number", listNumber.get(pos));
-                        intent.putExtra("id", listId.get(pos));
+                        Intent intent = new Intent(CurrentPatientsActivity.this,PrescribeActivity.class);
+                        intent.putExtra("name",lists.get(pos).getName());
+                        intent.putExtra("number",listNumber.get(pos));
+                        intent.putExtra("linkId",listId1.get(pos));
+                        intent.putExtra("patientName",patientName.get(pos));
                         startActivity(intent);
                     }
                 }
@@ -255,9 +258,9 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
         if (doctorId != null) {
             Log.e(TAG, doctorId);
             type = PATIENT;
-            presenter.getPatient(doctorId,"doctor",LINKING, 1);
+            presenter.getPatient(doctorId,"doctor",LINKING,1);
         } else {
-            presenter.getPatient(IdUtil.getIdString(),"doctor",LINKING, 1);
+            presenter.getPatient(IdUtil.getIdString(),"doctor",LINKING,1);
         }
     }
 
@@ -335,7 +338,9 @@ public class CurrentPatientsActivity extends RxBusSubscriberBaseActivity impleme
             Person person = new Person(name, phoneNumber, "120.77.87.78:8080/arti-sports/image//user15.png");
 
             lists.add(person);
+            patientName.add(name);
             listId.add(patientInfo.getBody().getList().get(i).getPatient().getIdString());
+            listId1.add(patientInfo.getBody().getList().get(i).getId());
             listNumber.add(phoneNumber);
         }
         adapter.addAll(lists);

@@ -2,6 +2,7 @@ package com.zxr.medicalaid.mvp.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,11 +18,9 @@ import android.widget.Toast;
 import com.github.lazylibrary.util.ToastUtils;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.zxr.medicalaid.DaoSession;
-import com.zxr.medicalaid.LinkDao;
 import com.zxr.medicalaid.MedicalList;
 import com.zxr.medicalaid.MedicalListDao;
 import com.zxr.medicalaid.R;
-import com.zxr.medicalaid.UserDao;
 import com.zxr.medicalaid.mvp.entity.PrescriptionItem;
 import com.zxr.medicalaid.mvp.entity.moudle.PrescriptionInfo;
 import com.zxr.medicalaid.mvp.presenter.presenterImpl.UpLoadPrescriptionPresenterImpl;
@@ -72,9 +71,10 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
     EditText mNameInput;
     @InjectView(R.id.medicine_weight_input)
     EditText mWeightInput;
-
     @Inject
     UpLoadPrescriptionPresenterImpl presenter;
+    long linkId ;
+
 
     private Handler handler = new Handler() {
         @Override
@@ -83,14 +83,7 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
             switch (msg.what) {
                 case CONNECT_FAILED:
                     ToastUtils.showToast(PrescribeActivity.this, "连接失败，请重试");
-                    StringBuilder builder = new StringBuilder();
-                    for(int i=0;i<listName.size();i++){
-                        builder.append(listName.get(i)+"_"+listWeight.get(i)+",");
-                    }
-                    long linkId= daoSession.getLinkDao().queryBuilder().where(LinkDao.Properties.Id.eq(
-                            daoSession.getUserDao().queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique().getLinkId()
-                    )).unique().getUId();
-                    presenter.upLoadPrescription(linkId,builder.toString());
+
                     break;
                 case NO_THIS_MEDICINE:
 //                    ToastUtils.showToast(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送");
@@ -101,29 +94,21 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
                     break;
                 case SEND_SUCCESS:
                     ToastUtils.showToast(PrescribeActivity.this, "已成功发送");
-
-                    //存入数据库
-                    daoSession = DbUtil.getDaosession();
-                    medicalListDao = daoSession.getMedicalListDao();
-                    MedicalList medicalList = new MedicalList();
-                    medicalList.setPatient(patientName);
-                    StringBuilder name = new StringBuilder();
-
-                    StringBuilder weight = new StringBuilder();
-                    for (int i = 0; i < dbNameList.size(); i++) {
-                        name.append(dbNameList.get(i) + ",");
-                        weight.append(dbWeightList.get(i) + ",");
+                    StringBuilder builder = new StringBuilder();
+                    for(int i=0;i<listName.size();i++){
+                        builder.append(listName.get(i)+"_"+listWeight.get(i)+",");
                     }
-                    medicalList.setName(name.toString());
-                    medicalList.setWeight(weight.toString());
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
-                    String date = simpleDateFormat.format(new Date());
-                    medicalList.setDate(date);
-                    medicalListDao.insert(medicalList);
-                    //提醒病人列表界面更新
-                    if (patientId != null) {
-                        RxBus.getDefault().post(new String(patientId));
-                    }
+//                    long linkId= daoSession.getLinkDao().queryBuilder().where(LinkDao.Properties.Id.eq(
+//                            daoSession.getUserDao().queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique().getLinkId()
+//                    )).unique().getUId();
+//                    SharedPreferences sp = getSharedPreferences("linkId",MODE_PRIVATE);
+//                    String[] str = sp.getString("linkId","").split(",");
+//                    for(String str1 :str){
+//                        Log.e(TAG,str1);
+//                    }
+//                    long linkId = Long.valueOf(str[str.length-1]);
+                    Log.e(TAG,linkId+"");
+                    presenter.upLoadPrescription(linkId,builder.toString());
                     finish();
                     break;
                 case EMPTY_MEDICINE:
@@ -184,10 +169,11 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
         patientName = getIntent().getStringExtra("name");
         phoneNumber = getIntent().getStringExtra("number");
-        patientId = getIntent().getStringExtra("id");
-        int randomNum = (int) ((Math.random() * 4 + 1.9) * 10);
-        mSex.setText(((randomNum % 2) == 1) ? "男" : "女");
-        mAge.setText(randomNum + "");
+        linkId = getIntent().getIntExtra("linkId",-1);
+        int randomNum = (int) ((Math.random()*4+1.9)*10);
+        mSex.setText(((randomNum/2)==1)?"男":"女");
+        mAge.setText(randomNum+"");
+
         mName.setText(patientName);
         mRegisterTime.setText("电话号码：   " + phoneNumber);
         //设置recyclerView
@@ -330,7 +316,19 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
 
     @Override
     public void upLaodSucceed(PrescriptionInfo info) {
-
+        SharedPreferences sp = getSharedPreferences("linkIdForDoc",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        Log.e(TAG,linkId+"");
+        editor.putLong(patientName,linkId);
+        editor.commit();
+        DaoSession daoSession = DbUtil.getDaosession();
+        MedicalListDao listDao = daoSession.getMedicalListDao();
+        MedicalList list = new MedicalList();
+        list.setName(patientName);
+        list.setPatient("patient");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        list.setDate(dateFormat.format(new Date()));
+        listDao.insert(list);
     }
 
 

@@ -7,6 +7,7 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zxr.medicalaid.DaoSession;
 import com.zxr.medicalaid.R;
@@ -145,7 +146,14 @@ public class PersonFragment extends RxBusFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.presribe_bt:
-                ToActivityUtil.toNextActivity(getContext(), InquiryActivity.class);
+                User user = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
+                if(user.getType().equals("doctor")){
+                    Intent intent2 = new Intent(getContext(),InquiryActivity.class);
+                    intent2.putExtra("type",user.getType());
+                    startActivity(intent2);
+                }else {
+                    Toast.makeText(getContext(),"只有医师才有权限哦",Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.about_us_bt:
                 ToActivityUtil.toNextActivity(getContext(), AboutUsActivity.class);
@@ -156,7 +164,14 @@ public class PersonFragment extends RxBusFragment {
                 startActivity(alarm);
                 break;
             case R.id.treat_record_bt:
-                ToActivityUtil.toNextActivity(getContext(), InquiryActivity.class);
+                User user1 = userDao.queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
+                if(user1.getType().equals("patient")){
+                    Intent inten1 = new Intent(getContext(),InquiryActivity.class);
+                    inten1.putExtra("type",user1.getType());
+                    startActivity(inten1);
+                }else {
+                    Toast.makeText(getContext(),"只有患者才有权限哦",Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.generate_qb:
                 //可能有bug
