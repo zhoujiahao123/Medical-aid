@@ -13,7 +13,6 @@ import rx.Observable;
 public class UpLoadPrescriptionModelImpl extends BaseModelImpl implements UpLoadPrescriptionModel {
     @Override
     public Observable<PrescriptionInfo> upLoadPrescription(long linkId, String message) {
-        return api
-                .uploadPrescription(linkId,message);
+        return api.uploadPrescription(linkId,message);
     }
 }

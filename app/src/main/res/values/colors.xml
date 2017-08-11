@@ -6,7 +6,8 @@
 
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
-
+    <color name="text_tips_color">#666666</color>
+    <color name="main_theme_color">#0195ff</color>
     <color name="red_50">#ffebff</color>
     <color name="red_100">#ffcdd2</color>
     <color name="red_200">#ef9a9a</color>
