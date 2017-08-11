@@ -95,8 +95,9 @@
       <TextView
           android:id="@+id/introduction"
           style="@style/TextAppearance.AppCompat.Title"
-          android:layout_width="40dp"
-          android:layout_height="40dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingBottom="16dp"
           android:layout_marginLeft="20dp"
           android:layout_marginTop="20dp"
           android:text="简介" />
