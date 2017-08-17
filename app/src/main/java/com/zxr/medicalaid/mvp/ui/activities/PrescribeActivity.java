@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -82,7 +83,27 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
             switch (msg.what) {
                 case CONNECT_FAILED:
                     ToastUtils.showToast(PrescribeActivity.this, "连接失败，请重试");
-
+                    //此处弹窗
+                    EditText editText = (EditText) LayoutInflater.from(PrescribeActivity.this).inflate(R.layout.view_reset_ip,null);
+                    new AlertDialog.Builder(PrescribeActivity.this)
+                            .setTitle("提示")
+                            .setView(editText)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            String newIp = editText.getText().toString();
+                                            editor.putString("ip",newIp);
+                                            editor.commit();
+                                            IP_ADD = newIp;
+                                        }
+                                    }
+                            ).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
                     break;
                 case NO_THIS_MEDICINE:
 //                    ToastUtils.showToast(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送");
@@ -128,7 +149,7 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
     //写入数据流
     OutputStream os;
     //ip地址和端口(公网,私有地址不行)
-    public static final String IP_ADD = "113.251.223.167";
+    public static  String IP_ADD ;
     public static final int PORT = 5566;
     private final int CONNECT_FAILED = 0;
     private final int NO_THIS_MEDICINE = 1;
@@ -145,6 +166,8 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
     DaoSession daoSession= DbUtil.getDaosession();
     MedicalListDao medicalListDao;
     private String patientId;
+    private SharedPreferences spf =this.getPreferences(MODE_PRIVATE);
+    private SharedPreferences.Editor editor = spf.edit();
     /**
      * 数据
      */
@@ -202,6 +225,8 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
         //设置重量输入框的弹起类型
         mWeightInput.setRawInputType(InputType.TYPE_CLASS_NUMBER);
         initData();
+
+        IP_ADD = spf.getString("ip",null);
     }
 
     private void initData() {
@@ -378,8 +403,8 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
             } catch (Exception e) {
                 Log.e(TAG, "连接超时");
                 e.printStackTrace();
-                sendTread = new SendMedicineThread();
                 handler.sendEmptyMessage(CONNECT_FAILED);
+                sendTread = new SendMedicineThread();
             }
         }
     }
