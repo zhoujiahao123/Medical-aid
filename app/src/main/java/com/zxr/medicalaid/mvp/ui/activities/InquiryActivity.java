@@ -69,7 +69,7 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
 //        }
 //        for(int i=0;i<linkIdArray.length;i++){
 //            linkIdList.add(linkIdArray[i]);
-//        }
+        //        }
         idType = getIntent().getStringExtra("type");
         mToolbar.setTitle(R.string.inquiryRecord);
         mToolbar.setTitleTextColor(Color.WHITE);
@@ -88,7 +88,7 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
         mEasyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerDecoration itemDecoration = new DividerDecoration(Color.GRAY, DensityUtil.dip2px(this, 0.5f), DensityUtil.dip2px(this, 8f), DensityUtil.dip2px(this, 8f));
         itemDecoration.setDrawLastItem(false);
-        mEasyRecyclerView.addItemDecoration(itemDecoration);
+//        mEasyRecyclerView.addItemDecoration(itemDecoration);
         mEasyRecyclerView.setAdapter(adapter);
 
         //加入header
@@ -97,7 +97,8 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
         mEasyRecyclerView.addItemDecoration(decoration);
         mEasyRecyclerView.setRefreshListener(this);
         mEasyRecyclerView.setRefreshing(true, true);
-
+        
+        adapter.addAll(datas);
     }
 
     @Override
