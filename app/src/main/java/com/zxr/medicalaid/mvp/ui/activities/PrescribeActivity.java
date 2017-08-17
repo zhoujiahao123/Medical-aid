@@ -29,7 +29,6 @@ import com.zxr.medicalaid.mvp.ui.adapters.PrescribeTableAdapter;
 import com.zxr.medicalaid.mvp.view.UpLoadPrescriptionView;
 import com.zxr.medicalaid.utils.db.DbUtil;
 import com.zxr.medicalaid.utils.others.DialogUtils;
-import com.zxr.medicalaid.utils.system.RxBus;
 import com.zxr.medicalaid.widget.CircleImageView;
 
 import java.io.OutputStream;
@@ -83,17 +82,6 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
             switch (msg.what) {
                 case CONNECT_FAILED:
                     ToastUtils.showToast(PrescribeActivity.this, "连接失败，请重试");
-
-                    break;
-                case NO_THIS_MEDICINE:
-//                    ToastUtils.showToast(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送");
-                    Toast.makeText(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送", Toast.LENGTH_SHORT);
-                    break;
-                case CONNECT_SUCCESS:
-                    ToastUtils.showToast(PrescribeActivity.this, "连接成功，正在发送");
-                    break;
-                case SEND_SUCCESS:
-                    ToastUtils.showToast(PrescribeActivity.this, "已成功发送");
                     StringBuilder builder = new StringBuilder();
                     for(int i=0;i<listName.size();i++){
                         builder.append(listName.get(i)+"_"+listWeight.get(i)+",");
@@ -107,8 +95,19 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
 //                        Log.e(TAG,str1);
 //                    }
 //                    long linkId = Long.valueOf(str[str.length-1]);
-                    Log.e(TAG,linkId+"");
+                    Log.e(TAG,linkId+" ++"+builder.toString());
                     presenter.upLoadPrescription(linkId,builder.toString());
+                    break;
+                case NO_THIS_MEDICINE:
+//                    ToastUtils.showToast(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送");
+                    Toast.makeText(PrescribeActivity.this, "暂时不支持 " + msg.obj.toString() + " 发送", Toast.LENGTH_SHORT);
+                    break;
+                case CONNECT_SUCCESS:
+                    ToastUtils.showToast(PrescribeActivity.this, "连接成功，正在发送");
+                    break;
+                case SEND_SUCCESS:
+                    ToastUtils.showToast(PrescribeActivity.this, "已成功发送");
+
                     finish();
                     break;
                 case EMPTY_MEDICINE:
@@ -129,7 +128,7 @@ public class PrescribeActivity extends BaseActivity implements UpLoadPrescriptio
     //写入数据流
     OutputStream os;
     //ip地址和端口(公网,私有地址不行)
-    public static final String IP_ADD = "113.251.223.3";
+    public static final String IP_ADD = "113.251.223.167";
     public static final int PORT = 5566;
     private final int CONNECT_FAILED = 0;
     private final int NO_THIS_MEDICINE = 1;
