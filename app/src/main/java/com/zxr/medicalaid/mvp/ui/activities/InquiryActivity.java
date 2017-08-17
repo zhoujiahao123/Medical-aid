@@ -133,9 +133,13 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
         Log.e("TAG","onRefresh");
         daoSession = DbUtil.getDaosession();
         MedicalListDao medicalListDao = daoSession.getMedicalListDao();
+        datas.clear();
+        patientName.clear();
+        adapter.clear();
         if(idType.equals("doctor")){
             Log.e("TAG","doctor");
             List<MedicalList> lists = medicalListDao.queryBuilder().where(MedicalListDao.Properties.Patient.eq("patient")).list();
+            Log.e(TAG,lists.size()+"");
             for(int i=0;i<lists.size();i++){
                 datas.add(new Person(lists.get(i).getName(),lists.get(i).getDate(),""));
                 Log.e("TAG",datas.get(i).getName());
@@ -153,6 +157,7 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
 //            datas.add(new Person(lists.get(i).getName(),lists.get(i).getDate(),""));
 //            patientName.add(lists.get(i).getName());
 //        }
+
         adapter.addAll(datas);
         adapter.notifyDataSetChanged();
 //        User user = daoSession.getUserDao().queryBuilder().where(UserDao.Properties.IsAlready.eq(1)).unique();
