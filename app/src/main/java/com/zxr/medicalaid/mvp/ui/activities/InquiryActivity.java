@@ -124,6 +124,7 @@ public class InquiryActivity extends BaseActivity implements SwipeRefreshLayout.
 
     @Override
     public void onRefresh() {
+        
         //进行加载
         daoSession = DbUtil.getDaosession();
         MedicalListDao medicalListDao = daoSession.getMedicalListDao();
