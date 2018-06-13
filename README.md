@@ -33,17 +33,9 @@
 ![系统流程图](https://upload-images.jianshu.io/upload_images/2536154-0d06e9a14c1b3fd5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 # 2. 功能展示
 ### 主界面&病人队列&开药中心
-![病人队列.jpg](https://upload-images.jianshu.io/upload_images/2536154-9c5803bfe7da157d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-![开药中心.jpg](https://upload-images.jianshu.io/upload_images/2536154-9d4e9beb5a9d1013.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-![主界面.jpg](https://upload-images.jianshu.io/upload_images/2536154-a195d9cc6d839d75.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+<img src="https://upload-images.jianshu.io/upload_images/2536154-9c5803bfe7da157d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="病人队列" width="250px" > <img src="https://upload-images.jianshu.io/upload_images/2536154-9d4e9beb5a9d1013.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="开药中心" width="250px" > <img src="https://upload-images.jianshu.io/upload_images/2536154-a195d9cc6d839d75.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="主界面" width="250px" >
 ### 个人中心&药材百科&药材保质
-![个人中心.jpg](https://upload-images.jianshu.io/upload_images/2536154-41ae99bce15810ed.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-![药材百科.jpg](https://upload-images.jianshu.io/upload_images/2536154-3d29e37075ab5464.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-![药材保质查询.jpg](https://upload-images.jianshu.io/upload_images/2536154-b458775950cf09c7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+<img src="https://upload-images.jianshu.io/upload_images/2536154-41ae99bce15810ed.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="个人中心" width="250px" > <img src="https://upload-images.jianshu.io/upload_images/2536154-3d29e37075ab5464.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="药材百科" width="250px" > <img src="https://upload-images.jianshu.io/upload_images/2536154-b458775950cf09c7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="药材保质查询" width="250px" >
 # 3 开发环境及技术支持
 ## 3.1 开发环境及运行平台
 - Android Studio 2.3.3
