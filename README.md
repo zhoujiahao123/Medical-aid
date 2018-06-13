@@ -31,7 +31,7 @@
 3. 病人队列看
 ### 1.3 系统流程图
 ![系统流程图](https://upload-images.jianshu.io/upload_images/2536154-0d06e9a14c1b3fd5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-#2. 功能展示
+# 2. 功能展示
 ### 主界面&病人队列&开药中心
 ![病人队列.jpg](https://upload-images.jianshu.io/upload_images/2536154-9c5803bfe7da157d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
